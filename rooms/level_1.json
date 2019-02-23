@@ -1,0 +1,152 @@
+[
+	{
+		"name": "SharedData",
+		"enable": [
+			{
+				"key": 0,
+				"value": 0
+			}
+		]
+	},
+	{
+		"name": "SkyBox",
+		"required": {
+			"position": {
+				"x": 0.0,
+				"y": 0.0,
+				"z": 0.0
+			},
+			"scale": {
+				"x": 128.0,
+				"y": 128.0,
+				"z": 128.0
+			}
+		},
+		"optional": {
+			"texture": "skybox_egypt.jpg"
+		}
+	},
+	{
+		"name": "Player",
+		"required": {
+			"position": {
+				"x": 0.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 0.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 20.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 40.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 60.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 60.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -20.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Spikes",
+		"required": {
+			"position": {
+				"x": 60.0,
+				"y": 30.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Spikes",
+		"required": {
+			"position": {
+				"x": 80.0,
+				"y": 30.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"mode": 0
+		}
+	},
+	{
+		"name": "Coin",
+		"required": {
+			"position": {
+				"x": -20.0,
+				"y": 40.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Exit",
+		"required": {
+			"position": {
+				"x": 100.0,
+				"y": 40.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 100.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	}
+]

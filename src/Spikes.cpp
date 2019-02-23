@@ -91,13 +91,13 @@ void Spikes::update()
 		if (mode)
 		{
 			mode = 0;
-			sounds["spike_out"]->play();
+			sounds[KEY_SOUND_SPIKE_OUT]->play();
 			timer->setTime(1500);
 		}
 		else
 		{
 			mode = 1;
-			sounds["spike_in"]->play();
+			sounds[KEY_SOUND_SPIKE_IN]->play();
 			timer->setTime(2250);
 		}
 	}

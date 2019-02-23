@@ -8,12 +8,14 @@ using namespace std;
 class Player : public GameObject
 {
 protected:
+
 	s8 direction;
 	bool moving, falling;
 	unique_ptr<vector3df> fallLine;
 	std::function<bool(const GameObject* go)> coinCollisionCheck;
 
 public:
+
 	// Constructor
 	Player();
 

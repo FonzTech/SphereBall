@@ -1,6 +1,14 @@
 #ifndef SOUNDMANAGER_H
 #define SOUNDMANAGER_H
 
+#define KEY_SOUND_SELECT		"select"
+#define KEY_SOUND_BOUNCE		"bounce"
+#define KEY_SOUND_COIN			"coin"
+#define KEY_SOUND_KEY			"key"
+#define KEY_SOUND_KEY_FINAL		"key_final"
+#define KEY_SOUND_SPIKE_IN		"spike_in"
+#define KEY_SOUND_SPIKE_OUT		"spike_out"
+
 #include <unordered_map>
 #include <string>
 #include <memory>

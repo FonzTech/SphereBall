@@ -5,9 +5,10 @@
 #include "SoundManager.h"
 #include "Camera.h"
 
+#include "Utility.h"
 #include "Solid.h"
 #include "Coin.h"
-#include "Utility.h"
+#include "Key.h"
 
 shared_ptr<Player> Player::createInstance(const json &jsonData)
 {
@@ -33,8 +34,10 @@ Player::Player() : GameObject()
 	fallLine = nullptr;
 
 	// Load sounds
-	sounds["bounce"] = SoundManager::singleton->getSound("bounce");
-	sounds["coin"] = SoundManager::singleton->getSound("coin");
+	sounds[KEY_SOUND_BOUNCE] = SoundManager::singleton->getSound(KEY_SOUND_BOUNCE);
+	sounds[KEY_SOUND_COIN] = SoundManager::singleton->getSound(KEY_SOUND_COIN);
+	sounds[KEY_SOUND_KEY] = SoundManager::singleton->getSound(KEY_SOUND_KEY);
+	sounds[KEY_SOUND_KEY_FINAL] = SoundManager::singleton->getSound(KEY_SOUND_KEY_FINAL);
 
 	// Create specialized functions
 	coinCollisionCheck = [](const GameObject* go)
@@ -148,12 +151,12 @@ void Player::update()
 		if (collision.gameObject != nullptr)
 		{
 			// Cast to game object
-			shared_ptr<GameObject> go = collision.getGameObject<GameObject>();
+			shared_ptr<GameObject> go = collision.getGameObject<Solid>();
 
 			// Play sound
 			if ((!i && speed.Y > 0.1) || (i && speed.Y < -0.1))
 			{
-				sounds["bounce"]->play();
+				sounds[KEY_SOUND_BOUNCE]->play();
 			}
 
 			// Reposition object correctly
@@ -202,7 +205,7 @@ void Player::update()
 			// Play sound
 			if ((!i && speed.X < -0.1) || (i && speed.X > 0.1))
 			{
-				sounds["bounce"]->play();
+				sounds[KEY_SOUND_BOUNCE]->play();
 			}
 
 			// Reposition object correctly
@@ -218,8 +221,19 @@ void Player::update()
 		Collision collision = checkBoundingBoxCollision<Coin>(RoomManager::singleton->gameObjects, rect, coinCollisionCheck);
 		if (collision.gameObject != nullptr)
 		{
-			sounds["coin"]->play();
-			((Coin*)(collision.gameObject.get()))->pick();
+			sounds[KEY_SOUND_COIN]->play();
+			collision.getGameObject<Coin>()->pick();
+		}
+	}
+
+	// Check collision with key
+	{
+		aabbox3df rect(bbox);
+		Collision collision = checkBoundingBoxCollision<Key>(RoomManager::singleton->gameObjects, rect);
+		if (collision.gameObject != nullptr)
+		{
+			std::string soundToPlay = collision.getGameObject<Key>()->pick() ? "key_final" : "key";
+			sounds[soundToPlay]->play();
 		}
 	}
 }

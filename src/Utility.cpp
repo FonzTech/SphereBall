@@ -45,8 +45,10 @@ namespace utility
 		#elif _WIN32
 		HWND hwnd = reinterpret_cast<HWND>(evd.D3D9.HWnd);
 		RECT  lpRect;
-		if (GetWindowRect(hwnd, &lpRect))
+		if (GetClientRect(hwnd, &lpRect))
+		{
 			windowSize = dimension2di(lpRect.right - lpRect.left, lpRect.bottom - lpRect.top);
+		}
 
 		#else
 		windowSize = dimension2di();

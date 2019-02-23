@@ -2,6 +2,8 @@
 #define SHAREDDATA_H
 
 #define KEY_SCORE_COIN 0
+#define KEY_SCORE_KEY 1
+#define KEY_SCORE_KEY_PICKED 2
 
 #include <memory>
 #include <unordered_map>
@@ -35,6 +37,9 @@ protected:
 
 	// Map for game scores and related data
 	unordered_map<s32, ScoreValue> gameScores;
+
+	// Map to hold textures
+	unordered_map<u8, ITexture*> guiTextures;
 
 	// Build GUI from game score
 	void buildGUIFromGameScore();

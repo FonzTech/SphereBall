@@ -69,7 +69,7 @@ void MainMenu::update()
 		currentIndex = tmpIndex;
 		if (currentIndex >= 0)
 		{
-			sounds["select"]->play();
+			sounds[KEY_SOUND_SELECT]->play();
 		}
 	}
 

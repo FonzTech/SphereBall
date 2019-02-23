@@ -87,6 +87,9 @@
     <ClCompile Include="src/main.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\Key.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src/Engine.h">
@@ -148,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="src/Collision.h">
       <Filter>Headers\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Key.h">
+      <Filter>Headers\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

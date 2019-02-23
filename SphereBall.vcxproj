@@ -189,6 +189,7 @@
     <ClCompile Include="src/SoundManager.cpp" />
     <ClCompile Include="src/Spikes.cpp" />
     <ClCompile Include="src/Utility.cpp" />
+    <ClCompile Include="src\Key.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src/Engine.h" />
@@ -211,6 +212,7 @@
     <ClInclude Include="src/SoundManager.h" />
     <ClInclude Include="src/Spikes.h" />
     <ClInclude Include="src/Utility.h" />
+    <ClInclude Include="src\Key.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

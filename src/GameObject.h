@@ -9,6 +9,7 @@
 #include <SFML/Audio.hpp>
 
 #include "EngineObject.h"
+#include "Collision.h"
 #include "Model.h"
 #include "Utility.h"
 
@@ -25,10 +26,10 @@ protected:
 
 	// Check for collision with another game object
 	template <typename T>
-	utility::Collision checkBoundingBoxCollision(const vector<shared_ptr<GameObject>>& gameObjects, aabbox3df& rect, const std::function<bool(const GameObject* go)>& specializedCheck = nullptr)
+	Collision checkBoundingBoxCollision(const vector<shared_ptr<GameObject>>& gameObjects, aabbox3df& rect, const std::function<bool(const GameObject* go)>& specializedCheck = nullptr)
 	{
 		// Create data structure to hold the return value
-		utility::Collision collision;
+		Collision collision;
 
 		// Get translated bounding box;
 		utility::transformAABBox(rect, position);
@@ -38,11 +39,15 @@ protected:
 		{
 			// Check for class maching
 			if (dynamic_cast<T*>(gameObject.get()) == nullptr)
+			{
 				continue;
+			}
 
 			// Check if object has been destroyed
 			else if (gameObject->destroy)
+			{
 				continue;
+			}
 
 			// Get bounding box of mesh
 			aabbox3df otherBox(gameObject->models.at(0)->mesh->getBoundingBox());
@@ -62,6 +67,8 @@ protected:
 				return collision;
 			}
 		}
+
+		// Return built object
 		return collision;
 	}
 
@@ -69,6 +76,9 @@ public:
 
 	// Get instance of game object with parameters
 	static shared_ptr<GameObject> createInstance(const json &jsonData);
+
+	// Assign common room data for GameObject
+	void assignGameObjectCommonData(const json& commonData);
 
 	// Common data among GameObjects
 	vector<shared_ptr<Model>> models;

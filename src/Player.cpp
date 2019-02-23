@@ -131,30 +131,41 @@ void Player::update()
 	for (s8 i = 0, j = 1; i < 2; ++i, j -= 2)
 	{
 		if (i && speed.Y > 0)
+		{
 			continue;
+		}
 		else if (!i && speed.Y <= 0)
+		{
 			continue;
+		}
 
+		// Get shifted BB
 		aabbox3df rect(bbox);
 		utility::getVerticalAABBox(bbox, rect, (1.0f + (0.25f * abs(speed.Y))) * j, 0.9f - abs(speed.X * 2));
 
-		utility::Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect);
+		// Check for collision
+		Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect);
 		if (collision.gameObject != nullptr)
 		{
+			// Cast to game object
+			shared_ptr<GameObject> go = collision.getGameObject<GameObject>();
+
+			// Play sound
 			if ((!i && speed.Y > 0.1) || (i && speed.Y < -0.1))
 			{
 				sounds["bounce"]->play();
 			}
 
+			// Reposition object correctly
 			speed.Y = 0;
 			if (i)
 			{
-				position.Y = collision.gameObject->position.Y + bbox.getExtent().Y;
+				position.Y = go->position.Y + bbox.getExtent().Y;
 				falling = false;
 			}
 			else
 			{
-				position.Y = collision.gameObject->position.Y - collision.otherBoundingBox.getExtent().Y;
+				position.Y = go->position.Y - collision.otherBoundingBox.getExtent().Y;
 				falling = true;
 				fallLine = nullptr;
 			}
@@ -169,22 +180,33 @@ void Player::update()
 	for (s8 i = 0, j = -1; i < 2; ++i, j += 2)
 	{
 		if (i && speed.X <= 0)
+		{
 			continue;
+		}
 		else if (!i && speed.X >= 0)
+		{
 			continue;
+		}
 
+		// Get shifted BB
 		aabbox3df rect(bbox);
 		utility::getHorizontalAABBox(bbox, rect, (1.0f + (0.25f * abs(speed.X))) * j, 0.9f);
 
-		utility::Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect);
+		// Check for collision
+		Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect);
 		if (collision.gameObject != nullptr)
 		{
+			// Cast to game object
+			shared_ptr<GameObject> go = collision.getGameObject<GameObject>();
+
+			// Play sound
 			if ((!i && speed.X < -0.1) || (i && speed.X > 0.1))
 			{
 				sounds["bounce"]->play();
 			}
 
-			position.X = collision.gameObject->position.X;
+			// Reposition object correctly
+			position.X = go->position.X;
 			position.X += i ? -bbox.getExtent().X : collision.otherBoundingBox.getExtent().X;
 			speed.X = 0;
 		}
@@ -193,7 +215,7 @@ void Player::update()
 	// Check collision with coin
 	{
 		aabbox3df rect(bbox);
-		utility::Collision collision = checkBoundingBoxCollision<Coin>(RoomManager::singleton->gameObjects, rect, coinCollisionCheck);
+		Collision collision = checkBoundingBoxCollision<Coin>(RoomManager::singleton->gameObjects, rect, coinCollisionCheck);
 		if (collision.gameObject != nullptr)
 		{
 			sounds["coin"]->play();

@@ -1,8 +1,6 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
-class GameObject;
-
 #include <memory>
 #include <irrlicht.h>
 #include <nlohmann/json.hpp>
@@ -18,13 +16,6 @@ using nlohmann::json;
 
 namespace utility
 {
-	// Structure which acts as a container to hold collision results
-	struct Collision
-	{
-		shared_ptr<GameObject> gameObject = nullptr;
-		aabbox3df mainBoundingBox, otherBoundingBox;
-	};
-
 	// Transform axis-aligned bounding box by point
 	void transformAABBox(aabbox3d<f32> &dest, const vector3df &translate = vector3df(0, 0, 0), const vector3df &rotation = vector3df(0, 0, 0), const vector3df &scale = vector3df(1, 1, 1));
 
@@ -45,9 +36,6 @@ namespace utility
 
 	// Generate Bezier's Curve
 	const vector2df getCubicBezierAt(const vector2df& a, const vector2df& b, const f32 t);
-
-	// Assign common room data for GameObject
-	void assignGameObjectCommonData(shared_ptr<GameObject>& gameObject, json& commonData);
 }
 
 #endif // UTILITY_H

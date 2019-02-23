@@ -91,32 +91,4 @@ namespace utility
 		f32 y = pow(1.0f - t, 3.0f) * 0.0f + 3.0f * t * pow(1.0f - t, 2.0f) * a.Y + 3.0f * pow(t, 2.0f) * (1.0f - t) * b.Y + pow(t, 3.0f) * 1.0f;
 		return vector2df(x, y);
 	}
-
-	void assignGameObjectCommonData(shared_ptr<GameObject>& gameObject, json& commonData)
-	{
-		for (u8 i = 0; i < 3; ++i)
-		{
-			std::string key = i == 0 ? "position" : i == 1 ? "rotation" : "scale";
-			vector3df v(0.0f, 0.0f, 0.0f);
-
-			if (commonData.find(key) == commonData.end())
-				v = i == 2 ? vector3df(1, 1, 1) : vector3df(0, 0, 0);
-			else
-			{
-				v.X = (float)commonData[key]["x"];
-				v.Y = (float)commonData[key]["y"];
-				v.Z = (float)commonData[key]["z"];
-			}
-
-			if (i == 0)
-				gameObject->position = v;
-			else if (gameObject->models.size() > 0)
-			{
-				if (i == 1)
-					gameObject->models.at(0)->rotation = v;
-				else
-					gameObject->models.at(0)->scale = v;
-			}
-		}
-	}
 }

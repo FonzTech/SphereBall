@@ -88,7 +88,7 @@ void RoomManager::loadRoom(std::string name)
 				shared_ptr<GameObject> instance = classFunction(object);
 
 				// Assign common data
-				utility::assignGameObjectCommonData(instance, object.at("required"));
+				instance->assignGameObjectCommonData(object.at("required"));
 
 				// Insert into current room
 				gameObjects.push_back(instance);

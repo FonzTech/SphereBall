@@ -191,7 +191,8 @@
     <ClCompile Include="src/Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src/Engine.h" />
+    <ClInclude Include="src/Engine.h" />
+    <ClInclude Include="src/Collision.h" />
     <ClInclude Include="src/Alarm.h" />
     <ClInclude Include="src/Camera.h" />
     <ClInclude Include="src/Coin.h" />

@@ -14,14 +14,14 @@ class Collision
 {
 public:
 
-	shared_ptr<EngineObject> gameObject = nullptr;
+	shared_ptr<EngineObject> engineObject = nullptr;
 	aabbox3df mainBoundingBox, otherBoundingBox;
 
 	// Get casted game object which collided
 	template <typename T>
 	shared_ptr<T> getGameObject()
 	{
-		return static_pointer_cast<T>(gameObject);
+		return static_pointer_cast<T>(engineObject);
 	}
 };
 

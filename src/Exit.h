@@ -7,6 +7,7 @@ class Exit : public GameObject
 {
 protected:
 	f32 angle;
+	s8 picked;
 
 public:
 
@@ -19,6 +20,9 @@ public:
 
 	// Create specialized instance
 	static shared_ptr<Exit> createInstance(const json &jsonData);
+
+	// Method to change this object to "picked" state
+	void pick();
 };
 
 #endif // EXIT_H

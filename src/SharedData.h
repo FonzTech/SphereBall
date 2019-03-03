@@ -35,11 +35,11 @@ protected:
 		}
 	};
 
-	// Map for game scores and related data
-	unordered_map<s32, ScoreValue> gameScores;
-
 	// Map to hold textures
 	unordered_map<u8, ITexture*> guiTextures;
+
+	// Map for game scores and related data
+	unordered_map<s32, ScoreValue> gameScores;
 
 	// Build GUI from game score
 	void buildGUIFromGameScore();

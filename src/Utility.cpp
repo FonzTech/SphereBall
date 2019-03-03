@@ -82,6 +82,11 @@ namespace utility
 		return rect<s32>(dx, dy, dx + width, dy + height);
 	}
 
+	sf::Vector3f irrVectorToSf(const vector3df& v)
+	{
+		return sf::Vector3f(v.X, v.Y, v.Z);
+	}
+
 	recti getSourceRect(ITexture* texture)
 	{
 		return recti(vector2di(0, 0), vector2di(texture->getSize().Width, texture->getSize().Height));

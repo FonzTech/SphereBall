@@ -28,7 +28,8 @@ MainMenu::MainMenu() : GameObject()
 	optionTitles[7] = L"Back";
 
 	// Load sound
-	sounds["select"] = SoundManager::singleton->getSound("select");
+	sounds[KEY_SOUND_SELECT] = SoundManager::singleton->getSound(KEY_SOUND_SELECT);
+	sounds[KEY_SOUND_SELECT]->setRelativeToListener(true);
 
 	// Initialize members
 	currentSection = 0;
@@ -69,7 +70,7 @@ void MainMenu::update()
 		currentIndex = tmpIndex;
 		if (currentIndex >= 0)
 		{
-			sounds[KEY_SOUND_SELECT]->play();
+			playSound(KEY_SOUND_SELECT, nullptr);
 		}
 	}
 

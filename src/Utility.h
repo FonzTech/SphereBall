@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <irrlicht.h>
+#include <SFML/Audio.hpp>
 #include <nlohmann/json.hpp>
 
 using namespace std;
@@ -30,6 +31,9 @@ namespace utility
 
 	// Get text rectangle within screen space
 	rect<s32> getPositionInScreenSpace(IVideoDriver* driver, const f32 x, const f32 y, const s32 width = 1024, const s32 height = 1024, IGUIFont* font = nullptr, const wchar_t* text = nullptr, const f32 alignX = 0.0f, const f32 alignY = 0.0f);
+
+	// Convert Irrlicht 3D vector to SFML 3D vector
+	sf::Vector3f irrVectorToSf(const vector3df& v);
 
 	// Get full source rect from texture
 	recti getSourceRect(ITexture* texture);

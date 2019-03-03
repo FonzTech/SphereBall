@@ -35,9 +35,16 @@ Player::Player() : GameObject()
 
 	// Load sounds
 	sounds[KEY_SOUND_BOUNCE] = SoundManager::singleton->getSound(KEY_SOUND_BOUNCE);
+	sounds[KEY_SOUND_BOUNCE]->setVolume(50.0f);
+
 	sounds[KEY_SOUND_COIN] = SoundManager::singleton->getSound(KEY_SOUND_COIN);
+
 	sounds[KEY_SOUND_KEY] = SoundManager::singleton->getSound(KEY_SOUND_KEY);
+	sounds[KEY_SOUND_KEY]->setVolume(50.0f);
+
 	sounds[KEY_SOUND_KEY_FINAL] = SoundManager::singleton->getSound(KEY_SOUND_KEY_FINAL);
+	sounds[KEY_SOUND_KEY_FINAL]->setVolume(50.0f);
+
 
 	// Create specialized functions
 	coinCollisionCheck = [](const GameObject* go)
@@ -148,7 +155,7 @@ void Player::update()
 
 		// Check for collision
 		Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect);
-		if (collision.gameObject != nullptr)
+		if (collision.engineObject != nullptr)
 		{
 			// Cast to game object
 			shared_ptr<GameObject> go = collision.getGameObject<Solid>();
@@ -156,7 +163,7 @@ void Player::update()
 			// Play sound
 			if ((!i && speed.Y > 0.1) || (i && speed.Y < -0.1))
 			{
-				sounds[KEY_SOUND_BOUNCE]->play();
+				playSound(KEY_SOUND_BOUNCE, nullptr);
 			}
 
 			// Reposition object correctly
@@ -197,7 +204,7 @@ void Player::update()
 
 		// Check for collision
 		Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect);
-		if (collision.gameObject != nullptr)
+		if (collision.engineObject != nullptr)
 		{
 			// Cast to game object
 			shared_ptr<GameObject> go = collision.getGameObject<GameObject>();
@@ -205,7 +212,7 @@ void Player::update()
 			// Play sound
 			if ((!i && speed.X < -0.1) || (i && speed.X > 0.1))
 			{
-				sounds[KEY_SOUND_BOUNCE]->play();
+				playSound(KEY_SOUND_BOUNCE, nullptr);
 			}
 
 			// Reposition object correctly
@@ -219,9 +226,9 @@ void Player::update()
 	{
 		aabbox3df rect(bbox);
 		Collision collision = checkBoundingBoxCollision<Coin>(RoomManager::singleton->gameObjects, rect, coinCollisionCheck);
-		if (collision.gameObject != nullptr)
+		if (collision.engineObject != nullptr)
 		{
-			sounds[KEY_SOUND_COIN]->play();
+			playSound(KEY_SOUND_COIN, &collision.getGameObject<Coin>()->position);
 			collision.getGameObject<Coin>()->pick();
 		}
 	}
@@ -230,12 +237,16 @@ void Player::update()
 	{
 		aabbox3df rect(bbox);
 		Collision collision = checkBoundingBoxCollision<Key>(RoomManager::singleton->gameObjects, rect);
-		if (collision.gameObject != nullptr)
+		if (collision.engineObject != nullptr)
 		{
-			std::string soundToPlay = collision.getGameObject<Key>()->pick() ? "key_final" : "key";
-			sounds[soundToPlay]->play();
+			std::string soundToPlay = collision.getGameObject<Key>()->pick() ? KEY_SOUND_KEY_FINAL : KEY_SOUND_KEY;
+			playSound(soundToPlay, &collision.getGameObject<Key>()->position);
 		}
 	}
+
+	// Update listener position
+	sf::Listener::setDirection(sf::Vector3f(0, 0, -1));
+	sf::Listener::setPosition(utility::irrVectorToSf(position));
 }
 
 void Player::draw()

@@ -61,7 +61,7 @@ protected:
 					continue;
 
 				// Return collision information
-				collision.gameObject = gameObject;
+				collision.engineObject = gameObject;
 				collision.mainBoundingBox = models.at(0)->mesh->getBoundingBox();
 				collision.otherBoundingBox = otherBox;
 				return collision;
@@ -71,6 +71,9 @@ protected:
 		// Return built object
 		return collision;
 	}
+
+	// Play spatial sound
+	void playSound(const std::string& key, const vector3df* position);
 
 public:
 

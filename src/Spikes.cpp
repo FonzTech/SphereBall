@@ -64,8 +64,13 @@ Spikes::Spikes(s8 initialMode, f32 delay) : GameObject()
 	models.push_back(model);
 
 	// Load sounds
-	sounds["spike_in"] = SoundManager::singleton->getSound("spike_in");
-	sounds["spike_out"] = SoundManager::singleton->getSound("spike_out");
+	sounds[KEY_SOUND_SPIKE_IN] = SoundManager::singleton->getSound(KEY_SOUND_SPIKE_IN);
+	sounds[KEY_SOUND_SPIKE_IN]->setMinDistance(50.0f);
+	sounds[KEY_SOUND_SPIKE_IN]->setAttenuation(25.0f);
+
+	sounds[KEY_SOUND_SPIKE_OUT] = SoundManager::singleton->getSound(KEY_SOUND_SPIKE_OUT);
+	sounds[KEY_SOUND_SPIKE_OUT]->setMinDistance(50.0f);
+	sounds[KEY_SOUND_SPIKE_OUT]->setAttenuation(25.0f);
 
 	// Initialize alarms
 	timer = make_unique<Alarm>(delay);
@@ -88,17 +93,24 @@ void Spikes::update()
 	timer->stepDecrement(deltaTime);
 	if (timer->isTriggered())
 	{
+		// Check for mode
 		if (mode)
 		{
+			// Trigger after 1.500 seconds
 			mode = 0;
-			sounds[KEY_SOUND_SPIKE_OUT]->play();
 			timer->setTime(1500);
+
+			// Play spatial sound
+			playSound(KEY_SOUND_SPIKE_OUT, &position);
 		}
 		else
 		{
+			// Trigger after 2.250 seconds
 			mode = 1;
-			sounds[KEY_SOUND_SPIKE_IN]->play();
 			timer->setTime(2250);
+
+			// Play spatial sound
+			playSound(KEY_SOUND_SPIKE_IN, &position);
 		}
 	}
 

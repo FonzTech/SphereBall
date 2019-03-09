@@ -21,7 +21,7 @@ Exit::Exit() : GameObject()
 	// Create model for player
 	shared_ptr<Model> model = make_shared<Model>(mesh);
 	model->addTexture(0, texture);
-	model->material = video::EMT_TRANSPARENT_ALPHA_CHANNEL;
+	model->material = EMT_TRANSPARENT_ALPHA_CHANNEL;
 	models.push_back(model);
 
 	// Load mesh and texture for Base model

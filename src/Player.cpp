@@ -19,13 +19,10 @@ shared_ptr<Player> Player::createInstance(const json &jsonData)
 
 Player::Player() : GameObject()
 {
-	// Load mesh
+	// Load model for player
 	IAnimatedMesh* mesh = smgr->getMesh("models/sphere.obj");
-
-	// Load texture
 	ITexture* texture = driver->getTexture("textures/player.png");
 
-	// Create model for player
 	shared_ptr<Model> model = make_shared<Model>(mesh);
 	model->addTexture(0, texture);
 	models.push_back(model);
@@ -71,24 +68,7 @@ void Player::update()
 	}
 	else if (state == STATE_DEAD)
 	{
-		// Alarm for waiting
-		if (dieAlarm != nullptr)
-		{
-			dieAlarm->stepDecrement(deltaTime);
-
-			// Check for alarm to be finished
-			if (dieAlarm->isTriggered())
-			{
-				// Delete alarm
-				dieAlarm = nullptr;
-
-				// Play game over sound
-				playSound(KEY_SOUND_GAME_OVER);
-
-				// Display game over GUI menu
-				SharedData::singleton->displayGameOver();
-			}
-		}
+		dead();
 	}
 
 	// Update listener position
@@ -101,9 +81,17 @@ void Player::draw()
 	// Update model
 	if (models.size() > 0)
 	{
-		shared_ptr<Model> model = models.at(0);
-		model->position = position;
-		model->rotation = vector3df(-45.0f, 0, -position.X * 3);
+		if (state == STATE_WALKING)
+		{
+			shared_ptr<Model> model = models.at(0);
+			model->position = position;
+			model->rotation = vector3df(-45.0f, 0, -position.X * 3);
+		}
+		else if (state == STATE_DEAD)
+		{
+			shared_ptr<Model> model = models.at(0);
+			model->position = position + vector3df(0, 0, -11);
+		}
 	}
 
 	// Reposition camera
@@ -332,9 +320,75 @@ void Player::die()
 	// Set dead state
 	state = STATE_DEAD;
 
-	// Replace sphere model with plane model
-	models.erase(models.begin());
-
 	// Trigger die alarm
 	dieAlarm = make_unique<Alarm>(1500.0f);
+
+	// Erase sphere model
+	models.erase(models.begin());
+
+	// Load model for nailed state
+	IAnimatedMesh* mesh = smgr->getMesh("models/plane.obj");
+	ITexture* texture = driver->getTexture("textures/nailed.png");
+
+	shared_ptr<Model> model = make_shared<Model>(mesh);
+	model->material = EMT_TRANSPARENT_ALPHA_CHANNEL;
+	model->addTexture(0, texture);
+	models.push_back(model);
+
+	// Create alarm for pop animation
+	popAlarm = make_unique<Alarm>(50.0f);
+}
+
+void Player::dead()
+{
+	// Alarm for waiting
+	if (dieAlarm != nullptr)
+	{
+		dieAlarm->stepDecrement(deltaTime);
+
+		// Check for alarm to be finished
+		if (dieAlarm->isTriggered())
+		{
+			// Delete alarm
+			dieAlarm = nullptr;
+
+			// Play game over sound
+			playSound(KEY_SOUND_GAME_OVER);
+
+			// Display game over GUI menu
+			SharedData::singleton->displayGameOver();
+		}
+	}
+
+	// Alarm for pop animation
+	if (popAlarm != nullptr)
+	{
+		popAlarm->stepDecrement(deltaTime);
+
+		// Check for alarm to be finished
+		if (popAlarm->isTriggered())
+		{
+			// Scale to achieve desired animation
+			vector3df* scale = &models.at(0)->scale;
+
+			// Check if animation should end
+			if (scale->X > 2.0f)
+			{
+				// Delete model
+				models.erase(models.begin());
+
+				// Delete alarm
+				popAlarm = nullptr;
+			}
+			else
+			{
+				const f32 s = scale->X + 0.5f;
+				const f32 y = scale->Y > 0.0f ? 0.0f : s;
+				*scale = vector3df(s, y, s);
+
+				// Restart alarm
+				popAlarm->setTime(50.0f);
+			}
+		}
+	}
 }

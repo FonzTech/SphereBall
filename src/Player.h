@@ -18,6 +18,7 @@ protected:
 
 	void walk();
 	void die();
+	void dead();
 
 	// Motion
 	s8 direction;
@@ -27,6 +28,7 @@ protected:
 
 	// Alarms
 	unique_ptr<Alarm> dieAlarm;
+	unique_ptr<Alarm> popAlarm;
 
 	// Custom collision check function
 	std::function<bool(const GameObject* go)> coinCollisionCheck;

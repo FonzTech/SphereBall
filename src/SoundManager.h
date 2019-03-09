@@ -8,6 +8,8 @@
 #define KEY_SOUND_KEY_FINAL		"key_final"
 #define KEY_SOUND_SPIKE_IN		"spike_in"
 #define KEY_SOUND_SPIKE_OUT		"spike_out"
+#define KEY_SOUND_NAILED		"nailed"
+#define KEY_SOUND_GAME_OVER		"game_over"
 
 #include <unordered_map>
 #include <string>

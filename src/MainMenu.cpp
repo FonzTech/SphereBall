@@ -70,7 +70,7 @@ void MainMenu::update()
 		currentIndex = tmpIndex;
 		if (currentIndex >= 0)
 		{
-			playSound(KEY_SOUND_SELECT, nullptr);
+			playSound(KEY_SOUND_SELECT);
 		}
 	}
 

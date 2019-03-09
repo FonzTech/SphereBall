@@ -21,12 +21,15 @@ public:
 	Spikes();
 	Spikes(s8 initialMode, f32 delay);
 
+	// Create specialized instance
+	static shared_ptr<Spikes> createInstance(const json &jsonData);
+
 	// Mandatory methods
 	void update();
 	void draw();
 
-	// Create specialized instance
-	static shared_ptr<Spikes> createInstance(const json &jsonData);
+	// Speicalized methods
+	s8 isHarmful();
 };
 
 #endif // SKYBOX_H

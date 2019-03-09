@@ -110,3 +110,8 @@ void SharedData::buildGUI()
 {
 	buildGUIFromGameScore();
 }
+
+void SharedData::displayGameOver()
+{
+	printf("GameOver\n");
+}

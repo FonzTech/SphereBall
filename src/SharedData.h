@@ -69,6 +69,9 @@ public:
 
 	// Build GUI from game score
 	void buildGUI();
+
+	// Display game over GUI menu
+	void displayGameOver();
 };
 
 #endif // SHAREDDATA_H

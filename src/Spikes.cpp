@@ -142,3 +142,8 @@ void Spikes::draw()
 	model = models.at(1);
 	model->position = position + vector3df(0, 3 - TIP_HEIGHT * tipY, 0);
 }
+
+s8 Spikes::isHarmful()
+{
+	return tipY < 0.5f;
+}

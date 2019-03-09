@@ -1,7 +1,11 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#define STATE_WALKING	0
+#define STATE_DEAD		1
+
 #include "GameObject.h"
+#include "Alarm.h"
 
 using namespace std;
 
@@ -9,10 +13,24 @@ class Player : public GameObject
 {
 protected:
 
+	// State
+	s8 state;
+
+	void walk();
+	void die();
+
+	// Motion
 	s8 direction;
-	bool moving, falling;
+	s8 moving;
+	s8 falling;
 	unique_ptr<vector3df> fallLine;
+
+	// Alarms
+	unique_ptr<Alarm> dieAlarm;
+
+	// Custom collision check function
 	std::function<bool(const GameObject* go)> coinCollisionCheck;
+	std::function<bool(const GameObject* go)> spikesCollisionCheck;
 
 public:
 

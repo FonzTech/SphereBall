@@ -73,7 +73,7 @@ protected:
 	}
 
 	// Play spatial sound
-	void playSound(const std::string& key, const vector3df* position);
+	void playSound(const std::string& key, const vector3df* position = nullptr);
 
 public:
 

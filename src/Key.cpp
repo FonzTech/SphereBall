@@ -39,13 +39,13 @@ void Key::draw()
 u8 Key::pick()
 {
 	// Increment coin counter by one
-	SharedData::singleton->updateGameScoreValue(KEY_SCORE_KEY_PICKED, 1);
+	SharedData::singleton->updateGameScoreValue(KEY_GUI_KEY_PICKED, 1);
 
 	// Mark item to be destroyed
 	destroy = true;
 
 	// Check if all of the keys have been picked
-	if (SharedData::singleton->getGameScoreValue(KEY_SCORE_KEY_PICKED) >= SharedData::singleton->getGameScoreValue(KEY_SCORE_KEY))
+	if (SharedData::singleton->getGameScoreValue(KEY_GUI_KEY_PICKED) >= SharedData::singleton->getGameScoreValue(KEY_GUI_KEY))
 	{
 		return 1;
 	}

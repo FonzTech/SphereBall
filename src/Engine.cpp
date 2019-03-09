@@ -131,6 +131,9 @@ void Engine::loop()
 			}
 		}
 
+		// Set Delta Time
+		SharedData::singleton->stepAnimations((f32) deltaTime);
+
 		// Build required GUI from SharedData
 		SharedData::singleton->buildGUI();
 

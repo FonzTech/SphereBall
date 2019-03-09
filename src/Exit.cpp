@@ -38,7 +38,7 @@ Exit::Exit() : GameObject()
 
 void Exit::update()
 {
-	if (SharedData::singleton->getGameScoreValue(KEY_SCORE_KEY_PICKED) >= SharedData::singleton->getGameScoreValue(KEY_SCORE_KEY))
+	if (SharedData::singleton->getGameScoreValue(KEY_GUI_KEY_PICKED) >= SharedData::singleton->getGameScoreValue(KEY_GUI_KEY))
 	{
 		if (picked)
 		{

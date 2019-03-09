@@ -1,9 +1,10 @@
 #ifndef SHAREDDATA_H
 #define SHAREDDATA_H
 
-#define KEY_SCORE_COIN 0
-#define KEY_SCORE_KEY 1
-#define KEY_SCORE_KEY_PICKED 2
+#define KEY_GUI_COIN		0
+#define KEY_GUI_KEY			1
+#define KEY_GUI_KEY_PICKED	2
+#define KEY_GUI_RECTANGLE	3
 
 #include <memory>
 #include <unordered_map>
@@ -15,6 +16,9 @@ using namespace std;
 class SharedData : public EngineObject
 {
 protected:
+
+	// Game Over screen
+	f32 gameOver = 0.0f;
 
 	// Graphics
 	IGUIFont* font;
@@ -42,17 +46,26 @@ protected:
 	unordered_map<s32, ScoreValue> gameScores;
 
 	// Build GUI from game score
-	void buildGUIFromGameScore();
+	void buildGameScore();
+
+	// Build GUI for Game Over screen
+	void buildGameOver();
 
 public:
 
 	// Key for room loader
 	static const std::string ROOM_OBJECT_KEY;
 
+	// Constructor
+	SharedData();
+
 	// Singleton pattern variable
 	static shared_ptr<SharedData> singleton;
 
-	// Constructor
+	// Animation stepper
+	void stepAnimations(f32 deltaTime);
+
+	// Post Constructor
 	void loadAssets();
 
 	// Initialize game score value

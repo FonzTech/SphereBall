@@ -40,7 +40,7 @@ MainMenu::MainMenu() : GameObject()
 void MainMenu::update()
 {
 	// Get event manager and window size
-	dimension2di windowSize = utility::getWindowSize(driver);
+	dimension2di windowSize = utility::getWindowSize<s32>(driver);
 
 	// Temporary current index
 	s8 tmpIndex = -1;

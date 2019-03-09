@@ -18,7 +18,7 @@ void SharedData::stepAnimations(f32 deltaTime)
 	// Increment Game Over variable
 	if (gameOver > 0)
 	{
-		gameOver += deltaTime * 0.005f;
+		gameOver += deltaTime * 0.0025f;
 
 		// Clamp value
 		if (gameOver > 1)

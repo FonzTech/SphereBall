@@ -12,7 +12,7 @@
 
 namespace utility
 {
-	void transformAABBox(aabbox3d<f32> &dest, const vector3df &translate, const vector3df &rotation, const vector3df &scale)
+	const void transformAABBox(aabbox3d<f32> &dest, const vector3df &translate, const vector3df &rotation, const vector3df &scale)
 	{
 		matrix4 trans;
 		trans.setTranslation(translate);
@@ -20,48 +20,20 @@ namespace utility
 		trans.transformBoxEx(dest);
 	}
 
-	void getHorizontalAABBox(aabbox3df &source, aabbox3df &dest, f32 align, f32 verScale)
+	const void getHorizontalAABBox(const aabbox3df &source, aabbox3df &dest, const f32 align, const f32 verScale)
 	{
 		utility::transformAABBox(dest, vector3df(source.getExtent().X / 2 * align, 0, 0), vector3df(0, 0, 0), vector3df(0.05f, 1, 1) * verScale);
 	}
 
-	void getVerticalAABBox(aabbox3df &source, aabbox3df &dest, f32 align, f32 horScale)
+	const void getVerticalAABBox(const aabbox3df &source, aabbox3df &dest, const f32 align, const f32 horScale)
 	{
 		utility::transformAABBox(dest, vector3df(0, source.getExtent().Y / 2 * align, 0), vector3df(0, 0, 0), vector3df(1, 0.05f, 1) * horScale);
 	}
 
-	dimension2di getWindowSize(IVideoDriver* driver)
-	{
-		// Get exposed video data
-		const SExposedVideoData evd = driver->getExposedVideoData();
-
-		// Prepare data structure to hold window size
-		dimension2di windowSize;
-
-		// Get window size
-		#ifdef __linux__ 
-		// Not implemented yet
-
-		#elif _WIN32
-		HWND hwnd = reinterpret_cast<HWND>(evd.D3D9.HWnd);
-		RECT  lpRect;
-		if (GetClientRect(hwnd, &lpRect))
-		{
-			windowSize = dimension2di(lpRect.right - lpRect.left, lpRect.bottom - lpRect.top);
-		}
-
-		#else
-		windowSize = dimension2di();
-
-		#endif
-
-		return windowSize;
-	}
-
-	rect<s32> getPositionInScreenSpace(IVideoDriver* driver, const f32 x, const f32 y, const s32 width, const s32 height, IGUIFont* font, const wchar_t* text, const f32 alignX, const f32 alignY)
+	const rect<s32> getPositionInScreenSpace(IVideoDriver* driver, const f32 x, const f32 y, const s32 width, const s32 height, IGUIFont* font, const wchar_t* text, const f32 alignX, const f32 alignY)
 	{
 		// Get window size
-		dimension2di windowSize = getWindowSize(driver);
+		const dimension2di windowSize = getWindowSize<s32>(driver);
 
 		// Variables for transform
 		s32 tx = 0, ty = 0;
@@ -82,12 +54,12 @@ namespace utility
 		return rect<s32>(dx, dy, dx + width, dy + height);
 	}
 
-	sf::Vector3f irrVectorToSf(const vector3df& v)
+	const sf::Vector3f irrVectorToSf(const vector3df& v)
 	{
 		return sf::Vector3f(v.X, v.Y, v.Z);
 	}
 
-	recti getSourceRect(ITexture* texture)
+	const recti getSourceRect(const ITexture* texture)
 	{
 		return recti(vector2di(0, 0), vector2di(texture->getSize().Width, texture->getSize().Height));
 	}

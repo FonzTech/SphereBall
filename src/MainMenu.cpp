@@ -24,7 +24,7 @@ MainMenu::MainMenu() : GameObject()
 
 	optionTitles[4] = L"Resolution";
 	optionTitles[5] = L"SFX Volume";
-	optionTitles[6] = L"Music Volune";
+	optionTitles[6] = L"Music Volume";
 	optionTitles[7] = L"Back";
 
 	// Load sound

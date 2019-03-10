@@ -47,18 +47,3 @@ GameObject::GameObject()
 	// Initialize variables
 	destroy = false;
 }
-
-void GameObject::playSound(const std::string& key, const vector3df* position)
-{
-	if (position == nullptr)
-	{
-		sounds[key]->setRelativeToListener(true);
-		sounds[key]->setPosition(sf::Vector3f(0, 0, 0));
-	}
-	else
-	{
-		sounds[key]->setRelativeToListener(false);
-		sounds[key]->setPosition(utility::irrVectorToSf(*position));
-	}
-	sounds[key]->play();
-}

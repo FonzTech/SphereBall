@@ -1,12 +1,9 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-#include <memory>
 #include <vector>
-#include <unordered_map>
 
 #include <nlohmann/json.hpp>
-#include <SFML/Audio.hpp>
 
 #include "EngineObject.h"
 #include "Collision.h"
@@ -20,9 +17,6 @@ using nlohmann::json;
 class GameObject : public EngineObject
 {
 protected:
-
-	// Map to hold sounds
-	std::unordered_map<std::string, shared_ptr<sf::Sound>> sounds;
 
 	// Check for collision with another game object
 	template <typename T>
@@ -71,9 +65,6 @@ protected:
 		// Return built object
 		return collision;
 	}
-
-	// Play spatial sound
-	void playSound(const std::string& key, const vector3df* position = nullptr);
 
 public:
 

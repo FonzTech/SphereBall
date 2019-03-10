@@ -14,7 +14,7 @@ MainMenu::MainMenu() : GameObject()
 	font = guienv->getFont("fonts/titles.xml");
 
 	// Load mouse pointer texture
-	mouse = driver->getTexture("textures/mouse.png");
+	mouse = driver->getTexture("textures/gui_mouse.png");
 
 	// Create titles for options
 	optionTitles[0] = L"Start Game";

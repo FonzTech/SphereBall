@@ -5,6 +5,9 @@
 #define KEY_GUI_KEY			1
 #define KEY_GUI_KEY_PICKED	2
 #define KEY_GUI_RECTANGLE	3
+#define KEY_GUI_MOUSE		4
+
+#define KEY_TEXT_GAME_OVER	0
 
 #include <memory>
 #include <unordered_map>
@@ -17,8 +20,11 @@ class SharedData : public EngineObject
 {
 protected:
 
+	// Menu selection
+	s8 selection;
+
 	// Game Over screen
-	f32 gameOver = 0.0f;
+	f32 gameOver;
 
 	// Graphics
 	IGUIFont* font;
@@ -41,6 +47,9 @@ protected:
 
 	// Map to hold textures
 	unordered_map<u8, ITexture*> guiTextures;
+
+	// Map to hold text groups
+	unordered_map<u8, vector<wstring>> textGroups;
 
 	// Map for game scores and related data
 	unordered_map<s32, ScoreValue> gameScores;

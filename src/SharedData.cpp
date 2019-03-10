@@ -2,6 +2,8 @@
 
 #include "SharedData.h"
 #include "Utility.h"
+#include "EventManager.h"
+#include "SoundManager.h"
 
 const std::string SharedData::ROOM_OBJECT_KEY = "SharedData";
 
@@ -10,7 +12,17 @@ shared_ptr<SharedData> SharedData::singleton = nullptr;
 SharedData::SharedData()
 {
 	// Initialize variables
+	selection = -1;
 	gameOver = 0;
+
+	// Initialize texts for game over
+	vector<wstring> textGameOver;
+	textGameOver.push_back(L"Riprova Livello");
+	textGameOver.push_back(L"Esci Dal Livello");
+	textGroups[KEY_TEXT_GAME_OVER] = textGameOver;
+
+	// Load sounds
+	sounds[KEY_SOUND_SELECT] = SoundManager::singleton->getSound(KEY_SOUND_SELECT);
 }
 
 void SharedData::stepAnimations(f32 deltaTime)
@@ -37,6 +49,7 @@ void SharedData::loadAssets()
 	guiTextures[KEY_GUI_COIN] = driver->getTexture("textures/gui_coin.png");
 	guiTextures[KEY_GUI_KEY] = driver->getTexture("textures/gui_key.png");
 	guiTextures[KEY_GUI_RECTANGLE] = driver->getTexture("textures/gui_rectangle.png");
+	guiTextures[KEY_GUI_MOUSE] = driver->getTexture("textures/gui_mouse.png");
 }
 
 void SharedData::buildGameScore()
@@ -94,11 +107,65 @@ void SharedData::buildGameOver()
 	// Check if Game Over screen has been triggered
 	if (gameOver > 0)
 	{
+		// Compute alpha value in unsigned integer form
+		u32 alpha[] = {
+			(u32)(gameOver * 192.0f),
+			(u32)(gameOver * 255.0f)
+		};
+
 		// Draw background image
 		IGUIImage* image = guienv->addImage(guiTextures[KEY_GUI_RECTANGLE], vector2di(0, 0));
 		image->setMinSize(utility::getWindowSize<u32>(driver));
 		image->setScaleImage(true);
-		image->setColor(SColor((u32) (gameOver * 192.0f), 0, 0, 0));
+		image->setColor(SColor(alpha[0], 0, 0, 0));
+
+		// Get window size
+		const dimension2di windowSize = utility::getWindowSize<s32>(driver);
+
+		// Calculate text rectangles, then draw them
+		s8 currentSelection = -1;
+		const auto& texts = textGroups[KEY_TEXT_GAME_OVER];
+
+		for (u8 i = 0; i < texts.size(); ++i)
+		{
+			// Compute text rectangle
+			const recti r(0, windowSize.Height / 4 * (2 + i), windowSize.Width, windowSize.Height / 4 * (3 + i));
+
+			// Default text color
+			SColor color(alpha[1], 255, 255, 255);
+
+			// Check if mouse is inside the text rectangle
+			if (r.isPointInside(EventManager::singleton->mousePosition))
+			{
+				// Make text color different
+				color.setBlue(0);
+
+				// Store selection index for later
+				currentSelection = i;
+			}
+
+			// Draw text
+			IGUIStaticText* text = guienv->addStaticText(texts.at(i).c_str(), r);
+			text->setOverrideFont(font);
+			text->setOverrideColor(color);
+			text->setTextAlignment(EGUIA_CENTER, EGUIA_CENTER);
+		}
+
+		// Commit menu selection
+		if (selection != currentSelection)
+		{
+			if (currentSelection >= 0)
+			{
+				playSound(KEY_SOUND_SELECT);
+			}
+		}
+		selection = currentSelection;
+
+		// Draw mouse pointer
+		ITexture* mouse = guiTextures[KEY_GUI_MOUSE];
+		const recti r = utility::getSourceRect(mouse) + EventManager::singleton->mousePosition;
+		image = guienv->addImage(r);
+		image->setImage(mouse);
 	}
 }
 

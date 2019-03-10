@@ -12,10 +12,10 @@
 
 namespace utility
 {
-	const void transformAABBox(aabbox3d<f32> &dest, const vector3df &translate, const vector3df &rotation, const vector3df &scale)
+	const void transformAABBox(aabbox3d<f32> &dest, const vector3df &translation, const vector3df &rotation, const vector3df &scale)
 	{
 		matrix4 trans;
-		trans.setTranslation(translate);
+		trans.setTranslation(translation);
 		trans.setScale(scale);
 		trans.transformBoxEx(dest);
 	}

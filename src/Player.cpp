@@ -306,6 +306,8 @@ void Player::walk()
 	// Check collision with spikes
 	{
 		aabbox3df rect(bbox);
+		utility::transformAABBox(rect, vector3df(0), vector3df(0), vector3df(0.75f, 0.85f, 1.0f));
+
 		Collision collision = checkBoundingBoxCollision<Spikes>(RoomManager::singleton->gameObjects, rect, spikesCollisionCheck);
 		if (collision.engineObject != nullptr)
 		{

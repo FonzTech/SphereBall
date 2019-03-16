@@ -16,9 +16,10 @@ protected:
 	// Plane model
 	shared_ptr<Model> planeModel;
 
-public:
 	// Sparkle shader
 	static s32 customMaterial;
+
+public:
 
 	// Specialized variables
 	bool notPicked;

@@ -57,7 +57,7 @@ void Exit::update()
 
 void Exit::draw()
 {
-	// Exit modl
+	// Exit model
 	shared_ptr<Model> model = models.at(0);
 	model->position = position;
 	model->rotation = vector3df(0, angle, 0);

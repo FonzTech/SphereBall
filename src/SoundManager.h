@@ -10,6 +10,7 @@
 #define KEY_SOUND_SPIKE_OUT		"spike_out"
 #define KEY_SOUND_NAILED		"nailed"
 #define KEY_SOUND_GAME_OVER		"game_over"
+#define KEY_SOUND_LETHARGY_PILL	"lethargy_pill"
 
 #include <unordered_map>
 #include <string>

@@ -190,6 +190,7 @@
     <ClCompile Include="src/Spikes.cpp" />
     <ClCompile Include="src/Utility.cpp" />
     <ClCompile Include="src\Key.cpp" />
+    <ClCompile Include="src\Pill.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src/Engine.h" />
@@ -213,6 +214,7 @@
     <ClInclude Include="src/Spikes.h" />
     <ClInclude Include="src/Utility.h" />
     <ClInclude Include="src\Key.h" />
+    <ClInclude Include="src\Pill.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -10,6 +10,7 @@
 #include "Spikes.h"
 #include "Exit.h"
 #include "Key.h"
+#include "Pill.h"
 
 shared_ptr<RoomManager> RoomManager::singleton = nullptr;
 
@@ -27,6 +28,7 @@ RoomManager::RoomManager()
 	gameObjectFactory["Spikes"] = &Spikes::createInstance;
 	gameObjectFactory["Exit"] = &Exit::createInstance;
 	gameObjectFactory["Key"] = &Key::createInstance;
+	gameObjectFactory["Pill"] = &Pill::createInstance;
 
 	// Initialize variables
 	isProgramRunning = true;

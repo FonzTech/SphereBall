@@ -11,6 +11,7 @@
 #include "Coin.h"
 #include "Key.h"
 #include "Spikes.h"
+#include "Pill.h"
 
 shared_ptr<Player> Player::createInstance(const json &jsonData)
 {
@@ -44,6 +45,7 @@ Player::Player() : GameObject()
 	sounds[KEY_SOUND_KEY_FINAL] = SoundManager::singleton->getSound(KEY_SOUND_KEY_FINAL);
 	sounds[KEY_SOUND_NAILED] = SoundManager::singleton->getSound(KEY_SOUND_NAILED);
 	sounds[KEY_SOUND_GAME_OVER] = SoundManager::singleton->getSound(KEY_SOUND_GAME_OVER);
+	sounds[KEY_SOUND_LETHARGY_PILL] = SoundManager::singleton->getSound(KEY_SOUND_LETHARGY_PILL);
 
 	// Create specialized functions
 	coinCollisionCheck = [](const GameObject* go)
@@ -313,6 +315,19 @@ void Player::walk()
 		{
 			playSound(KEY_SOUND_NAILED);
 			die();
+		}
+	}
+
+	// Check collision with pill
+	{
+		aabbox3df rect(bbox);
+		utility::transformAABBox(rect, vector3df(0), vector3df(0), vector3df(0.8f, 0.8f, 0.8f));
+
+		Collision collision = checkBoundingBoxCollision<Pill>(RoomManager::singleton->gameObjects, rect);
+		if (collision.engineObject != nullptr)
+		{
+			playSound(KEY_SOUND_LETHARGY_PILL);
+			collision.getGameObject<Pill>()->destroy = 1;
 		}
 	}
 }

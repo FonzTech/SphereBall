@@ -5,7 +5,7 @@
 
 using namespace irr;
 
-class ShaderCallBack : public video::IShaderConstantSetCallBack
+class ShaderCallback : public video::IShaderConstantSetCallBack
 {
 public:
 

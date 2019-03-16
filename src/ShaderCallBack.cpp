@@ -1,6 +1,6 @@
 #include "ShaderCallback.h"
 
-void ShaderCallBack::OnSetConstants(video::IMaterialRendererServices* services, s32 userData)
+void ShaderCallback::OnSetConstants(video::IMaterialRendererServices* services, s32 userData)
 {
 	// Get video driver
 	video::IVideoDriver* driver = services->getVideoDriver();

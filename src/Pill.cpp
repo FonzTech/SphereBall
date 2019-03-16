@@ -68,7 +68,7 @@ Pill::SpecializedShaderCallback::SpecializedShaderCallback(Pill* pill)
 void Pill::SpecializedShaderCallback::OnSetConstants(video::IMaterialRendererServices* services, s32 userData)
 {
 	// Execute parent method
-	ShaderCallBack::OnSetConstants(services, userData);
+	ShaderCallback::OnSetConstants(services, userData);
 
 	// Set shader values
 	s32 layer0 = 0;

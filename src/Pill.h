@@ -30,7 +30,7 @@ public:
 	static shared_ptr<Pill> createInstance(const json &jsonData);
 
 	// ShaderCallBack
-	class SpecializedShaderCallback : public ShaderCallBack
+	class SpecializedShaderCallback : public ShaderCallback
 	{
 	protected:
 		Pill* pill;

@@ -38,7 +38,7 @@ public:
 	static shared_ptr<Coin> createInstance(const json &jsonData);
 
 	// ShaderCallBack
-	class SpecializedShaderCallback : public ShaderCallBack
+	class SpecializedShaderCallback : public ShaderCallback
 	{
 	protected:
 		Coin* coin;

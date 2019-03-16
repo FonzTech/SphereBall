@@ -6,11 +6,12 @@ void ShaderCallBack::OnSetConstants(video::IMaterialRendererServices* services, 
 	video::IVideoDriver* driver = services->getVideoDriver();
 
 	// Set clip matrix
-	core::matrix4 worldViewProj;
-	worldViewProj = driver->getTransform(video::ETS_PROJECTION);
-	worldViewProj *= driver->getTransform(video::ETS_VIEW);
-	worldViewProj *= driver->getTransform(video::ETS_WORLD);
+	core::matrix4 mProj = driver->getTransform(video::ETS_PROJECTION);
+	core::matrix4 mView = driver->getTransform(video::ETS_VIEW);
+	core::matrix4 mWorld = driver->getTransform(video::ETS_WORLD);
 
-	// Set View-Projection matrix
-	services->setVertexShaderConstant("mWorldViewProj", worldViewProj.pointer(), 16);
+	// Pass matrices to shader
+	services->setVertexShaderConstant("mWorld", mWorld.pointer(), 16);
+	services->setVertexShaderConstant("mView", mView.pointer(), 16);
+	services->setVertexShaderConstant("mProj", mProj.pointer(), 16);
 }

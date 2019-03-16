@@ -2,7 +2,7 @@
 #define PILL_H
 
 #include "GameObject.h"
-#include "ShaderCallBack.h"
+#include "ShaderCallback.h"
 
 class Pill : public GameObject
 {

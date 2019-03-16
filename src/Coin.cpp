@@ -99,7 +99,7 @@ Coin::SpecializedShaderCallback::SpecializedShaderCallback(Coin* coin)
 void Coin::SpecializedShaderCallback::OnSetConstants(video::IMaterialRendererServices* services, s32 userData)
 {
 	// Execute parent method
-	ShaderCallBack::OnSetConstants(services, userData);
+	ShaderCallback::OnSetConstants(services, userData);
 
 	// Set shader values
 	if (coin->notPicked)

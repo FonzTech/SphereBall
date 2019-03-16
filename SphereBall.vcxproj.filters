@@ -51,9 +51,6 @@
     <ClCompile Include="src/RoomManager.cpp">
       <Filter>Sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src/ShaderCallBack.cpp">
-      <Filter>Sources\Core</Filter>
-    </ClCompile>
     <ClCompile Include="src/SharedData.cpp">
       <Filter>Sources\Core</Filter>
     </ClCompile>
@@ -93,6 +90,9 @@
     <ClCompile Include="src\Pill.cpp">
       <Filter>Sources\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\ShaderCallback.cpp">
+      <Filter>Sources\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src/Engine.h">
@@ -117,9 +117,6 @@
       <Filter>Headers\Core</Filter>
     </ClInclude>
     <ClInclude Include="src/RoomManager.h">
-      <Filter>Headers\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src/ShaderCallBack.h">
       <Filter>Headers\Core</Filter>
     </ClInclude>
     <ClInclude Include="src/SharedData.h">
@@ -160,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="src\Pill.h">
       <Filter>Headers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ShaderCallback.h">
+      <Filter>Headers\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

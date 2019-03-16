@@ -1,5 +1,5 @@
-uniform float angle;
 uniform sampler2D tex;
+uniform float angle;
 
 #define PI 3.1416
 

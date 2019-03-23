@@ -83,7 +83,7 @@ void Engine::loop()
 		driver->beginScene(true, true, SColor(255, 100, 101, 140));
 
 		// Cycle through all available game objects
-		for (u32 i = 0; i != RoomManager::singleton->gameObjects.size(); ++i)
+		for (size_t i = 0; i != RoomManager::singleton->gameObjects.size(); ++i)
 		{
 			// Set delta time for the current object
 			RoomManager::singleton->gameObjects[i]->deltaTime = (f32) deltaTime;

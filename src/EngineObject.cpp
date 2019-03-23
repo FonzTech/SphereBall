@@ -1,6 +1,7 @@
 #include "EngineObject.h"
 #include "Utility.h"
 
+IrrlichtDevice* EngineObject::device = nullptr;
 IVideoDriver* EngineObject::driver = nullptr;
 ISceneManager* EngineObject::smgr = nullptr;
 IGUIEnvironment* EngineObject::guienv = nullptr;
@@ -20,9 +21,10 @@ void EngineObject::playSound(const std::string& key, const vector3df* position)
 	sounds[key]->play();
 }
 
-void EngineObject::setEngineInstances(ISceneManager* smgr, IGUIEnvironment* guienv)
+void EngineObject::setEngineInstances(IrrlichtDevice* device, ISceneManager* smgr, IGUIEnvironment* guienv)
 {
+	EngineObject::device = device;
+	EngineObject::driver = device->getVideoDriver();
 	EngineObject::smgr = smgr;
 	EngineObject::guienv = guienv;
-	EngineObject::driver = smgr->getVideoDriver();
 }

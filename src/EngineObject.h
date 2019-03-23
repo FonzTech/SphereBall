@@ -29,12 +29,13 @@ protected:
 public:
 
 	// Persistent object from game engine
+	static IrrlichtDevice* device;
 	static IVideoDriver* driver;
 	static ISceneManager* smgr;
 	static IGUIEnvironment* guienv;
 
 	// Set engine instances
-	static void setEngineInstances(ISceneManager* smgr, IGUIEnvironment* guienv);
+	static void setEngineInstances(IrrlichtDevice* device, ISceneManager* smgr, IGUIEnvironment* guienv);
 };
 
 #endif // ENGINEOBJECT_H

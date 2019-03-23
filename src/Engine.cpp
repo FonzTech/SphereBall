@@ -51,7 +51,7 @@ void Engine::setupComponents()
 	guienv = device->getGUIEnvironment();
 
 	// Set engine instances
-	EngineObject::setEngineInstances(Engine::singleton->smgr, Engine::singleton->guienv);
+	EngineObject::setEngineInstances(device, smgr, guienv);
 
 	// Load assets for SharedData
 	SharedData::singleton->loadAssets();

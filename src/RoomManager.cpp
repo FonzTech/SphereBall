@@ -36,18 +36,26 @@ RoomManager::RoomManager()
 
 void RoomManager::loadRoom(std::string name)
 {
+	// Read room from file and parse JSON
+	json jsonData;
+	{
+		try
+		{
+			std::ifstream input("rooms/" + name + ".json");
+			input >> jsonData;
+		}
+		catch (json::exception e)
+		{
+			printf("Room %s could not be loaded.\n", name.c_str());
+			return;
+		}
+	}
+
 	// Clear currently loaded room
 	gameObjects.clear();
 
 	// Clear game score values
 	SharedData::singleton->clearGameScore();
-
-	// Read room from file and parse JSON
-	json jsonData;
-	{
-		std::ifstream input("rooms/" + name + ".json");
-		input >> jsonData;
-	}
 
 	// Iterate through all available objects
 	for (u32 i = 0; i < jsonData.size(); ++i)

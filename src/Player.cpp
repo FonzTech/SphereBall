@@ -321,7 +321,7 @@ void Player::walk()
 	// Check collision with pill
 	{
 		aabbox3df rect(bbox);
-		utility::transformAABBox(rect, vector3df(0), vector3df(0), vector3df(0.8f, 0.8f, 0.8f));
+		utility::transformAABBox(rect, vector3df(0), vector3df(0), vector3df(0.9f, 0.8f, 0.8f));
 
 		Collision collision = checkBoundingBoxCollision<Pill>(RoomManager::singleton->gameObjects, rect);
 		if (collision.engineObject != nullptr)

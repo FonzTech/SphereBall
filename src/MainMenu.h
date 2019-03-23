@@ -4,22 +4,26 @@
 #include "GameObject.h"
 #include "EventManager.h"
 
-using namespace std;
-
 class MainMenu : public GameObject
 {
 protected:
 	// Font for menu entriess
 	IGUIFont* font;
 
-	// Texture for mouse
+	// Textures
 	ITexture* mouse;
+	ITexture* rectangleTexture;
 
-	// Strings for option titles
-	const wchar_t* optionTitles[8];
+	// Window size
+	dimension2di windowSize;
 
-	// Members for option areas
-	recti optionsAreas[8];
+	// Strings for text strings
+	std::vector<std::wstring> optionTitles;
+	std::vector<std::wstring> levelTitles;
+
+	// Members for text ares
+	std::vector<recti> optionsAreas;
+	std::vector<recti> levelAreas;
 	f32 animation;
 
 	// Current selected entry index

@@ -24,6 +24,7 @@ protected:
 	// Members for text ares
 	std::vector<recti> optionsAreas;
 	std::vector<recti> levelAreas;
+	recti titleArea;
 	f32 animation;
 
 	// Current selected entry index

@@ -60,6 +60,12 @@ void MainMenu::update()
 	optionsAreas.clear();
 	levelAreas.clear();
 
+	// Compute area for title
+	{
+		s32 height = max(windowSize.Height / 5, 160);
+		titleArea = recti(0, 0, windowSize.Width, height);
+	}
+
 	// Compute vertical sections for menu
 	for (s8 i = 0; i < 8; ++i)
 	{
@@ -218,6 +224,23 @@ void MainMenu::draw()
 
 	// Get animated value
 	f32 animatedValue = utility::getCubicBezierAt(*(&vector2df(0, 1)), *(&vector2df(1, 0)), abs(animation)).X;
+
+	// Draw title
+	{
+		// Compute right animated position
+		if (animation < 0)
+		{
+			s32 x = (s32)(animatedValue * (f32)windowSize.Width * (animation < 0 ? 1.0f : -1.0f));
+			titleArea.UpperLeftCorner.X += x;
+			titleArea.LowerRightCorner.X += x;
+		}
+
+		// Create text to be drawn
+		IGUIStaticText* text = guienv->addStaticText(L"SphereBall", titleArea);
+		text->setOverrideFont(font);
+		text->setOverrideColor(SColor(255, 255, 255, 0));
+		text->setTextAlignment(EGUIA_CENTER, EGUIA_CENTER);
+	}
 
 	// Draw main menu and options
 	size_t limit = animation < 0 ? optionsAreas.size() / 2 : optionsAreas.size();

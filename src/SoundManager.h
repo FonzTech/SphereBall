@@ -11,6 +11,7 @@
 #define KEY_SOUND_NAILED		"nailed"
 #define KEY_SOUND_GAME_OVER		"game_over"
 #define KEY_SOUND_LETHARGY_PILL	"lethargy_pill"
+#define KEY_SOUND_LEVEL_START	"level_start"
 
 #include <unordered_map>
 #include <string>

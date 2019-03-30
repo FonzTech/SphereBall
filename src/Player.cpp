@@ -46,6 +46,7 @@ Player::Player() : GameObject()
 	sounds[KEY_SOUND_NAILED] = SoundManager::singleton->getSound(KEY_SOUND_NAILED);
 	sounds[KEY_SOUND_GAME_OVER] = SoundManager::singleton->getSound(KEY_SOUND_GAME_OVER);
 	sounds[KEY_SOUND_LETHARGY_PILL] = SoundManager::singleton->getSound(KEY_SOUND_LETHARGY_PILL);
+	sounds[KEY_SOUND_LEVEL_START] = SoundManager::singleton->getSound(KEY_SOUND_LEVEL_START);
 
 	// Create specialized functions
 	coinCollisionCheck = [](const GameObject* go)
@@ -62,6 +63,9 @@ Player::Player() : GameObject()
 
 	// Fade out
 	SharedData::singleton->startFade(false, nullptr);
+
+	// Play Start Level sound
+	playSound(KEY_SOUND_LEVEL_START, nullptr);
 }
 
 void Player::update()

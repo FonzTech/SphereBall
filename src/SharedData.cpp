@@ -13,7 +13,11 @@ SharedData::SharedData()
 {
 	// Initialize variables
 	selection = -1;
-	gameOver = 0;
+	gameOver = 0.0f;
+
+	fadeType = 0;
+	fadeValue = 0.0f;
+	fadeCallback = nullptr;
 
 	// Initialize texts for game over
 	vector<wstring> textGameOver;
@@ -27,6 +31,38 @@ SharedData::SharedData()
 
 void SharedData::stepAnimations(f32 deltaTime)
 {
+	// Fade animation
+	if (fadeType == 0)
+	{
+		fadeValue -= 0.002f * deltaTime;
+
+		if (fadeValue < 0.0f)
+		{
+			fadeValue = 0.0f;
+
+			if (fadeCallback != nullptr)
+			{
+				fadeCallback();
+				fadeCallback = nullptr;
+			}
+		}
+	}
+	else if (fadeType == 1)
+	{
+		fadeValue += 0.002f * deltaTime;
+
+		if (fadeValue > 1.0f)
+		{
+			fadeValue = 1.0f;
+
+			if (fadeCallback != nullptr)
+			{
+				fadeCallback();
+				fadeCallback = nullptr;
+			}
+		}
+	}
+
 	// Increment Game Over variable
 	if (gameOver > 0)
 	{
@@ -169,6 +205,17 @@ void SharedData::buildGameOver()
 	}
 }
 
+void SharedData::buildFadeTransition()
+{
+	dimension2di ws = utility::getWindowSize<s32>(driver);
+	recti r(0, 0, ws.Width, ws.Height);
+
+	IGUIImage* image = guienv->addImage(r);
+	image->setColor(SColor((s32)(fadeValue * 255.0f), 255, 255, 255));
+	image->setImage(guiTextures[KEY_GUI_RECTANGLE]);
+	image->setScaleImage(true);
+}
+
 void SharedData::initGameScoreValue(s32 key, s32 value)
 {
 	gameScores[key] = ScoreValue(1, value);
@@ -208,10 +255,22 @@ void SharedData::updateGameScoreValue(const s32 key, const s32 stepValue)
 	search->second.value += stepValue;
 }
 
+void SharedData::startFade(bool in, std::function<void()> fadeCallback)
+{
+	this->fadeType = in ? 1 : 0;
+	this->fadeCallback = fadeCallback;
+}
+
 void SharedData::buildGUI()
 {
+	// Game score first
 	buildGameScore();
+
+	// Game over screen on top
 	buildGameOver();
+
+	// Fade transition over all
+	buildFadeTransition();
 }
 
 void SharedData::displayGameOver()

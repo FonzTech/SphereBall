@@ -2,6 +2,7 @@
 #include "RoomManager.h"
 #include "SoundManager.h"
 #include "Camera.h"
+#include "SharedData.h"
 
 shared_ptr<MainMenu> MainMenu::createInstance(const json &jsonData)
 {
@@ -13,7 +14,7 @@ MainMenu::MainMenu() : GameObject()
 	// Load font for menu
 	font = guienv->getFont("fonts/titles.xml");
 
-	// Load mouse pointer texture
+	// Load textures
 	mouse = driver->getTexture("textures/gui_mouse.png");
 	rectangleTexture = driver->getTexture("textures/gui_rectangle.png");
 
@@ -46,10 +47,18 @@ MainMenu::MainMenu() : GameObject()
 	currentSection = 1;
 	currentIndex = -1;
 	animation = 0;
+
+	roomToLoad = "";
 }
 
 void MainMenu::update()
 {
+	// Check if transition in active
+	if (roomToLoad.length() > 0)
+	{
+		return;
+	}
+
 	// Get window size
 	windowSize = utility::getWindowSize<s32>(driver);
 
@@ -147,8 +156,10 @@ void MainMenu::update()
 			}
 			else
 			{
-				std::string fname = "level_" + std::to_string(currentIndex - 1);
-				RoomManager::singleton->loadRoom(fname);
+				roomToLoad = "level_" + std::to_string(currentIndex - 1);
+
+				std::function<void()> callback = std::bind(&MainMenu::jumpToLevel, this);
+				SharedData::singleton->startFade(true, callback);
 			}
 		}
 		else
@@ -304,7 +315,14 @@ void MainMenu::draw()
 	}
 
 	// Draw mouse pointer
-	recti r = utility::getSourceRect(mouse) + EventManager::singleton->mousePosition;
-	IGUIImage* image = guienv->addImage(r);
-	image->setImage(mouse);
+	{
+		recti r = utility::getSourceRect(mouse) + EventManager::singleton->mousePosition;
+		IGUIImage* image = guienv->addImage(r);
+		image->setImage(mouse);
+	}
+}
+
+void MainMenu::jumpToLevel()
+{
+	RoomManager::singleton->loadRoom(roomToLoad);
 }

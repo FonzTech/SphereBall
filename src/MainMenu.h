@@ -7,6 +7,7 @@
 class MainMenu : public GameObject
 {
 protected:
+
 	// Font for menu entriess
 	IGUIFont* font;
 
@@ -31,7 +32,14 @@ protected:
 	s8 currentSection;
 	s8 currentIndex;
 
+	// Room jump variables
+	std::string roomToLoad;
+
+	// Jump Room callback function
+	void jumpToLevel();
+
 public:
+
 	// Constructor
 	MainMenu();
 

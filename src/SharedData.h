@@ -11,6 +11,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include <functional>
 
 #include "EngineObject.h"
 
@@ -26,7 +27,12 @@ protected:
 	// Game Over screen
 	f32 gameOver;
 
-	// Graphics
+	// Variables for fade transition
+	s8 fadeType;
+	f32 fadeValue;
+	std::function<void()> fadeCallback;
+
+	// Font for GUI
 	IGUIFont* font;
 
 	// Structure for GUI score value
@@ -53,6 +59,9 @@ protected:
 
 	// Map for game scores and related data
 	unordered_map<s32, ScoreValue> gameScores;
+
+	// Build fade for transition
+	void buildFadeTransition();
 
 	// Build GUI from game score
 	void buildGameScore();
@@ -88,6 +97,9 @@ public:
 
 	// Update value for game score
 	void updateGameScoreValue(const s32 key, const s32 stepValue);
+
+	// Fade control
+	void startFade(bool in, std::function<void()> fadeCallback);
 
 	// Build GUI from game score
 	void buildGUI();

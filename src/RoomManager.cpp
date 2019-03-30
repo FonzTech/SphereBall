@@ -14,6 +14,8 @@
 
 shared_ptr<RoomManager> RoomManager::singleton = nullptr;
 
+std::string RoomManager::ROOM_MAIN_MENU = "main_menu";
+
 RoomManager::RoomManager()
 {
 	// Create vector to hold game objects
@@ -34,19 +36,19 @@ RoomManager::RoomManager()
 	isProgramRunning = true;
 }
 
-void RoomManager::loadRoom(std::string name)
+void RoomManager::loadRoom(const std::string roomToLoad)
 {
 	// Read room from file and parse JSON
 	json jsonData;
 	{
 		try
 		{
-			std::ifstream input("rooms/" + name + ".json");
+			std::ifstream input("rooms/" + roomToLoad + ".json");
 			input >> jsonData;
 		}
 		catch (json::exception e)
 		{
-			printf("Room %s could not be loaded.\n", name.c_str());
+			printf("Room %s could NOT be loaded.\n", roomToLoad.c_str());
 			return;
 		}
 	}
@@ -107,4 +109,12 @@ void RoomManager::loadRoom(std::string name)
 			}
 		}
 	}
+
+	// Store current loaded room
+	roomName = roomToLoad;
+}
+
+void RoomManager::restartRoom()
+{
+	loadRoom(roomName);
 }

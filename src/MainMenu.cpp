@@ -49,6 +49,9 @@ MainMenu::MainMenu() : GameObject()
 	animation = 0;
 
 	roomToLoad = "";
+
+	// Fade out animation
+	SharedData::singleton->startFade(false, nullptr);
 }
 
 void MainMenu::update()

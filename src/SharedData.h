@@ -21,11 +21,10 @@ class SharedData : public EngineObject
 {
 protected:
 
-	// Menu selection
-	s8 selection;
-
 	// Game Over screen
 	f32 gameOverAlpha;
+	s8 gameOverSelection;
+	vector<recti> gameOverRects;
 
 	// Variables for fade transition
 	s8 fadeType;
@@ -68,6 +67,12 @@ protected:
 
 	// Build GUI for Game Over screen
 	void buildGameOver();
+
+	// Restart room method
+	void restartRoom();
+
+	// Back to menu room method
+	void jumpToMenuRoom();
 
 public:
 

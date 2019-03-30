@@ -4,6 +4,7 @@
 #include "Utility.h"
 #include "EventManager.h"
 #include "SoundManager.h"
+#include "RoomManager.h"
 
 const std::string SharedData::ROOM_OBJECT_KEY = "SharedData";
 
@@ -12,8 +13,8 @@ shared_ptr<SharedData> SharedData::singleton = nullptr;
 SharedData::SharedData()
 {
 	// Initialize variables
-	selection = -1;
 	gameOverAlpha = 0.0f;
+	gameOverSelection = -1;
 
 	fadeType = 0;
 	fadeValue = 0.0f;
@@ -63,15 +64,29 @@ void SharedData::update(f32 deltaTime)
 		}
 	}
 
-	// Increment Game Over variable
+	// Game Over controller
 	if (gameOverAlpha > 0)
 	{
+		// Increment alpha value
 		gameOverAlpha += deltaTime * 0.0025f;
 
 		// Clamp value
 		if (gameOverAlpha > 1)
 		{
 			gameOverAlpha = 1;
+		}
+
+		// Menu selection
+		gameOverRects.clear();
+
+		for (u8 i = 0; i < 2; ++i)
+		{
+			// Get window size
+			const dimension2di windowSize = utility::getWindowSize<s32>(driver);
+
+			// Compute text rectangle
+			recti r(0, windowSize.Height / 4 * (2 + i), windowSize.Width, windowSize.Height / 4 * (3 + i));
+			gameOverRects.push_back(r);
 		}
 	}
 }
@@ -155,23 +170,17 @@ void SharedData::buildGameOver()
 		image->setScaleImage(true);
 		image->setColor(SColor(alpha[0], 0, 0, 0));
 
-		// Get window size
-		const dimension2di windowSize = utility::getWindowSize<s32>(driver);
-
 		// Calculate text rectangles, then draw them
 		s8 currentSelection = -1;
 		const auto& texts = textGroups[KEY_TEXT_GAME_OVER];
 
 		for (u8 i = 0; i < texts.size(); ++i)
 		{
-			// Compute text rectangle
-			const recti r(0, windowSize.Height / 4 * (2 + i), windowSize.Width, windowSize.Height / 4 * (3 + i));
-
 			// Default text color
 			SColor color(alpha[1], 255, 255, 255);
 
 			// Check if mouse is inside the text rectangle
-			if (r.isPointInside(EventManager::singleton->mousePosition))
+			if (gameOverRects[i].isPointInside(EventManager::singleton->mousePosition))
 			{
 				// Make text color different
 				color.setBlue(0);
@@ -181,21 +190,34 @@ void SharedData::buildGameOver()
 			}
 
 			// Draw text
-			IGUIStaticText* text = guienv->addStaticText(texts.at(i).c_str(), r);
+			IGUIStaticText* text = guienv->addStaticText(texts.at(i).c_str(), gameOverRects[i]);
 			text->setOverrideFont(font);
 			text->setOverrideColor(color);
 			text->setTextAlignment(EGUIA_CENTER, EGUIA_CENTER);
 		}
 
 		// Commit menu selection
-		if (selection != currentSelection)
+		if (gameOverSelection != currentSelection)
 		{
 			if (currentSelection >= 0)
 			{
 				playSound(KEY_SOUND_SELECT);
 			}
 		}
-		selection = currentSelection;
+		gameOverSelection = currentSelection;
+
+		// Game Over menu selection
+		if (EventManager::singleton->keyStates[KEY_LBUTTON] == KEY_RELEASED)
+		{
+			if (gameOverSelection == 0)
+			{
+				SharedData::singleton->startFade(true, std::bind(&SharedData::restartRoom, this));
+			}
+			else if (gameOverSelection == 1)
+			{
+				SharedData::singleton->startFade(true, std::bind(&SharedData::jumpToMenuRoom, this));
+			}
+		}
 
 		// Draw mouse pointer
 		ITexture* mouse = guiTextures[KEY_GUI_MOUSE];
@@ -203,6 +225,24 @@ void SharedData::buildGameOver()
 		image = guienv->addImage(r);
 		image->setImage(mouse);
 	}
+}
+
+void SharedData::restartRoom()
+{
+	// Turn off game over scren
+	gameOverAlpha = 0.0f;
+
+	// Restart current room
+	RoomManager::singleton->restartRoom();
+}
+
+void SharedData::jumpToMenuRoom()
+{
+	// Turn off game over scren
+	gameOverAlpha = 0.0f;
+
+	// Jump to main menu room
+	RoomManager::singleton->loadRoom(RoomManager::ROOM_MAIN_MENU);
 }
 
 void SharedData::buildFadeTransition()

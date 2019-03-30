@@ -3,9 +3,9 @@
 
 s32 Coin::customMaterial = -1;
 
-shared_ptr<Coin> Coin::createInstance(const json &jsonData)
+std::shared_ptr<Coin> Coin::createInstance(const json &jsonData)
 {
-	return make_shared<Coin>();
+	return std::make_shared<Coin>();
 }
 
 Coin::Coin() : GameObject()
@@ -30,7 +30,7 @@ Coin::Coin() : GameObject()
 	}
 
 	// Create model for player
-	shared_ptr<Model> model = make_shared<Model>(mesh);
+	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
 	model->material = customMaterial;
 	models.push_back(model);
@@ -40,7 +40,7 @@ Coin::Coin() : GameObject()
 	texture = driver->getTexture("textures/coin_glare.png");
 
 	// Load plane model
-	planeModel = make_shared<Model>(mesh);
+	planeModel = std::make_shared<Model>(mesh);
 	planeModel->addTexture(0, texture);
 	planeModel->material = video::EMT_TRANSPARENT_ALPHA_CHANNEL;
 	planeModel->scale = vector3df(2, 2, 0);
@@ -57,7 +57,7 @@ void Coin::update()
 
 void Coin::draw()
 {
-	shared_ptr<Model> &model = models.at(0);
+	std::shared_ptr<Model> &model = models.at(0);
 	model->position = position;
 	model->rotation = vector3df(0, angle, 0);
 

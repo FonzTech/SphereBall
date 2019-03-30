@@ -3,7 +3,7 @@
 
 const f32 Spikes::TIP_HEIGHT = 10;
 
-shared_ptr<Spikes> Spikes::createInstance(const json &jsonData)
+std::shared_ptr<Spikes> Spikes::createInstance(const json &jsonData)
 {
 	u32 initialMode = -1;
 	f32 delay;
@@ -36,7 +36,7 @@ shared_ptr<Spikes> Spikes::createInstance(const json &jsonData)
 			delay = 2500;
 		}
 	}
-	return make_shared<Spikes>(initialMode, delay);
+	return std::make_shared<Spikes>(initialMode, delay);
 }
 
 Spikes::Spikes() : Spikes(1, 2500)
@@ -53,12 +53,12 @@ Spikes::Spikes(s8 initialMode, f32 delay) : GameObject()
 	ITexture* texture = driver->getTexture("textures/spikes.png");
 
 	// Create model for base
-	shared_ptr<Model> model = make_shared<Model>(meshA);
+	std::shared_ptr<Model> model = std::make_shared<Model>(meshA);
 	model->addTexture(0, texture);
 	models.push_back(model);
 
 	// Create model for tip
-	model = make_shared<Model>(meshB);
+	model = std::make_shared<Model>(meshB);
 	model->addTexture(0, texture);
 	model->scale = vector3df(1, 1, 1);
 	models.push_back(model);
@@ -73,7 +73,7 @@ Spikes::Spikes(s8 initialMode, f32 delay) : GameObject()
 	sounds[KEY_SOUND_SPIKE_OUT]->setAttenuation(25.0f);
 
 	// Initialize alarms
-	timer = make_unique<Alarm>(delay);
+	timer = std::make_unique<Alarm>(delay);
 
 	// Initialize variables
 	mode = initialMode;
@@ -136,7 +136,7 @@ void Spikes::update()
 void Spikes::draw()
 {
 	// Update model
-	shared_ptr<Model> model = models.at(0);
+	std::shared_ptr<Model> model = models.at(0);
 	model->position = position;
 
 	model = models.at(1);

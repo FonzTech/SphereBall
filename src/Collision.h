@@ -4,8 +4,6 @@
 #include <memory>
 #include "EngineObject.h"
 
-using namespace std;
-
 using namespace irr;
 using namespace core;
 
@@ -14,14 +12,14 @@ class Collision
 {
 public:
 
-	shared_ptr<EngineObject> engineObject = nullptr;
+	std::shared_ptr<EngineObject> engineObject = nullptr;
 	aabbox3df mainBoundingBox, otherBoundingBox;
 
 	// Get casted game object which collided
 	template <typename T>
-	shared_ptr<T> getGameObject()
+	std::shared_ptr<T> getGameObject()
 	{
-		return static_pointer_cast<T>(engineObject);
+		return std::static_pointer_cast<T>(engineObject);
 	}
 };
 

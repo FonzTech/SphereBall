@@ -48,7 +48,7 @@ public:
 	void draw();
 
 	// Create specialized instance
-	static shared_ptr<MainMenu> createInstance(const json &jsonData);
+	static std::shared_ptr<MainMenu> createInstance(const json &jsonData);
 };
 
 #endif // MAINMENU_H

@@ -6,15 +6,13 @@
 #include "ShaderCallback.h"
 #include <SFML/Audio.hpp>
 
-using namespace std;
-
 class Coin : public GameObject
 {
 protected:
 	f32 angle;
 
 	// Plane model
-	shared_ptr<Model> planeModel;
+	std::shared_ptr<Model> planeModel;
 
 	// Sparkle shader
 	static s32 customMaterial;
@@ -35,7 +33,7 @@ public:
 	void pick();
 
 	// Create specialized instance
-	static shared_ptr<Coin> createInstance(const json &jsonData);
+	static std::shared_ptr<Coin> createInstance(const json &jsonData);
 
 	// ShaderCallBack
 	class SpecializedShaderCallback : public ShaderCallback

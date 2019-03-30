@@ -4,9 +4,9 @@
 #include "Camera.h"
 #include "SharedData.h"
 
-shared_ptr<MainMenu> MainMenu::createInstance(const json &jsonData)
+std::shared_ptr<MainMenu> MainMenu::createInstance(const json &jsonData)
 {
-	return make_shared<MainMenu>();
+	return std::make_shared<MainMenu>();
 }
 
 MainMenu::MainMenu() : GameObject()
@@ -74,7 +74,7 @@ void MainMenu::update()
 
 	// Compute area for title
 	{
-		s32 height = max(windowSize.Height / 5, 160);
+		s32 height = std::max(windowSize.Height / 5, 160);
 		titleArea = recti(0, 0, windowSize.Width, height);
 	}
 
@@ -100,7 +100,7 @@ void MainMenu::update()
 	// Compute sections for levels
 	{
 		// Common top limit
-		const s32 height = max(windowSize.Height / 6, 96);
+		const s32 height = std::max(windowSize.Height / 6, 96);
 
 		// Description
 		levelAreas.push_back(recti(0, 0, (s32)(windowSize.Width * 0.6f), height));

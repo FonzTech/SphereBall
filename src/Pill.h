@@ -27,7 +27,7 @@ public:
 	void draw();
 
 	// Create specialized instance
-	static shared_ptr<Pill> createInstance(const json &jsonData);
+	static std::shared_ptr<Pill> createInstance(const json &jsonData);
 
 	// ShaderCallBack
 	class SpecializedShaderCallback : public ShaderCallback

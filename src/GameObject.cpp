@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-shared_ptr<GameObject> GameObject::createInstance(const json &jsonData)
+std::shared_ptr<GameObject> GameObject::createInstance(const json &jsonData)
 {
 	return nullptr;
 }
@@ -42,7 +42,7 @@ void GameObject::assignGameObjectCommonData(const json& commonData)
 GameObject::GameObject()
 {
 	// Initialize vector for models
-	models = vector<shared_ptr<Model>>();
+	models = std::vector<std::shared_ptr<Model>>();
 
 	// Initialize variables
 	destroy = false;

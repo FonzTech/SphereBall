@@ -7,16 +7,16 @@
 
 // Default values
 const wchar_t* Engine::WINDOW_TITLE = L"SphereBall - Demo";
-shared_ptr<Engine> Engine::singleton = nullptr;
+std::shared_ptr<Engine> Engine::singleton = nullptr;
 
 Engine::Engine()
 {
 	// Initialize engine subsystems
-	EventManager::singleton = make_shared<EventManager>();
-	RoomManager::singleton = make_shared<RoomManager>();
-	SoundManager::singleton = make_shared<SoundManager>();
-	SharedData::singleton = make_shared<SharedData>();
-	Camera::singleton = make_shared<Camera>();
+	EventManager::singleton = std::make_shared<EventManager>();
+	RoomManager::singleton = std::make_shared<RoomManager>();
+	SoundManager::singleton = std::make_shared<SoundManager>();
+	SharedData::singleton = std::make_shared<SharedData>();
+	Camera::singleton = std::make_shared<Camera>();
 }
 
 bool Engine::startDevice()
@@ -100,13 +100,13 @@ void Engine::loop()
 			}
 
 			// Get static reference to object
-			shared_ptr<GameObject> &gameObject = RoomManager::singleton->gameObjects[i];
+			std::shared_ptr<GameObject> &gameObject = RoomManager::singleton->gameObjects[i];
 
 			// Affect drawing of game object
 			gameObject->draw();
 
 			// Add all game object's models to the scene
-			for (shared_ptr<Model> &model : gameObject->models)
+			for (std::shared_ptr<Model> &model : gameObject->models)
 			{
 				// Create scene node from this mesh
 				IMeshSceneNode* node = smgr->addMeshSceneNode(model->mesh, nullptr, -1, model->position, model->rotation, model->scale);

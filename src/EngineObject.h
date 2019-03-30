@@ -8,8 +8,6 @@
 #include <irrlicht.h>
 #include <SFML/Audio.hpp>
 
-using namespace std;
-
 using namespace irr;
 using namespace core;
 using namespace video;
@@ -21,7 +19,7 @@ class EngineObject
 protected:
 
 	// Map to hold sounds
-	unordered_map<std::string, shared_ptr<sf::Sound>> sounds;
+	std::unordered_map<std::string, std::shared_ptr<sf::Sound>> sounds;
 
 	// Play spatial sound
 	void playSound(const std::string& key, const vector3df* position = nullptr);

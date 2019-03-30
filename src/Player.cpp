@@ -13,9 +13,9 @@
 #include "Spikes.h"
 #include "Pill.h"
 
-shared_ptr<Player> Player::createInstance(const json &jsonData)
+std::shared_ptr<Player> Player::createInstance(const json &jsonData)
 {
-	return make_shared<Player>();
+	return std::make_shared<Player>();
 }
 
 Player::Player() : GameObject()
@@ -24,7 +24,7 @@ Player::Player() : GameObject()
 	IAnimatedMesh* mesh = smgr->getMesh("models/sphere.obj");
 	ITexture* texture = driver->getTexture("textures/player.png");
 
-	shared_ptr<Model> model = make_shared<Model>(mesh);
+	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
 	models.push_back(model);
 
@@ -92,13 +92,13 @@ void Player::draw()
 	{
 		if (state == STATE_WALKING)
 		{
-			shared_ptr<Model> model = models.at(0);
+			std::shared_ptr<Model> model = models.at(0);
 			model->position = position;
 			model->rotation = vector3df(-45.0f, 0, -position.X * 3);
 		}
 		else if (state == STATE_DEAD)
 		{
-			shared_ptr<Model> model = models.at(0);
+			std::shared_ptr<Model> model = models.at(0);
 			model->position = position + vector3df(0, 0, -11);
 		}
 	}
@@ -176,7 +176,7 @@ void Player::walk()
 
 		// Set fall line above player
 		vector3df fl(position + vector3df(0, bbox.getExtent().Y, 0));
-		fallLine = unique_ptr<vector3df>(new vector3df(fl));
+		fallLine = std::unique_ptr<vector3df>(new vector3df(fl));
 
 		// Turn on falling
 		falling = 1;
@@ -226,7 +226,7 @@ void Player::walk()
 		if (collision.engineObject != nullptr)
 		{
 			// Cast to game object
-			shared_ptr<GameObject> go = collision.getGameObject<Solid>();
+			std::shared_ptr<GameObject> go = collision.getGameObject<Solid>();
 
 			// Play sound
 			if ((!i && speed.Y > 0.1) || (i && speed.Y < -0.1))
@@ -275,7 +275,7 @@ void Player::walk()
 		if (collision.engineObject != nullptr)
 		{
 			// Cast to game object
-			shared_ptr<GameObject> go = collision.getGameObject<GameObject>();
+			std::shared_ptr<GameObject> go = collision.getGameObject<GameObject>();
 
 			// Play sound
 			if ((!i && speed.X < -0.1) || (i && speed.X > 0.1))
@@ -345,7 +345,7 @@ void Player::die()
 	state = STATE_DEAD;
 
 	// Trigger die alarm
-	dieAlarm = make_unique<Alarm>(1500.0f);
+	dieAlarm = std::make_unique<Alarm>(1500.0f);
 
 	// Erase sphere model
 	models.erase(models.begin());
@@ -354,13 +354,13 @@ void Player::die()
 	IAnimatedMesh* mesh = smgr->getMesh("models/plane.obj");
 	ITexture* texture = driver->getTexture("textures/nailed.png");
 
-	shared_ptr<Model> model = make_shared<Model>(mesh);
+	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->material = EMT_TRANSPARENT_ALPHA_CHANNEL;
 	model->addTexture(0, texture);
 	models.push_back(model);
 
 	// Create alarm for pop animation
-	popAlarm = make_unique<Alarm>(50.0f);
+	popAlarm = std::make_unique<Alarm>(50.0f);
 }
 
 void Player::dead()

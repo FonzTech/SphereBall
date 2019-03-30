@@ -2,7 +2,7 @@
 
 s32 Pill::customMaterial = -1;
 
-shared_ptr<Pill> Pill::createInstance(const json &jsonData)
+std::shared_ptr<Pill> Pill::createInstance(const json &jsonData)
 {
 	u8 type;
 	try
@@ -14,7 +14,7 @@ shared_ptr<Pill> Pill::createInstance(const json &jsonData)
 	{
 		type = 0;
 	}
-	return make_shared<Pill>(type);
+	return std::make_shared<Pill>(type);
 }
 
 Pill::Pill() : Pill(0)
@@ -42,7 +42,7 @@ Pill::Pill(u8 type) : GameObject()
 	}
 
 	// Create model for player
-	shared_ptr<Model> model = make_shared<Model>(mesh);
+	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
 	model->material = customMaterial;
 	models.push_back(model);
@@ -55,7 +55,7 @@ void Pill::update()
 void Pill::draw()
 {
 	// Exit model
-	shared_ptr<Model> model = models.at(0);
+	std::shared_ptr<Model> model = models.at(0);
 	model->position = position;
 	model->rotation += vector3df(0.125, 0.25, 0.5) * deltaTime;
 }

@@ -10,8 +10,6 @@
 #include <Windows.h>
 #endif
 
-using namespace std;
-
 using namespace irr;
 using namespace core;
 using namespace video;

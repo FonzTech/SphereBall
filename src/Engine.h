@@ -5,8 +5,6 @@
 #include <vector>
 #include "EventManager.h"
 
-using namespace std;
-
 using namespace irr;
 using namespace core;
 using namespace scene;
@@ -24,7 +22,7 @@ protected:
 
 public:
 	// Singleton pattern
-	static shared_ptr<Engine> singleton;
+	static std::shared_ptr<Engine> singleton;
 
 	// Constructor
 	Engine();

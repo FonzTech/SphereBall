@@ -1,11 +1,10 @@
 #ifndef SKYBOX_H
 #define SKYBOX_H
 
-#include "GameObject.h"
 #include <SFML/Audio.hpp>
 #include <string>
 
-using namespace std;
+#include "GameObject.h"
 
 class SkyBox : public GameObject
 {
@@ -21,7 +20,7 @@ public:
 	void draw();
 
 	// Create specialized instance
-	static shared_ptr<SkyBox> createInstance(const json &jsonData);
+	static std::shared_ptr<SkyBox> createInstance(const json &jsonData);
 };
 
 #endif // SKYBOX_H

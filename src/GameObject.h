@@ -10,8 +10,6 @@
 #include "Model.h"
 #include "Utility.h"
 
-using namespace std;
-
 using nlohmann::json;
 
 class GameObject : public EngineObject
@@ -20,7 +18,7 @@ protected:
 
 	// Check for collision with another game object
 	template <typename T>
-	Collision checkBoundingBoxCollision(const vector<shared_ptr<GameObject>>& gameObjects, aabbox3df& rect, const std::function<bool(const GameObject* go)>& specializedCheck = nullptr)
+	Collision checkBoundingBoxCollision(const std::vector<std::shared_ptr<GameObject>>& gameObjects, aabbox3df& rect, const std::function<bool(const GameObject* go)>& specializedCheck = nullptr)
 	{
 		// Create data structure to hold the return value
 		Collision collision;
@@ -29,7 +27,7 @@ protected:
 		utility::transformAABBox(rect, position);
 
 		// Check for all of the other game objects
-		for (const shared_ptr<GameObject> &gameObject : gameObjects)
+		for (const std::shared_ptr<GameObject> &gameObject : gameObjects)
 		{
 			// Check for class maching
 			if (dynamic_cast<T*>(gameObject.get()) == nullptr)
@@ -69,13 +67,13 @@ protected:
 public:
 
 	// Get instance of game object with parameters
-	static shared_ptr<GameObject> createInstance(const json &jsonData);
+	static std::shared_ptr<GameObject> createInstance(const json &jsonData);
 
 	// Assign common room data for GameObject
 	void assignGameObjectCommonData(const json& commonData);
 
 	// Common data among GameObjects
-	vector<shared_ptr<Model>> models;
+	std::vector<std::shared_ptr<Model>> models;
 
 	// Object properties
 	bool destroy;

@@ -7,8 +7,6 @@
 #include "GameObject.h"
 #include "Alarm.h"
 
-using namespace std;
-
 class Player : public GameObject
 {
 protected:
@@ -24,11 +22,11 @@ protected:
 	s8 direction;
 	s8 moving;
 	s8 falling;
-	unique_ptr<vector3df> fallLine;
+	std::unique_ptr<vector3df> fallLine;
 
 	// Alarms
-	unique_ptr<Alarm> dieAlarm;
-	unique_ptr<Alarm> popAlarm;
+	std::unique_ptr<Alarm> dieAlarm;
+	std::unique_ptr<Alarm> popAlarm;
 
 	// Custom collision check function
 	std::function<bool(const GameObject* go)> coinCollisionCheck;
@@ -44,7 +42,7 @@ public:
 	void draw();
 
 	// Create specialized instance
-	static shared_ptr<Player> createInstance(const json &jsonData);
+	static std::shared_ptr<Player> createInstance(const json &jsonData);
 };
 
 #endif // PLAYER_H

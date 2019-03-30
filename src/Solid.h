@@ -3,8 +3,6 @@
 
 #include "GameObject.h"
 
-using namespace std;
-
 class Solid : public GameObject
 {
 public:
@@ -16,7 +14,7 @@ public:
 	void draw();
 
 	// Create specialized instance
-	static shared_ptr<Solid> createInstance(const json &jsonData);
+	static std::shared_ptr<Solid> createInstance(const json &jsonData);
 };
 
 #endif // SOLID_H

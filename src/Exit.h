@@ -19,7 +19,7 @@ public:
 	void draw();
 
 	// Create specialized instance
-	static shared_ptr<Exit> createInstance(const json &jsonData);
+	static std::shared_ptr<Exit> createInstance(const json &jsonData);
 
 	// Method to change this object to "picked" state
 	void pick();

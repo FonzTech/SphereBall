@@ -1,7 +1,7 @@
 #include "EventManager.h"
 
 // Singleton initial value
-shared_ptr<EventManager> EventManager::singleton = nullptr;
+std::shared_ptr<EventManager> EventManager::singleton = nullptr;
 
 EventManager::EventManager()
 {

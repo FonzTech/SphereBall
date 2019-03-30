@@ -6,7 +6,7 @@ Model::Model(IAnimatedMesh* mesh)
 	this->mesh = mesh;
 
 	// Initialize members
-	textures = unordered_map<u32, ITexture*>();
+	textures = std::unordered_map<u32, ITexture*>();
 	material = -1;
 }
 

@@ -9,8 +9,6 @@
 #define KEY_PRESSING 2
 #define KEY_RELEASED -1
 
-using namespace std;
-
 using namespace irr;
 using namespace core;
 
@@ -18,7 +16,7 @@ class EventManager : public IEventReceiver
 {
 public:
 	// Singleton pattern variable
-	static shared_ptr<EventManager> singleton;
+	static std::shared_ptr<EventManager> singleton;
 
 	// Constructor
 	EventManager();

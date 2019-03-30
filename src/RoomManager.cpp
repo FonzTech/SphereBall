@@ -12,14 +12,14 @@
 #include "Key.h"
 #include "Pill.h"
 
-shared_ptr<RoomManager> RoomManager::singleton = nullptr;
+std::shared_ptr<RoomManager> RoomManager::singleton = nullptr;
 
 std::string RoomManager::ROOM_MAIN_MENU = "main_menu";
 
 RoomManager::RoomManager()
 {
 	// Create vector to hold game objects
-	gameObjects = vector<shared_ptr<GameObject>>();
+	gameObjects = std::vector<std::shared_ptr<GameObject>>();
 
 	// Populate map for game objects factory pattern
 	gameObjectFactory["MainMenu"] = &MainMenu::createInstance;
@@ -96,10 +96,10 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 			else
 			{
 				// Get method to instantiate class
-				std::function<shared_ptr<GameObject>(const json& jsonData)> classFunction = goIterator->second;
+				std::function<std::shared_ptr<GameObject>(const json& jsonData)> classFunction = goIterator->second;
 
 				// Get pointer to class instance
-				shared_ptr<GameObject> instance = classFunction(object);
+				std::shared_ptr<GameObject> instance = classFunction(object);
 
 				// Assign common data
 				instance->assignGameObjectCommonData(object.at("required"));

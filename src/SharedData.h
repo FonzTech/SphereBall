@@ -15,8 +15,6 @@
 
 #include "EngineObject.h"
 
-using namespace std;
-
 class SharedData : public EngineObject
 {
 protected:
@@ -24,7 +22,7 @@ protected:
 	// Game Over screen
 	f32 gameOverAlpha;
 	s8 gameOverSelection;
-	vector<recti> gameOverRects;
+	std::vector<recti> gameOverRects;
 
 	// Variables for fade transition
 	s8 fadeType;
@@ -51,13 +49,13 @@ protected:
 	};
 
 	// Map to hold textures
-	unordered_map<u8, ITexture*> guiTextures;
+	std::unordered_map<u8, ITexture*> guiTextures;
 
 	// Map to hold text groups
-	unordered_map<u8, vector<wstring>> textGroups;
+	std::unordered_map<u8, std::vector<std::wstring>> textGroups;
 
 	// Map for game scores and related data
-	unordered_map<s32, ScoreValue> gameScores;
+	std::unordered_map<s32, ScoreValue> gameScores;
 
 	// Build fade for transition
 	void buildFadeTransition();
@@ -83,7 +81,7 @@ public:
 	SharedData();
 
 	// Singleton pattern variable
-	static shared_ptr<SharedData> singleton;
+	static std::shared_ptr<SharedData> singleton;
 
 	// Animation stepper
 	void update(f32 deltaTime);

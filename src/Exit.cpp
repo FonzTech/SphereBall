@@ -3,9 +3,9 @@
 #include "Exit.h"
 #include "SharedData.h"
 
-shared_ptr<Exit> Exit::createInstance(const json &jsonData)
+std::shared_ptr<Exit> Exit::createInstance(const json &jsonData)
 {
-	return make_shared<Exit>();
+	return std::make_shared<Exit>();
 }
 
 Exit::Exit() : GameObject()
@@ -19,7 +19,7 @@ Exit::Exit() : GameObject()
 	ITexture* texture = driver->getTexture("textures/exit_red.png");
 	
 	// Create model for player
-	shared_ptr<Model> model = make_shared<Model>(mesh);
+	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
 	model->material = EMT_TRANSPARENT_ALPHA_CHANNEL;
 	models.push_back(model);
@@ -29,7 +29,7 @@ Exit::Exit() : GameObject()
 	texture = driver->getTexture("textures/exit_base_red.png");
 
 	// Create model for base
-	model = make_shared<Model>(mesh);
+	model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
 	model->rotation = vector3df(90, 0, 0);
 	model->scale = vector3df(1, 1, 1);
@@ -58,7 +58,7 @@ void Exit::update()
 void Exit::draw()
 {
 	// Exit model
-	shared_ptr<Model> model = models.at(0);
+	std::shared_ptr<Model> model = models.at(0);
 	model->position = position;
 	model->rotation = vector3df(0, angle, 0);
 

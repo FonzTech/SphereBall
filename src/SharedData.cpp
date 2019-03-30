@@ -8,7 +8,7 @@
 
 const std::string SharedData::ROOM_OBJECT_KEY = "SharedData";
 
-shared_ptr<SharedData> SharedData::singleton = nullptr;
+std::shared_ptr<SharedData> SharedData::singleton = nullptr;
 
 SharedData::SharedData()
 {
@@ -21,7 +21,7 @@ SharedData::SharedData()
 	fadeCallback = nullptr;
 
 	// Initialize texts for game over
-	vector<wstring> textGameOver;
+	std::vector<std::wstring> textGameOver;
 	textGameOver.push_back(L"Riprova Livello");
 	textGameOver.push_back(L"Esci Dal Livello");
 	textGroups[KEY_TEXT_GAME_OVER] = textGameOver;

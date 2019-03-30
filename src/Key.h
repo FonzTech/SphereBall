@@ -24,7 +24,7 @@ public:
 	u8 pick();
 
 	// Create specialized instance
-	static shared_ptr<Key> createInstance(const json &jsonData);
+	static std::shared_ptr<Key> createInstance(const json &jsonData);
 };
 
 #endif // KEY_H

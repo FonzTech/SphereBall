@@ -7,13 +7,11 @@
 using namespace irr;
 using namespace core;
 
-using namespace std;
-
 class Camera
 {
 public:
 	// Singleton holder
-	static shared_ptr<Camera> singleton;
+	static std::shared_ptr<Camera> singleton;
 
 	// Constructor
 	Camera();

@@ -1,8 +1,8 @@
 #include "SoundManager.h"
 
-shared_ptr<SoundManager> SoundManager::singleton = nullptr;
+std::shared_ptr<SoundManager> SoundManager::singleton = nullptr;
 
-shared_ptr<sf::SoundBuffer> SoundManager::getSoundBuffer(const std::string& fname)
+std::shared_ptr<sf::SoundBuffer> SoundManager::getSoundBuffer(const std::string& fname)
 {
 	// Check if sound buffer has been already loaded
 	if (soundBuffers.find(fname) != soundBuffers.end())
@@ -12,7 +12,7 @@ shared_ptr<sf::SoundBuffer> SoundManager::getSoundBuffer(const std::string& fnam
 	}
 
 	// Otherwise load the sound buffer into memory
-	shared_ptr<sf::SoundBuffer> sb = make_shared<sf::SoundBuffer>();
+	std::shared_ptr<sf::SoundBuffer> sb = std::make_shared<sf::SoundBuffer>();
 	if (!sb->loadFromFile("sounds/" + fname + ".ogg"))
 	{
 		printf("SoundBuffer %s has NOT been loaded\n", fname.c_str());
@@ -23,18 +23,18 @@ shared_ptr<sf::SoundBuffer> SoundManager::getSoundBuffer(const std::string& fnam
 	return soundBuffers[fname] = sb;
 }
 
-shared_ptr<sf::Sound> SoundManager::getSound(const std::string& fname)
+std::shared_ptr<sf::Sound> SoundManager::getSound(const std::string& fname)
 {
 	// Get sound buffer from its routine
-	shared_ptr<sf::SoundBuffer> sb = this->getSoundBuffer(fname);
+	std::shared_ptr<sf::SoundBuffer> sb = this->getSoundBuffer(fname);
 
 	// Check if sound buffer creation has encountered an error
 	if (sb == nullptr)
 	{
 		printf("Sound %s could NOT be created\n", fname.c_str());
-		return make_shared<sf::Sound>();
+		return std::make_shared<sf::Sound>();
 	}
 
 	// Return the handleable sound
-	return make_shared<sf::Sound>(*sb.get());
+	return std::make_shared<sf::Sound>(*sb.get());
 }

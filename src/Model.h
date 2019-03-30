@@ -5,8 +5,6 @@
 #include <unordered_map>
 #include <irrlicht.h>
 
-using namespace std;
-
 using namespace irr;
 using namespace core;
 using namespace scene;
@@ -15,7 +13,7 @@ using namespace video;
 class Model
 {
 public:
-	unordered_map<u32, ITexture*> textures;
+	std::unordered_map<u32, ITexture*> textures;
 	IAnimatedMesh* mesh;
 	vector3df position;
 	vector3df rotation;

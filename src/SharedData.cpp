@@ -13,7 +13,7 @@ SharedData::SharedData()
 {
 	// Initialize variables
 	selection = -1;
-	gameOver = 0.0f;
+	gameOverAlpha = 0.0f;
 
 	fadeType = 0;
 	fadeValue = 0.0f;
@@ -29,7 +29,7 @@ SharedData::SharedData()
 	sounds[KEY_SOUND_SELECT] = SoundManager::singleton->getSound(KEY_SOUND_SELECT);
 }
 
-void SharedData::stepAnimations(f32 deltaTime)
+void SharedData::update(f32 deltaTime)
 {
 	// Fade animation
 	if (fadeType == 0)
@@ -64,14 +64,14 @@ void SharedData::stepAnimations(f32 deltaTime)
 	}
 
 	// Increment Game Over variable
-	if (gameOver > 0)
+	if (gameOverAlpha > 0)
 	{
-		gameOver += deltaTime * 0.0025f;
+		gameOverAlpha += deltaTime * 0.0025f;
 
 		// Clamp value
-		if (gameOver > 1)
+		if (gameOverAlpha > 1)
 		{
-			gameOver = 1;
+			gameOverAlpha = 1;
 		}
 	}
 }
@@ -141,12 +141,12 @@ void SharedData::buildGameScore()
 void SharedData::buildGameOver()
 {
 	// Check if Game Over screen has been triggered
-	if (gameOver > 0)
+	if (gameOverAlpha > 0)
 	{
 		// Compute alpha value in unsigned integer form
 		u32 alpha[] = {
-			(u32)(gameOver * 192.0f),
-			(u32)(gameOver * 255.0f)
+			(u32)(gameOverAlpha * 192.0f),
+			(u32)(gameOverAlpha * 255.0f)
 		};
 
 		// Draw background image
@@ -207,9 +207,11 @@ void SharedData::buildGameOver()
 
 void SharedData::buildFadeTransition()
 {
+	// Get window size
 	dimension2di ws = utility::getWindowSize<s32>(driver);
 	recti r(0, 0, ws.Width, ws.Height);
 
+	// Cover the rectangle for entire window
 	IGUIImage* image = guienv->addImage(r);
 	image->setColor(SColor((s32)(fadeValue * 255.0f), 255, 255, 255));
 	image->setImage(guiTextures[KEY_GUI_RECTANGLE]);
@@ -275,5 +277,5 @@ void SharedData::buildGUI()
 
 void SharedData::displayGameOver()
 {
-	gameOver = 0.05f;
+	gameOverAlpha = 0.05f;
 }

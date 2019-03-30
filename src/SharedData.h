@@ -25,7 +25,7 @@ protected:
 	s8 selection;
 
 	// Game Over screen
-	f32 gameOver;
+	f32 gameOverAlpha;
 
 	// Variables for fade transition
 	s8 fadeType;
@@ -81,7 +81,7 @@ public:
 	static shared_ptr<SharedData> singleton;
 
 	// Animation stepper
-	void stepAnimations(f32 deltaTime);
+	void update(f32 deltaTime);
 
 	// Post Constructor
 	void loadAssets();

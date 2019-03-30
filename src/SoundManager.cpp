@@ -15,7 +15,7 @@ shared_ptr<sf::SoundBuffer> SoundManager::getSoundBuffer(const std::string& fnam
 	shared_ptr<sf::SoundBuffer> sb = make_shared<sf::SoundBuffer>();
 	if (!sb->loadFromFile("sounds/" + fname + ".ogg"))
 	{
-		printf("SoundBuffer %s has not been loaded\n", fname.c_str());
+		printf("SoundBuffer %s has NOT been loaded\n", fname.c_str());
 		return nullptr;
 	}
 
@@ -31,7 +31,7 @@ shared_ptr<sf::Sound> SoundManager::getSound(const std::string& fname)
 	// Check if sound buffer creation has encountered an error
 	if (sb == nullptr)
 	{
-		printf("Sound %s could not be created\n", fname.c_str());
+		printf("Sound %s could NOT be created\n", fname.c_str());
 		return make_shared<sf::Sound>();
 	}
 

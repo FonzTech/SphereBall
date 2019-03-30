@@ -59,6 +59,9 @@ Player::Player() : GameObject()
 		Spikes* spikes = (Spikes*)go;
 		return spikes->isHarmful();
 	};
+
+	// Fade out
+	SharedData::singleton->startFade(false, nullptr);
 }
 
 void Player::update()

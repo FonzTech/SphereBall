@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "ScreenQuadSceneNode.h"
 #include "Utility.h"
 #include "RoomManager.h"
 #include "SoundManager.h"
@@ -20,6 +21,16 @@ Engine::Engine()
 
 	// Initialize variables and pointers
 	sceneRtt = nullptr;
+}
+
+void Engine::createPostProcessingMaterial()
+{
+	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
+
+	video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+	postProcessingMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/scene.vs", "shaders/scene.fs", ssc);
+
+	ssc->drop();
 }
 
 bool Engine::startDevice()
@@ -61,6 +72,9 @@ bool Engine::setupComponents()
 
 	// Set initial delta time
 	deltaTime = device->getTimer()->getTime();
+
+	// Setup material for post-processing
+	createPostProcessingMaterial();
 
 	// Check for render to target support
 	return driver->queryFeature(video::EVDF_RENDER_TO_TARGET);
@@ -160,6 +174,9 @@ void Engine::loop()
 
 		// Work on scene render target
 		{
+			// Clear the entire scene
+			smgr->clear();
+
 			// Clear all the GUI environment produced by game objects
 			guienv->clear();
 
@@ -167,7 +184,12 @@ void Engine::loop()
 			driver->setRenderTarget(0);
 
 			// Display game surface
-			SharedData::singleton->addSceneRTT(sceneRtt);
+			ScreenQuadSceneNode screenQuad(smgr->getRootSceneNode(), smgr, -1);
+			screenQuad.ChangeMaterialType((video::E_MATERIAL_TYPE) postProcessingMaterial);
+			screenQuad.getMaterial(0).setTexture(0, sceneRtt);
+
+			// Draw scene RTT quad
+			screenQuad.render();
 		}
 
 		// Set Delta Time
@@ -207,4 +229,16 @@ void Engine::loop()
 
 	// Clear engine pointer
 	Engine::singleton = nullptr;
+}
+
+Engine::SpecializedShaderCallback::SpecializedShaderCallback(Engine* engine)
+{
+	this->engine = engine;
+}
+
+void Engine::SpecializedShaderCallback::OnSetConstants(video::IMaterialRendererServices* services, s32 userData)
+{
+	// Set shader values
+	s32 layer0 = 0;
+	services->setPixelShaderConstant("tex", (s32*)&layer0, 1);
 }

@@ -3,7 +3,9 @@
 
 #include <irrlicht.h>
 #include <vector>
+
 #include "EventManager.h"
+#include "ShaderCallback.h"
 
 using namespace irr;
 using namespace core;
@@ -22,6 +24,23 @@ protected:
 
 	// Global render target
 	ITexture* sceneRtt;
+
+	// Post-Processing material
+	s32 postProcessingMaterial;
+
+	// Create Post-Processing material
+	void createPostProcessingMaterial();
+
+	// ShaderCallBack
+	class SpecializedShaderCallback : public ShaderCallback
+	{
+	protected:
+		Engine* engine;
+
+	public:
+		SpecializedShaderCallback(Engine* engine);
+		virtual void OnSetConstants(video::IMaterialRendererServices* services, s32 userData);
+	};
 
 public:
 	// Singleton pattern

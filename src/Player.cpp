@@ -333,12 +333,20 @@ void Player::walk()
 		Collision collision = checkBoundingBoxCollision<Pill>(RoomManager::singleton->gameObjects, rect);
 		if (collision.engineObject != nullptr)
 		{
+			// Play sound
 			playSound(KEY_SOUND_LETHARGY_PILL);
+
+			// Destroy object
 			collision.getGameObject<Pill>()->destroy = 1;
 
+			// Trigger wave effect
 			json data;
-			data["strength"] = 1.0f;
+			data["speed"] = 0.00001f;
+			data["strength"] = 0.05f;
 			SharedData::singleton->triggerPostProcessingCallback(KEY_PP_WAVE, data);
+
+			// Trigger fade out
+			SharedData::singleton->startFade(false, nullptr, 1.0f);
 		}
 	}
 }

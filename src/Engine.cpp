@@ -78,9 +78,13 @@ bool Engine::setupComponents()
 	{
 		std::function<void(const json&)> callback = [this](const json& data)
 		{
-			f32 strength;
-			data.at("strength").get_to(strength);
-			postProcessing->waveStrength = strength;
+			f32 params[2];
+
+			data.at("speed").get_to(params[0]);
+			data.at("strength").get_to(params[1]);
+
+			postProcessing->waveSpeed = params[0];
+			postProcessing->waveStrength = params[1];
 		};
 		SharedData::singleton->setPostProcessingCallback(KEY_PP_WAVE, callback);
 	}
@@ -250,6 +254,7 @@ Engine::PostProcessing::PostProcessing(Engine* engine)
 
 	// Initialize variables
 	waveTime = 0.0f;
+	waveSpeed = 0.0f;
 	waveStrength = 0.0f;
 }
 
@@ -268,7 +273,7 @@ void Engine::PostProcessing::update(f32 deltaTime)
 	waveTime += deltaTime;
 
 	// Decrease wave strength effect
-	waveStrength -= 0.0005f * deltaTime;
+	waveStrength -= waveSpeed * deltaTime;
 	if (waveStrength < 0.0f)
 	{
 		waveStrength = 0.0f;

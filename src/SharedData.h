@@ -111,6 +111,8 @@ public:
 	void updateGameScoreValue(const s32 key, const s32 stepValue);
 
 	// Fade control
+	void startFade(bool in, std::function<void(void)> fadeCallback, f32 value);
+
 	void startFade(bool in, std::function<void(void)> fadeCallback);
 
 	// Build GUI from game score

@@ -30,6 +30,7 @@ protected:
 
 	public:
 
+		f32 waveSpeed;
 		f32 waveStrength;
 
 		PostProcessing(Engine* engine);

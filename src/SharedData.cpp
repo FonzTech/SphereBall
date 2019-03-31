@@ -296,10 +296,16 @@ void SharedData::updateGameScoreValue(const s32 key, const s32 stepValue)
 	search->second.value += stepValue;
 }
 
-void SharedData::startFade(bool in, std::function<void(void)> fadeCallback)
+void SharedData::startFade(bool in, std::function<void(void)> fadeCallback, f32 value)
 {
 	this->fadeType = in ? 1 : 0;
+	this->fadeValue = value;
 	this->fadeCallback = fadeCallback;
+}
+
+void SharedData::startFade(bool in, std::function<void(void)> fadeCallback)
+{
+	startFade(in, fadeCallback, fadeValue);
 }
 
 void SharedData::buildGUI()

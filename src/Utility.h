@@ -44,7 +44,7 @@ namespace utility
 		RECT lpRect;
 		if (GetClientRect(hwnd, &lpRect))
 		{
-			return vector2d<T>(lpRect.right - lpRect.left, lpRect.bottom - lpRect.top);
+			return vector2d<T>((T)(lpRect.right - lpRect.left), (T)(lpRect.bottom - lpRect.top));
 		}
 
 		#endif

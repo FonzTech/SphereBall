@@ -20,6 +20,9 @@ protected:
 	// Delta time
 	u32 deltaTime;
 
+	// Global render target
+	ITexture* sceneRtt;
+
 public:
 	// Singleton pattern
 	static std::shared_ptr<Engine> singleton;
@@ -37,7 +40,7 @@ public:
 	bool startDevice();
 
 	// Setup window and required managers
-	void setupComponents();
+	bool setupComponents();
 
 	// Loop system for game
 	void loop();

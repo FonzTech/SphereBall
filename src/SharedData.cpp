@@ -91,6 +91,13 @@ void SharedData::update(f32 deltaTime)
 	}
 }
 
+void SharedData::addSceneRTT(ITexture* texture)
+{
+	recti windowRect(vector2di(0), utility::getWindowSize<s32>(driver));
+	IGUIImage* image = guienv->addImage(windowRect);
+	image->setImage(texture);
+}
+
 void SharedData::loadAssets()
 {
 	// Load font
@@ -137,7 +144,7 @@ void SharedData::buildGameScore()
 			{
 				// Compute coords for image
 				const s32 x = 32 + 96 * i;
-				const s32 y = utility::getWindowSize<s32>(driver).Height - 160;
+				const s32 y = utility::getWindowSize<s32>(driver).Y - 160;
 
 				// Draw key
 				IGUIImage* image = guienv->addImage(guiTextures[KEY_GUI_KEY], vector2di(x, y));
@@ -248,11 +255,10 @@ void SharedData::jumpToMenuRoom()
 void SharedData::buildFadeTransition()
 {
 	// Get window size
-	dimension2di ws = utility::getWindowSize<s32>(driver);
-	recti r(0, 0, ws.Width, ws.Height);
+	recti windowRect(vector2di(0), utility::getWindowSize<s32>(driver));
 
 	// Cover the rectangle for entire window
-	IGUIImage* image = guienv->addImage(r);
+	IGUIImage* image = guienv->addImage(windowRect);
 	image->setColor(SColor((s32)(fadeValue * 255.0f), 255, 255, 255));
 	image->setImage(guiTextures[KEY_GUI_RECTANGLE]);
 	image->setScaleImage(true);

@@ -17,6 +17,9 @@ Engine::Engine()
 	SoundManager::singleton = std::make_shared<SoundManager>();
 	SharedData::singleton = std::make_shared<SharedData>();
 	Camera::singleton = std::make_shared<Camera>();
+
+	// Initialize variables and pointers
+	sceneRtt = nullptr;
 }
 
 bool Engine::startDevice()
@@ -36,7 +39,7 @@ bool Engine::startDevice()
 	return device != nullptr;
 }
 
-void Engine::setupComponents()
+bool Engine::setupComponents()
 {
 	// Setup window caption
 	device->setWindowCaption(WINDOW_TITLE);
@@ -58,6 +61,9 @@ void Engine::setupComponents()
 
 	// Set initial delta time
 	deltaTime = device->getTimer()->getTime();
+
+	// Check for render to target support
+	return driver->queryFeature(video::EVDF_RENDER_TO_TARGET);
 }
 
 void Engine::loop()
@@ -69,15 +75,27 @@ void Engine::loop()
 	// Loop while game is still running
 	while (device->run() && RoomManager::singleton->isProgramRunning)
 	{
+		// Add new render target for window
+		{
+			if (sceneRtt != nullptr)
+			{
+				driver->removeTexture(sceneRtt);
+				sceneRtt = nullptr;
+			}
+
+			// Get window size
+			dimension2du windowSize = utility::getWindowSize<u32>(driver);
+
+			// Create new render target
+			sceneRtt = driver->addRenderTargetTexture(windowSize);
+
+			// Make RT curren
+			driver->setRenderTarget(sceneRtt);
+		}
+
 		// Now delta time
 		u32 now = device->getTimer()->getTime();
 		deltaTime = now - deltaTime;
-
-		// Clear scene
-		smgr->clear();
-
-		// Clear GUI
-		guienv->clear();
 
 		// Double buffered scene with clear color
 		driver->beginScene(true, true, SColor(255, 100, 101, 140));
@@ -131,23 +149,44 @@ void Engine::loop()
 			}
 		}
 
-		// Set Delta Time
-		SharedData::singleton->update((f32) deltaTime);
-
-		// Build required GUI from SharedData
-		SharedData::singleton->buildGUI();
-
 		// Add camera scene node
 		smgr->addCameraSceneNode(0, Camera::singleton->position, Camera::singleton->lookAt);
 
 		// Draw the entire scene
 		smgr->drawAll();
 
-		// Draw the entire GUI environment
+		// Draw the entire GUI environment produced by game objects
+		guienv->drawAll();
+
+		// Work on scene render target
+		{
+			// Clear all the GUI environment produced by game objects
+			guienv->clear();
+
+			// Set default render target
+			driver->setRenderTarget(0);
+
+			// Display game surface
+			SharedData::singleton->addSceneRTT(sceneRtt);
+		}
+
+		// Set Delta Time
+		SharedData::singleton->update((f32)deltaTime);
+
+		// Build required GUI from SharedData
+		SharedData::singleton->buildGUI();
+
+		// Draw the entire GUI environment produced by engine objects which are NOT game objects
 		guienv->drawAll();
 
 		// End scene after all
 		driver->endScene();
+
+		// Clear scene manager
+		smgr->clear();
+
+		// Clear GUI environment
+		guienv->clear();
 
 		// Update key states
 		EventManager::singleton->updateKeyStates();

@@ -30,7 +30,7 @@ namespace utility
 
 	// Get window size
 	template <typename T>
-	const dimension2d<T> getWindowSize(IVideoDriver* driver)
+	const vector2d<T> getWindowSize(IVideoDriver* driver)
 	{
 		// Get exposed video data
 		const SExposedVideoData evd = driver->getExposedVideoData();
@@ -44,12 +44,12 @@ namespace utility
 		RECT lpRect;
 		if (GetClientRect(hwnd, &lpRect))
 		{
-			return dimension2d<T>(lpRect.right - lpRect.left, lpRect.bottom - lpRect.top);
+			return vector2d<T>(lpRect.right - lpRect.left, lpRect.bottom - lpRect.top);
 		}
 
 		#endif
 
-		return dimension2d<T>();
+		return vector2d<T>();
 	}
 
 	// Get text rectangle within screen space

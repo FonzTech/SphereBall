@@ -9,11 +9,17 @@
 
 #define KEY_TEXT_GAME_OVER	0
 
+#define KEY_PP_WAVE	0
+
+#include <nlohmann/json.hpp>
+
 #include <memory>
 #include <unordered_map>
 #include <functional>
 
 #include "EngineObject.h"
+
+using nlohmann::json;
 
 class SharedData : public EngineObject
 {
@@ -43,10 +49,13 @@ protected:
 	// Variables for fade transition
 	s8 fadeType;
 	f32 fadeValue;
-	std::function<void()> fadeCallback;
+	std::function<void(void)> fadeCallback;
 
 	// Font for GUI
 	IGUIFont* font;
+
+	// Map to hold post processing effect
+	std::unordered_map<u8, std::function<void(const json&)>> ppCallbacks;
 
 	// Map to hold textures
 	std::unordered_map<u8, ITexture*> guiTextures;
@@ -102,13 +111,22 @@ public:
 	void updateGameScoreValue(const s32 key, const s32 stepValue);
 
 	// Fade control
-	void startFade(bool in, std::function<void()> fadeCallback);
+	void startFade(bool in, std::function<void(void)> fadeCallback);
 
 	// Build GUI from game score
 	void buildGUI();
 
 	// Display game over GUI menu
 	void displayGameOver();
+
+	/*
+		Set function for post processing effect.
+		Supply nullptr for callback to erase the desired key.
+	*/
+	void setPostProcessingCallback(u8 key, std::function<void(const json&)> callback);
+
+	// Trigger post processing callback
+	bool triggerPostProcessingCallback(u8 key, const json& data);
 };
 
 #endif // SHAREDDATA_H

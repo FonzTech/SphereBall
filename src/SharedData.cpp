@@ -296,7 +296,7 @@ void SharedData::updateGameScoreValue(const s32 key, const s32 stepValue)
 	search->second.value += stepValue;
 }
 
-void SharedData::startFade(bool in, std::function<void()> fadeCallback)
+void SharedData::startFade(bool in, std::function<void(void)> fadeCallback)
 {
 	this->fadeType = in ? 1 : 0;
 	this->fadeCallback = fadeCallback;
@@ -317,4 +317,29 @@ void SharedData::buildGUI()
 void SharedData::displayGameOver()
 {
 	gameOverAlpha = 0.05f;
+}
+
+void SharedData::setPostProcessingCallback(u8 key, std::function<void(const json&)> callback)
+{
+	if (callback == nullptr)
+	{
+		ppCallbacks.erase(ppCallbacks.find(key));
+	}
+	else
+	{
+		ppCallbacks[key] = callback;
+	}
+}
+
+bool SharedData::triggerPostProcessingCallback(u8 key, const json& data)
+{
+	try
+	{
+		ppCallbacks.at(key)(data);
+		return true;
+	}
+	catch (std::out_of_range e)
+	{
+	}
+	return false;
 }

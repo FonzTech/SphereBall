@@ -2,6 +2,7 @@
 #define ENGINE_H
 
 #include <irrlicht.h>
+#include <nlohmann/json.hpp>
 #include <vector>
 
 #include "EventManager.h"
@@ -12,6 +13,8 @@ using namespace core;
 using namespace scene;
 using namespace video;
 using namespace gui;
+
+using nlohmann::json;
 
 class Engine
 {
@@ -24,9 +27,11 @@ protected:
 		Engine* engine;
 
 		f32 waveTime;
-		f32 waveStrength;
 
 	public:
+
+		f32 waveStrength;
+
 		PostProcessing(Engine* engine);
 
 		virtual void OnSetConstants(video::IMaterialRendererServices* services, s32 userData);
@@ -43,7 +48,7 @@ protected:
 	// Global render target
 	ITexture* sceneRtt;
 
-	// Post-Processing
+	// Post-Processing system
 	std::unique_ptr<PostProcessing> postProcessing;
 	s32 postProcessingMaterial;
 	void createPostProcessingMaterial();

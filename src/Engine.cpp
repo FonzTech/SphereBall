@@ -74,6 +74,17 @@ bool Engine::setupComponents()
 	// Setup material for post-processing
 	createPostProcessingMaterial();
 
+	// Bind post processing functions
+	{
+		std::function<void(const json&)> callback = [this](const json& data)
+		{
+			f32 strength;
+			data.at("strength").get_to(strength);
+			postProcessing->waveStrength = strength;
+		};
+		SharedData::singleton->setPostProcessingCallback(KEY_PP_WAVE, callback);
+	}
+
 	// Check for render to target support
 	return driver->queryFeature(video::EVDF_RENDER_TO_TARGET);
 }
@@ -257,7 +268,7 @@ void Engine::PostProcessing::update(f32 deltaTime)
 	waveTime += deltaTime;
 
 	// Decrease wave strength effect
-	waveStrength -= 0.0005 * deltaTime;
+	waveStrength -= 0.0005f * deltaTime;
 	if (waveStrength < 0.0f)
 	{
 		waveStrength = 0.0f;

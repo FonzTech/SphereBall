@@ -2,7 +2,6 @@
 #define GAMEOBJECT_H
 
 #include <vector>
-
 #include <nlohmann/json.hpp>
 
 #include "EngineObject.h"

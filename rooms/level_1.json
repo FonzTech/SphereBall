@@ -204,6 +204,16 @@
 		}
 	},
 	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 220.0,
+				"y": 40.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
 		"name": "Key",
 		"required": {
 			"position": {
@@ -239,6 +249,19 @@
 			"position": {
 				"x": 200.0,
 				"y": 40.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"type": 0
+		}
+	},
+	{
+		"name": "Pill",
+		"required": {
+			"position": {
+				"x": 220.0,
+				"y": 60.0,
 				"z": 0.0
 			}
 		},

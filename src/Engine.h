@@ -16,6 +16,24 @@ using namespace gui;
 class Engine
 {
 protected:
+
+	// ShaderCallBack
+	class PostProcessing : public ShaderCallback
+	{
+	protected:
+		Engine* engine;
+
+		f32 waveTime;
+		f32 waveStrength;
+
+	public:
+		PostProcessing(Engine* engine);
+
+		virtual void OnSetConstants(video::IMaterialRendererServices* services, s32 userData);
+
+		void update(f32 deltaTime);
+	};
+
 	// Public static class constants
 	static const wchar_t* WINDOW_TITLE;
 
@@ -25,22 +43,10 @@ protected:
 	// Global render target
 	ITexture* sceneRtt;
 
-	// Post-Processing material
+	// Post-Processing
+	std::unique_ptr<PostProcessing> postProcessing;
 	s32 postProcessingMaterial;
-
-	// Create Post-Processing material
 	void createPostProcessingMaterial();
-
-	// ShaderCallBack
-	class SpecializedShaderCallback : public ShaderCallback
-	{
-	protected:
-		Engine* engine;
-
-	public:
-		SpecializedShaderCallback(Engine* engine);
-		virtual void OnSetConstants(video::IMaterialRendererServices* services, s32 userData);
-	};
 
 public:
 	// Singleton pattern

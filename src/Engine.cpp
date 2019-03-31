@@ -25,12 +25,10 @@ Engine::Engine()
 
 void Engine::createPostProcessingMaterial()
 {
-	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
+	postProcessing = std::make_unique<PostProcessing>(this);
 
 	video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
-	postProcessingMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/scene.vs", "shaders/scene.fs", ssc);
-
-	ssc->drop();
+	postProcessingMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/scene.vs", "shaders/scene.fs", postProcessing.get());
 }
 
 bool Engine::startDevice()
@@ -110,6 +108,9 @@ void Engine::loop()
 		// Now delta time
 		u32 now = device->getTimer()->getTime();
 		deltaTime = now - deltaTime;
+
+		// Update post processing manager
+		postProcessing->update((f32)deltaTime);
 
 		// Double buffered scene with clear color
 		driver->beginScene(true, true, SColor(255, 100, 101, 140));
@@ -231,14 +232,34 @@ void Engine::loop()
 	Engine::singleton = nullptr;
 }
 
-Engine::SpecializedShaderCallback::SpecializedShaderCallback(Engine* engine)
+Engine::PostProcessing::PostProcessing(Engine* engine)
 {
+	// Set engine reference
 	this->engine = engine;
+
+	// Initialize variables
+	waveTime = 0.0f;
+	waveStrength = 0.0f;
 }
 
-void Engine::SpecializedShaderCallback::OnSetConstants(video::IMaterialRendererServices* services, s32 userData)
+void Engine::PostProcessing::OnSetConstants(video::IMaterialRendererServices* services, s32 userData)
 {
 	// Set shader values
 	s32 layer0 = 0;
 	services->setPixelShaderConstant("tex", (s32*)&layer0, 1);
+	services->setPixelShaderConstant("time", &waveTime, 1);
+	services->setPixelShaderConstant("strength", &waveStrength, 1);
+}
+
+void Engine::PostProcessing::update(f32 deltaTime)
+{
+	// Increase time for wave effect
+	waveTime += deltaTime;
+
+	// Decrease wave strength effect
+	waveStrength -= 0.0005 * deltaTime;
+	if (waveStrength < 0.0f)
+	{
+		waveStrength = 0.0f;
+	}
 }

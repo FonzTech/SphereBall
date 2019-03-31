@@ -335,6 +335,10 @@ void Player::walk()
 		{
 			playSound(KEY_SOUND_LETHARGY_PILL);
 			collision.getGameObject<Pill>()->destroy = 1;
+
+			json data;
+			data["strength"] = 1.0f;
+			SharedData::singleton->triggerPostProcessingCallback(KEY_PP_WAVE, data);
 		}
 	}
 }

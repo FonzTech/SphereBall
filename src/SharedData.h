@@ -19,19 +19,6 @@ class SharedData : public EngineObject
 {
 protected:
 
-	// Game Over screen
-	f32 gameOverAlpha;
-	s8 gameOverSelection;
-	std::vector<recti> gameOverRects;
-
-	// Variables for fade transition
-	s8 fadeType;
-	f32 fadeValue;
-	std::function<void()> fadeCallback;
-
-	// Font for GUI
-	IGUIFont* font;
-
 	// Structure for GUI score value
 	struct ScoreValue {
 		s8 visible;
@@ -47,6 +34,19 @@ protected:
 			this->value = value;
 		}
 	};
+
+	// Game Over screen
+	f32 gameOverAlpha;
+	s8 gameOverSelection;
+	std::vector<recti> gameOverRects;
+
+	// Variables for fade transition
+	s8 fadeType;
+	f32 fadeValue;
+	std::function<void()> fadeCallback;
+
+	// Font for GUI
+	IGUIFont* font;
 
 	// Map to hold textures
 	std::unordered_map<u8, ITexture*> guiTextures;

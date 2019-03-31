@@ -1,7 +1,7 @@
+varying vec4 positionToWorld;
+
 uniform sampler2D tex;
 uniform vec3 position;
-
-varying vec4 positionToWorld;
 
 void main()
 {

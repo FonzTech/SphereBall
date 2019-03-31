@@ -91,13 +91,6 @@ void SharedData::update(f32 deltaTime)
 	}
 }
 
-void SharedData::addSceneRTT(ITexture* texture)
-{
-	recti windowRect(vector2di(0), utility::getWindowSize<s32>(driver));
-	IGUIImage* image = guienv->addImage(windowRect);
-	image->setImage(texture);
-}
-
 void SharedData::loadAssets()
 {
 	// Load font

@@ -86,9 +86,6 @@ public:
 	// Animation stepper
 	void update(f32 deltaTime);
 
-	// Set window render target textur
-	void addSceneRTT(ITexture* texture);
-
 	// Post Constructor
 	void loadAssets();
 

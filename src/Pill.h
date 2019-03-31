@@ -15,7 +15,7 @@ protected:
 	u8 type = 0;
 
 	// Fake light shader
-	static s32 customMaterial;
+	s32 customMaterial;
 
 public:
 	// Constructor

@@ -1,7 +1,5 @@
 #include "Pill.h"
 
-s32 Pill::customMaterial = -1;
-
 std::shared_ptr<Pill> Pill::createInstance(const json &jsonData)
 {
 	u8 type;
@@ -31,15 +29,12 @@ Pill::Pill(u8 type) : GameObject()
 	ITexture* texture = driver->getTexture("textures/lethargy_pill.png");
 
 	// Create sparkle shader
-	if (customMaterial == -1)
-	{
-		SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
+	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
 
-		video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
-		customMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/pill.vs", "shaders/pill.fs", ssc);
+	video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+	customMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/pill.vs", "shaders/pill.fs", ssc);
 
-		ssc->drop();
-	}
+	ssc->drop();
 
 	// Create model for player
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
@@ -76,5 +71,6 @@ void Pill::SpecializedShaderCallback::OnSetConstants(video::IMaterialRendererSer
 
 	f32 values[3];
 	pill->position.getAs3Values(values);
+
 	services->setPixelShaderConstant("position", values, 3);
 }

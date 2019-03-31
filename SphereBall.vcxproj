@@ -182,6 +182,7 @@
     <ClCompile Include="src/GameObject.cpp" />
     <ClCompile Include="src/main.cpp" />
     <ClCompile Include="src/RoomManager.cpp" />
+    <ClCompile Include="src\ScreenQuadSceneNode.cpp" />
     <ClCompile Include="src\ShaderCallback.cpp" />
     <ClCompile Include="src/SharedData.cpp" />
     <ClCompile Include="src/SkyBox.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="src/Model.h" />
     <ClInclude Include="src/Player.h" />
     <ClInclude Include="src/RoomManager.h" />
+    <ClInclude Include="src\ScreenQuadSceneNode.h" />
     <ClInclude Include="src\ShaderCallback.h" />
     <ClInclude Include="src/SharedData.h" />
     <ClInclude Include="src/SkyBox.h" />

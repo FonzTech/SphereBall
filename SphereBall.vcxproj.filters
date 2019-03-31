@@ -93,6 +93,9 @@
     <ClCompile Include="src\ShaderCallback.cpp">
       <Filter>Sources\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\ScreenQuadSceneNode.cpp">
+      <Filter>Sources\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src/Engine.h">
@@ -159,6 +162,9 @@
       <Filter>Headers\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\ShaderCallback.h">
+      <Filter>Headers\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ScreenQuadSceneNode.h">
       <Filter>Headers\Core</Filter>
     </ClInclude>
   </ItemGroup>

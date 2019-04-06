@@ -27,7 +27,7 @@ void Engine::createPostProcessingMaterial()
 {
 	postProcessing = std::make_unique<PostProcessing>(this);
 
-	video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
 	postProcessingMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/scene.vs", "shaders/scene.fs", postProcessing.get());
 }
 
@@ -35,7 +35,7 @@ bool Engine::startDevice()
 {
 	// Create device and assign
 	SIrrlichtCreationParameters params;
-	params.DriverType = video::EDT_OPENGL;
+	params.DriverType = EDT_OPENGL;
 	params.WindowSize = dimension2d<u32>(1920, 1080);
 	params.Bits = 32;
 	params.Vsync = true;
@@ -56,7 +56,7 @@ bool Engine::setupComponents()
 	// Create and setup driver
 	driver = device->getVideoDriver();
 	driver->getMaterial2D().TextureLayer[0].BilinearFilter = true;
-	driver->getMaterial2D().AntiAliasing = video::EAAM_FULL_BASIC;
+	driver->getMaterial2D().AntiAliasing = EAAM_FULL_BASIC;
 
 	// Create required components
 	smgr = device->getSceneManager();
@@ -90,7 +90,7 @@ bool Engine::setupComponents()
 	}
 
 	// Check for render to target support
-	return driver->queryFeature(video::EVDF_RENDER_TO_TARGET);
+	return driver->queryFeature(EVDF_RENDER_TO_TARGET);
 }
 
 void Engine::loop()
@@ -166,14 +166,14 @@ void Engine::loop()
 					for (auto &entry : model->textures)
 					{
 						node->setMaterialTexture(entry.first, entry.second);
-						node->setMaterialFlag(video::EMF_LIGHTING, false);
+						node->setMaterialFlag(EMF_LIGHTING, false);
 					}
 
 					// Set material type, if available
 					if (model->material != -1)
 					{
-						node->setMaterialType((video::E_MATERIAL_TYPE) model->material);
-						node->setMaterialFlag(video::EMF_BLEND_OPERATION, true);
+						node->setMaterialType((E_MATERIAL_TYPE) model->material);
+						node->setMaterialFlag(EMF_BLEND_OPERATION, true);
 					}
 				}
 			}
@@ -201,7 +201,7 @@ void Engine::loop()
 
 			// Display game surface
 			ScreenQuadSceneNode screenQuad(smgr->getRootSceneNode(), smgr, -1);
-			screenQuad.ChangeMaterialType((video::E_MATERIAL_TYPE) postProcessingMaterial);
+			screenQuad.ChangeMaterialType((E_MATERIAL_TYPE) postProcessingMaterial);
 			screenQuad.getMaterial(0).setTexture(0, sceneRtt);
 
 			// Draw scene RTT quad
@@ -258,7 +258,7 @@ Engine::PostProcessing::PostProcessing(Engine* engine)
 	waveStrength = 0.0f;
 }
 
-void Engine::PostProcessing::OnSetConstants(video::IMaterialRendererServices* services, s32 userData)
+void Engine::PostProcessing::OnSetConstants(IMaterialRendererServices* services, s32 userData)
 {
 	// Set shader values
 	s32 layer0 = 0;

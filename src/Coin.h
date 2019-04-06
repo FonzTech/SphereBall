@@ -43,7 +43,7 @@ public:
 
 	public:
 		SpecializedShaderCallback(Coin* coin);
-		virtual void OnSetConstants(video::IMaterialRendererServices* services, s32 userData);
+		virtual void OnSetConstants(IMaterialRendererServices* services, s32 userData);
 	};
 };
 

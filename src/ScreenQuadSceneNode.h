@@ -4,6 +4,7 @@
 #include <irrlicht.h>
 
 using namespace irr;
+using namespace video;
 
 class ScreenQuadSceneNode : public scene::ISceneNode
 {
@@ -11,14 +12,14 @@ class ScreenQuadSceneNode : public scene::ISceneNode
 	core::aabbox3df aabb;
 
 	// The material used to render the Scene Node
-	video::SMaterial material;
+	SMaterial material;
 
 	/*
 		The vertices of the Scene Node.
 		Normally we wouldn't need more than one set of UV coordinates.
 		But if we are to use the builtin materials, this is necessary.
 	*/
-	video::S3DVertex2TCoords vertices[4];
+	S3DVertex2TCoords vertices[4];
 
 public:
 	ScreenQuadSceneNode(scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id);
@@ -27,10 +28,10 @@ public:
 	const core::aabbox3df& getBoundingBox() const;
 
 	void OnRegisterSceneNode();
-	void ChangeMaterialType(video::E_MATERIAL_TYPE newMaterial);
+	void ChangeMaterialType(E_MATERIAL_TYPE newMaterial);
 	void render();
 	u32 getMaterialCount();
-	video::SMaterial& getMaterial(u32 i);
+	SMaterial& getMaterial(u32 i);
 	void flipHorizontal();
 };
 

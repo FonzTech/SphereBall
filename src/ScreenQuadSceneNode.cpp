@@ -11,10 +11,10 @@ ScreenQuadSceneNode::ScreenQuadSceneNode(scene::ISceneNode* parent, scene::IScen
 
 	aabb.reset(0, 0, 0);
 
-	vertices[0] = video::S3DVertex2TCoords(vector3df(-1.0f, -1.0f, 0.0f), vector3df(0.0f, 0.0f, -1.0f), video::SColor(255, 255, 255, 255), vector2df(0), vector2df(0));
-	vertices[1] = video::S3DVertex2TCoords(vector3df(1.0f, -1.0, 0.0f), vector3df(0.0f, 0.0f, -1.0f), video::SColor(255, 255, 255, 255), vector2df(1, 0), vector2df(1, 0));
-	vertices[2] = video::S3DVertex2TCoords(vector3df(-1.0f, 1.0, 0.0f), vector3df(0.0f, 0.0f, -1.0f), video::SColor(255, 255, 255, 255), vector2df(0, 1), vector2df(0, 1));
-	vertices[3] = video::S3DVertex2TCoords(vector3df(1.0f, 1.0f, 0.0f), vector3df(0.0f, 0.0f, -1.0f), video::SColor(255, 255, 255, 255), vector2df(1, 1), vector2df(1, 1));
+	vertices[0] = S3DVertex2TCoords(vector3df(-1.0f, -1.0f, 0.0f), vector3df(0.0f, 0.0f, -1.0f), SColor(255, 255, 255, 255), vector2df(0), vector2df(0));
+	vertices[1] = S3DVertex2TCoords(vector3df(1.0f, -1.0, 0.0f), vector3df(0.0f, 0.0f, -1.0f), SColor(255, 255, 255, 255), vector2df(1, 0), vector2df(1, 0));
+	vertices[2] = S3DVertex2TCoords(vector3df(-1.0f, 1.0, 0.0f), vector3df(0.0f, 0.0f, -1.0f), SColor(255, 255, 255, 255), vector2df(0, 1), vector2df(0, 1));
+	vertices[3] = S3DVertex2TCoords(vector3df(1.0f, 1.0f, 0.0f), vector3df(0.0f, 0.0f, -1.0f), SColor(255, 255, 255, 255), vector2df(1, 1), vector2df(1, 1));
 
 	/*
 		Now we proceed to initialize the appropriate settings for the material we are going to use
@@ -25,7 +25,7 @@ ScreenQuadSceneNode::ScreenQuadSceneNode(scene::ISceneNode* parent, scene::IScen
 	material.Lighting = false;
 
 	// This will add both first and second textures
-	material.MaterialType = video::EMT_SOLID;
+	material.MaterialType = EMT_SOLID;
 
 	// Not needed, but simplifies things
 	material.BackfaceCulling = false;
@@ -34,7 +34,7 @@ ScreenQuadSceneNode::ScreenQuadSceneNode(scene::ISceneNode* parent, scene::IScen
 	setAutomaticCulling(scene::EAC_OFF);
 
 	// Enable Z-Buffering
-	material.ZBuffer = video::ECFN_ALWAYS;
+	material.ZBuffer = ECFN_ALWAYS;
 	material.ZWriteEnable = false;
 }
 
@@ -55,14 +55,14 @@ void ScreenQuadSceneNode::OnRegisterSceneNode()
 	*/
 }
 
-void ScreenQuadSceneNode::ChangeMaterialType(video::E_MATERIAL_TYPE newMaterial)
+void ScreenQuadSceneNode::ChangeMaterialType(E_MATERIAL_TYPE newMaterial)
 {
 	material.MaterialType = newMaterial;
 }
 
 void ScreenQuadSceneNode::render()
 {
-	video::IVideoDriver* drv = getSceneManager()->getVideoDriver();
+	IVideoDriver* drv = getSceneManager()->getVideoDriver();
 	core::matrix4 proj;
 	u16 indices[] = { 0,1,2,3,1,2 };
 
@@ -70,9 +70,9 @@ void ScreenQuadSceneNode::render()
 
 	drv->setMaterial(material);
 
-	drv->setTransform(video::ETS_PROJECTION, core::IdentityMatrix);
-	drv->setTransform(video::ETS_VIEW, core::IdentityMatrix);
-	drv->setTransform(video::ETS_WORLD, core::IdentityMatrix);
+	drv->setTransform(ETS_PROJECTION, core::IdentityMatrix);
+	drv->setTransform(ETS_VIEW, core::IdentityMatrix);
+	drv->setTransform(ETS_WORLD, core::IdentityMatrix);
 
 	drv->drawIndexedTriangleList(&vertices[0], 4, &indices[0], 2);
 }
@@ -83,7 +83,7 @@ u32 ScreenQuadSceneNode::getMaterialCount()
 	return 1;
 }
 
-video::SMaterial& ScreenQuadSceneNode::getMaterial(irr::u32 i)
+SMaterial& ScreenQuadSceneNode::getMaterial(irr::u32 i)
 {
 	// We always return the same material, so there is no need for more.
 	return material;

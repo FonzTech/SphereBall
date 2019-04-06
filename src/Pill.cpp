@@ -31,7 +31,7 @@ Pill::Pill(u8 type) : GameObject()
 	// Create sparkle shader
 	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
 
-	video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
 	customMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/pill.vs", "shaders/pill.fs", ssc);
 
 	ssc->drop();
@@ -60,7 +60,7 @@ Pill::SpecializedShaderCallback::SpecializedShaderCallback(Pill* pill)
 	this->pill = pill;
 }
 
-void Pill::SpecializedShaderCallback::OnSetConstants(video::IMaterialRendererServices* services, s32 userData)
+void Pill::SpecializedShaderCallback::OnSetConstants(IMaterialRendererServices* services, s32 userData)
 {
 	// Execute parent method
 	ShaderCallback::OnSetConstants(services, userData);

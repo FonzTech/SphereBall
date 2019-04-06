@@ -23,7 +23,7 @@ Player::Player() : GameObject()
 	// Load custom shader for player
 	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
 
-	video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
 	customShader = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/player.fs", ssc);
 
 	ssc->drop();
@@ -478,7 +478,7 @@ Player::SpecializedShaderCallback::SpecializedShaderCallback(Player* player)
 	this->player = player;
 }
 
-void Player::SpecializedShaderCallback::OnSetConstants(video::IMaterialRendererServices* services, s32 userData)
+void Player::SpecializedShaderCallback::OnSetConstants(IMaterialRendererServices* services, s32 userData)
 {
 	// Set custom world matrix
 	driver->setTransform(ETS_WORLD, player->transformMatrix);

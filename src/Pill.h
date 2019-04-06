@@ -37,7 +37,7 @@ public:
 
 	public:
 		SpecializedShaderCallback(Pill* pill);
-		virtual void OnSetConstants(video::IMaterialRendererServices* services, s32 userData);
+		virtual void OnSetConstants(IMaterialRendererServices* services, s32 userData);
 	};
 };
 

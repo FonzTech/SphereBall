@@ -19,7 +19,7 @@ Coin::Coin() : GameObject()
 	// Create sparkle shader
 	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
 
-	video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
 	customShader = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/coin.fs", ssc);
 
 	ssc->drop();
@@ -37,7 +37,7 @@ Coin::Coin() : GameObject()
 	// Load plane model
 	planeModel = std::make_shared<Model>(mesh);
 	planeModel->addTexture(0, texture);
-	planeModel->material = video::EMT_TRANSPARENT_ALPHA_CHANNEL;
+	planeModel->material = EMT_TRANSPARENT_ALPHA_CHANNEL;
 	planeModel->scale = vector3df(2, 2, 0);
 }
 
@@ -91,7 +91,7 @@ Coin::SpecializedShaderCallback::SpecializedShaderCallback(Coin* coin)
 	this->coin = coin;
 }
 
-void Coin::SpecializedShaderCallback::OnSetConstants(video::IMaterialRendererServices* services, s32 userData)
+void Coin::SpecializedShaderCallback::OnSetConstants(IMaterialRendererServices* services, s32 userData)
 {
 	// Execute parent method
 	ShaderCallback::OnSetConstants(services, userData);

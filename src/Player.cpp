@@ -44,6 +44,7 @@ Player::Player() : GameObject()
 	moving = 0;
 	falling = 0;
 	breathing = 0.0f;
+	breathingSpeed = 0.001f;
 
 	fallLine = nullptr;
 	dieAlarm = nullptr;
@@ -83,8 +84,16 @@ void Player::update()
 	// Execute code for matching player state
 	if (state == STATE_WALKING)
 	{
-		// Breathing animation
-		breathing += 0.001f * deltaTime;
+		// Decrease breathing speed
+		breathingSpeed -= 0.00005f * deltaTime;
+
+		// Limit breathing speed
+		if (breathingSpeed <= 0.001f)
+		{
+			breathingSpeed = 0.001f;
+		}
+
+		breathing += breathingSpeed * deltaTime;
 
 		// Walk code
 		walk();
@@ -278,10 +287,14 @@ void Player::walk()
 			// Cast to game object
 			std::shared_ptr<GameObject> go = collision.getGameObject<Solid>();
 
-			// Play sound
+			// Motion effects
 			if ((!i && speed.Y > 0.1) || (i && speed.Y < -0.1))
 			{
+				// Play sound
 				playSound(KEY_SOUND_BOUNCE);
+
+				// Reset breathing
+				breathingSpeed = 0.025f;
 			}
 
 			// Stop vertical movement

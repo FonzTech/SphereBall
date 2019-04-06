@@ -28,6 +28,7 @@ protected:
 	s8 moving;
 	s8 falling;
 	f32 breathing;
+	f32 breathingSpeed;
 	std::unique_ptr<vector3df> fallLine;
 
 	// Alarms

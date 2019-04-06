@@ -27,6 +27,7 @@
 #include <functional>
 
 #include "EngineObject.h"
+#include "Alarm.h"
 
 using nlohmann::json;
 
@@ -59,6 +60,9 @@ protected:
 	s8 fadeType;
 	f32 fadeValue;
 	std::function<void(void)> fadeCallback;
+
+	// Alarm for time counter
+	std::unique_ptr<Alarm> timeAlarm;
 
 	// Font for GUI
 	IGUIFont* font;

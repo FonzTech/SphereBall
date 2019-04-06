@@ -28,10 +28,47 @@ SharedData::SharedData()
 
 	// Load sounds
 	sounds[KEY_SOUND_SELECT] = SoundManager::singleton->getSound(KEY_SOUND_SELECT);
+	sounds[KEY_SOUND_CLOCK_A] = SoundManager::singleton->getSound(KEY_SOUND_CLOCK_A);
+	sounds[KEY_SOUND_CLOCK_B] = SoundManager::singleton->getSound(KEY_SOUND_CLOCK_B);
+	sounds[KEY_SOUND_TIME_OUT] = SoundManager::singleton->getSound(KEY_SOUND_TIME_OUT);
 }
 
 void SharedData::update(f32 deltaTime)
 {
+	// Step alarms
+	if (timeAlarm != nullptr)
+	{
+		timeAlarm->stepDecrement(deltaTime);
+		if (timeAlarm->isTriggered())
+		{
+			// Check for time out
+			s32 time = gameScores[KEY_SCORE_KEY_TIME].value;
+			if (time <= 0)
+			{
+				// Play time out sound
+				playSound(KEY_SOUND_TIME_OUT);
+
+				// Delete alarm
+				timeAlarm = nullptr;
+			}
+			else
+			{
+				// Decrease time
+				updateGameScoreValue(KEY_SCORE_KEY_TIME, -1);
+
+				// Play clock sound
+				if (time <= 20)
+				{
+					f32 volume = (f32)(21 - time) * 5.0f;
+					playSound(time % 2 ? KEY_SOUND_CLOCK_B : KEY_SOUND_CLOCK_A)->setVolume(volume);
+				}
+
+				// Reset alarm
+				timeAlarm->setTime(1000.0f);
+			}
+		}
+	}
+
 	// Fade animation
 	if (fadeType == 0)
 	{
@@ -331,12 +368,23 @@ void SharedData::buildFadeTransition()
 
 void SharedData::initGameScoreValue(s32 key, s32 value)
 {
+	// Init game score
 	gameScores[key] = ScoreValue(1, value);
+
+	// Check for special key
+	if (key == KEY_SCORE_KEY_TIME)
+	{
+		timeAlarm = std::make_unique<Alarm>(1000.0f);
+	}
 }
 
 void SharedData::clearGameScore()
 {
+	// Clear game score map
 	gameScores.clear();
+
+	// Remove alarm for time counter
+	timeAlarm = nullptr;
 }
 
 s32 SharedData::getGameScoreValue(const s32 key, const s32 defaultValue)
@@ -394,7 +442,11 @@ void SharedData::buildGUI()
 
 void SharedData::displayGameOver()
 {
+	// Trigger game over for GUI
 	gameOverAlpha = 0.05f;
+
+	// Remove time counter alarm
+	timeAlarm = nullptr;
 }
 
 void SharedData::disposeResourcesAtFrameEnd()

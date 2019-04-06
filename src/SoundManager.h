@@ -12,6 +12,9 @@
 #define KEY_SOUND_GAME_OVER		"game_over"
 #define KEY_SOUND_LETHARGY_PILL	"lethargy_pill"
 #define KEY_SOUND_LEVEL_START	"level_start"
+#define KEY_SOUND_CLOCK_A		"clock_a"
+#define KEY_SOUND_CLOCK_B		"clock_b"
+#define KEY_SOUND_TIME_OUT		"time_out"
 
 #include <unordered_map>
 #include <string>

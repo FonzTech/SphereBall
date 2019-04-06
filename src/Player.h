@@ -12,6 +12,9 @@ class Player : public GameObject
 {
 protected:
 
+	// Constants
+	const static f32 breathingDelta;
+
 	// State
 	s8 state;
 
@@ -20,7 +23,7 @@ protected:
 	void dead();
 
 	// Shader variables
-	s32 customShader;
+	s32 customMaterial;
 	matrix4 transformMatrix;
 
 	// Motion

@@ -13,6 +13,8 @@
 #include "Spikes.h"
 #include "Pill.h"
 
+const f32 Player::breathingDelta = 0.125f;
+
 std::shared_ptr<Player> Player::createInstance(const json &jsonData)
 {
 	return std::make_shared<Player>();
@@ -24,7 +26,7 @@ Player::Player() : GameObject()
 	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
 
 	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
-	customShader = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/player.fs", ssc);
+	customMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/player.fs", ssc);
 
 	ssc->drop();
 
@@ -34,7 +36,7 @@ Player::Player() : GameObject()
 
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
-	model->material = customShader;
+	model->material = customMaterial;
 	models.push_back(model);
 
 	// Initialize variables
@@ -141,8 +143,8 @@ void Player::updateTransformMatrix()
 	f32 height = models.at(0)->mesh->getBoundingBox().getExtent().Y;
 	f32 phaseAngle = (f32)std::sin(breathing);
 
-	f32 scaleHeight = phaseAngle * 0.25f + 0.75f;
-	f32 translateHeight = height * -0.25f + (phaseAngle * 0.5f + 0.5f) * height * 0.25f;
+	f32 scaleHeight = phaseAngle * breathingDelta + (1.0f - breathingDelta);
+	f32 translateHeight = height * -breathingDelta + (phaseAngle * 0.5f + 0.5f) * height * breathingDelta;
 
 	// Rotation
 	matrix4 rotation;

@@ -65,12 +65,10 @@ void Pill::SpecializedShaderCallback::OnSetConstants(video::IMaterialRendererSer
 	// Execute parent method
 	ShaderCallback::OnSetConstants(services, userData);
 
-	// Set shader values
+	// Set texture layer
 	s32 layer0 = 0;
 	services->setPixelShaderConstant("tex", (s32*)&layer0, 1);
 
-	f32 values[3];
-	pill->position.getAs3Values(values);
-
-	services->setPixelShaderConstant("position", values, 3);
+	// Set position
+	services->setPixelShaderConstant("position", &pill->position.X, 3);
 }

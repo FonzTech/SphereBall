@@ -211,7 +211,7 @@ void SharedData::buildGameScore()
 				}
 
 				// Restore old render target
-				driver->setRenderTarget(0);
+				driver->setRenderTarget(0, false, false);
 			}
 
 			// Draw hourglass

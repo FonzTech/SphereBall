@@ -232,7 +232,9 @@ void Player::walk()
 		if (fallLine != nullptr)
 		{
 			if (position.Y >= fallLine->Y)
+			{
 				fallLine = nullptr;
+			}
 		}
 		else
 		{

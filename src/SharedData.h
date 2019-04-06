@@ -63,7 +63,12 @@ protected:
 	// Font for GUI
 	IGUIFont* font;
 
-	// Map to hold render target textures
+	/*
+		This map holds all the textures that must be disposed
+		at the end of the frame, otherwise severe memory leaks
+		will occur, causing memory usage to jump high, leading
+		to an unavoidable evitably crash of the application.
+	*/
 	std::unordered_map<u8, ITexture*> frameResources;
 
 	// Map to hold post processing effect

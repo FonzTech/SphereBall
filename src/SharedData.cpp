@@ -113,7 +113,7 @@ void SharedData::buildGameScore()
 	// Draw coin amount
 	{
 		// Get picked coin amount
-		s32 amount = getGameScoreValue(KEY_GUI_COIN);
+		s32 amount = getGameScoreValue(KEY_SCORE_COIN);
 		if (amount >= 0)
 		{
 			// Draw coin
@@ -131,11 +131,11 @@ void SharedData::buildGameScore()
 	// Draw key amount
 	{
 		// Get picked key amount
-		s32 amount = getGameScoreValue(KEY_GUI_KEY);
+		s32 amount = getGameScoreValue(KEY_SCORE_KEY_TOTAL);
 		if (amount >= 0)
 		{
 			// Get picked key amount
-			s32 pickedAmount = getGameScoreValue(KEY_GUI_KEY_PICKED);
+			s32 pickedAmount = getGameScoreValue(KEY_SCORE_KEY_PICKED);
 
 			// Draw keys
 			for (u8 i = 0; i < amount; ++i)
@@ -159,11 +159,11 @@ void SharedData::buildGameScore()
 
 	// Draw time
 	{
-		s32 amount = getGameScoreValue(KEY_GUI_HOURGLASS);
+		s32 amount = getGameScoreValue(KEY_SCORE_KEY_TIME);
 		if (amount >= 0)
 		{
 			// Get maximum time
-			s32 maxTime = getGameScoreValue(KEY_GUI_HOURGLASS_SAND_TOP);
+			s32 maxTime = getGameScoreValue(KEY_SCORE_KEY_TIME_MAX);
 
 			// Get time ratio
 			f32 ratio = (f32)amount / (f32)maxTime;

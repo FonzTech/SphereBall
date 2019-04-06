@@ -101,10 +101,14 @@ void SharedData::loadAssets()
 	guiTextures[KEY_GUI_KEY] = driver->getTexture("textures/gui_key.png");
 	guiTextures[KEY_GUI_RECTANGLE] = driver->getTexture("textures/gui_rectangle.png");
 	guiTextures[KEY_GUI_MOUSE] = driver->getTexture("textures/gui_mouse.png");
+	guiTextures[KEY_GUI_HOURGLASS] = driver->getTexture("textures/gui_hourglass.png");
+	guiTextures[KEY_GUI_HOURGLASS_SAND] = driver->getTexture("textures/gui_hourglass_sand.png");
 }
 
 void SharedData::buildGameScore()
 {
+	vector2di windowSize = utility::getWindowSize<s32>(driver);
+
 	// Draw coin amount
 	{
 		// Get picked coin amount
@@ -137,7 +141,7 @@ void SharedData::buildGameScore()
 			{
 				// Compute coords for image
 				const s32 x = 32 + 96 * i;
-				const s32 y = utility::getWindowSize<s32>(driver).Y - 160;
+				const s32 y = windowSize.Y - 160;
 
 				// Draw key
 				IGUIImage* image = guienv->addImage(guiTextures[KEY_GUI_KEY], vector2di(x, y));
@@ -149,6 +153,55 @@ void SharedData::buildGameScore()
 					image->setColor(SColor(255, 0, 0, 0));
 				}
 			}
+		}
+	}
+
+	// Draw time
+	{
+		s32 amount = getGameScoreValue(KEY_GUI_HOURGLASS);
+		if (amount >= 0)
+		{
+			// Get maximum time
+			s32 maxTime = getGameScoreValue(KEY_GUI_HOURGLASS_SAND);
+
+			// Get time ratio
+			f32 ratio = (f32)amount / (f32)maxTime;
+
+			// Compute coords for image
+			dimension2du imageSize = guiTextures[KEY_GUI_HOURGLASS]->getOriginalSize();
+			dimension2du size(192 * imageSize.Width / imageSize.Height, 192);
+
+			const s32 x = windowSize.X - size.Width - 32;
+			const s32 y = windowSize.Y - size.Height - 32;
+
+			// Render sand on separate texture
+			renderTargetTextures[KEY_GUI_HOURGLASS] = driver->addRenderTargetTexture(dimension2d<u32>(128, 128));
+			{
+				driver->setRenderTarget(renderTargetTextures[KEY_GUI_HOURGLASS]);
+
+				// Compute required data
+				recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND]);
+
+				f32 width = (f32)sourceRect.getWidth() / (f32)sourceRect.getHeight() * 192.0f;
+				f32 height = (f32)sourceRect.getHeight() * 0.5f;
+
+				recti destRect(0, 0, (s32)width, 192);
+				recti clipRect(0, 0, destRect.getWidth(), (s32)(height * ratio));
+
+				// Draw rectangle
+				driver->draw2DImage(guiTextures[KEY_GUI_HOURGLASS_SAND], destRect, sourceRect, &clipRect, 0, true);
+
+				// Restore old render target
+				driver->setRenderTarget(0);
+			}
+
+			// Draw hourglass
+			IGUIImage* image = guienv->addImage(renderTargetTextures[KEY_GUI_HOURGLASS], vector2di(x, y));
+
+			// Draw hourglass
+			image = guienv->addImage(guiTextures[KEY_GUI_HOURGLASS], vector2di(x, y));
+			image->setMaxSize(size);
+			image->setScaleImage(true);
 		}
 	}
 }

@@ -1,11 +1,13 @@
 #ifndef SHAREDDATA_H
 #define SHAREDDATA_H
 
-#define KEY_GUI_COIN		0
-#define KEY_GUI_KEY			1
-#define KEY_GUI_KEY_PICKED	2
-#define KEY_GUI_RECTANGLE	3
-#define KEY_GUI_MOUSE		4
+#define KEY_GUI_COIN			0
+#define KEY_GUI_KEY				1
+#define KEY_GUI_KEY_PICKED		2
+#define KEY_GUI_RECTANGLE		3
+#define KEY_GUI_MOUSE			4
+#define KEY_GUI_HOURGLASS		5
+#define KEY_GUI_HOURGLASS_SAND	6
 
 #define KEY_TEXT_GAME_OVER	0
 
@@ -53,6 +55,9 @@ protected:
 
 	// Font for GUI
 	IGUIFont* font;
+
+	// Map to hold render target textures
+	std::unordered_map<u8, ITexture*> renderTargetTextures;
 
 	// Map to hold post processing effect
 	std::unordered_map<u8, std::function<void(const json&)>> ppCallbacks;

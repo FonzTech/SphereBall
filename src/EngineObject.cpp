@@ -6,19 +6,23 @@ IVideoDriver* EngineObject::driver = nullptr;
 ISceneManager* EngineObject::smgr = nullptr;
 IGUIEnvironment* EngineObject::guienv = nullptr;
 
-void EngineObject::playSound(const std::string& key, const vector3df* position)
+std::shared_ptr<sf::Sound> EngineObject::playSound(const std::string& key, const vector3df* position)
 {
+	std::shared_ptr<sf::Sound> sound = sounds[key];
+
 	if (position == nullptr)
 	{
-		sounds[key]->setRelativeToListener(true);
-		sounds[key]->setPosition(sf::Vector3f(0, 0, 0));
+		sound->setRelativeToListener(true);
+		sound->setPosition(sf::Vector3f(0, 0, 0));
 	}
 	else
 	{
-		sounds[key]->setRelativeToListener(false);
-		sounds[key]->setPosition(utility::irrVectorToSf(*position));
+		sound->setRelativeToListener(false);
+		sound->setPosition(utility::irrVectorToSf(*position));
 	}
-	sounds[key]->play();
+	sound->play();
+
+	return sound;
 }
 
 void EngineObject::setEngineInstances(IrrlichtDevice* device, ISceneManager* smgr, IGUIEnvironment* guienv)

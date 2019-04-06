@@ -22,7 +22,7 @@ protected:
 	std::unordered_map<std::string, std::shared_ptr<sf::Sound>> sounds;
 
 	// Play spatial sound
-	void playSound(const std::string& key, const vector3df* position = nullptr);
+	std::shared_ptr<sf::Sound> playSound(const std::string& key, const vector3df* position = nullptr);
 
 public:
 

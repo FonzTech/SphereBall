@@ -1,13 +1,14 @@
 #ifndef SHAREDDATA_H
 #define SHAREDDATA_H
 
-#define KEY_GUI_COIN			0
-#define KEY_GUI_KEY				1
-#define KEY_GUI_KEY_PICKED		2
-#define KEY_GUI_RECTANGLE		3
-#define KEY_GUI_MOUSE			4
-#define KEY_GUI_HOURGLASS		5
-#define KEY_GUI_HOURGLASS_SAND	6
+#define KEY_GUI_COIN					0
+#define KEY_GUI_KEY						1
+#define KEY_GUI_KEY_PICKED				2
+#define KEY_GUI_RECTANGLE				3
+#define KEY_GUI_MOUSE					4
+#define KEY_GUI_HOURGLASS				5
+#define KEY_GUI_HOURGLASS_SAND_TOP		6
+#define KEY_GUI_HOURGLASS_SAND_BOTTOM	7
 
 #define KEY_TEXT_GAME_OVER	0
 

@@ -102,7 +102,8 @@ void SharedData::loadAssets()
 	guiTextures[KEY_GUI_RECTANGLE] = driver->getTexture("textures/gui_rectangle.png");
 	guiTextures[KEY_GUI_MOUSE] = driver->getTexture("textures/gui_mouse.png");
 	guiTextures[KEY_GUI_HOURGLASS] = driver->getTexture("textures/gui_hourglass.png");
-	guiTextures[KEY_GUI_HOURGLASS_SAND] = driver->getTexture("textures/gui_hourglass_sand.png");
+	guiTextures[KEY_GUI_HOURGLASS_SAND_TOP] = driver->getTexture("textures/gui_hourglass_sand_top.png");
+	guiTextures[KEY_GUI_HOURGLASS_SAND_BOTTOM] = driver->getTexture("textures/gui_hourglass_sand_bottom.png");
 }
 
 void SharedData::buildGameScore()
@@ -162,7 +163,7 @@ void SharedData::buildGameScore()
 		if (amount >= 0)
 		{
 			// Get maximum time
-			s32 maxTime = getGameScoreValue(KEY_GUI_HOURGLASS_SAND);
+			s32 maxTime = getGameScoreValue(KEY_GUI_HOURGLASS_SAND_TOP);
 
 			// Get time ratio
 			f32 ratio = (f32)amount / (f32)maxTime;
@@ -175,21 +176,39 @@ void SharedData::buildGameScore()
 			const s32 y = windowSize.Y - size.Height - 32;
 
 			// Render sand on separate texture
-			renderTargetTextures[KEY_GUI_HOURGLASS] = driver->addRenderTargetTexture(dimension2d<u32>(128, 128));
+			renderTargetTextures[KEY_GUI_HOURGLASS] = driver->addRenderTargetTexture(dimension2d<u32>(128, 256));
 			{
 				driver->setRenderTarget(renderTargetTextures[KEY_GUI_HOURGLASS]);
 
-				// Compute required data
-				recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND]);
+				// Top part
+				{
+					// Compute required data
+					recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND_TOP]);
+					f32 width = (f32)sourceRect.getWidth() / (f32)sourceRect.getHeight() * 192.0f;
 
-				f32 width = (f32)sourceRect.getWidth() / (f32)sourceRect.getHeight() * 192.0f;
-				f32 height = (f32)sourceRect.getHeight() * 0.5f;
+					recti destRect(0, 0, (s32)width, 192);
+					f32 height = (f32)destRect.getHeight() * 0.5f;
 
-				recti destRect(0, 0, (s32)width, 192);
-				recti clipRect(0, 0, destRect.getWidth(), (s32)(height * ratio));
+					recti clipRect(0, (s32)(height * (1.0f - ratio)), destRect.getWidth(), destRect.getHeight());
 
-				// Draw rectangle
-				driver->draw2DImage(guiTextures[KEY_GUI_HOURGLASS_SAND], destRect, sourceRect, &clipRect, 0, true);
+					// Draw rectangle
+					driver->draw2DImage(guiTextures[KEY_GUI_HOURGLASS_SAND_TOP], destRect, sourceRect, &clipRect, 0, true);
+				}
+
+				// Bottom part
+				{
+					// Compute required data
+					recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND_BOTTOM]);
+					f32 width = (f32)sourceRect.getWidth() / (f32)sourceRect.getHeight() * 192.0f;
+
+					recti destRect(0, 0, (s32)width, 192);
+					f32 height = (f32)destRect.getHeight() * 0.5f;
+
+					recti clipRect(0, (s32)height + (s32)(height * ratio), destRect.getWidth(), destRect.getHeight());
+
+					// Draw rectangle
+					driver->draw2DImage(guiTextures[KEY_GUI_HOURGLASS_SAND_BOTTOM], destRect, sourceRect, &clipRect, 0, true);
+				}
 
 				// Restore old render target
 				driver->setRenderTarget(0);

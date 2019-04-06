@@ -378,6 +378,15 @@ void SharedData::displayGameOver()
 	gameOverAlpha = 0.05f;
 }
 
+void SharedData::disposeResourcesAtFrameEnd()
+{
+	for (auto& entry : renderTargetTextures)
+	{
+		driver->removeTexture(entry.second);
+	}
+	renderTargetTextures.clear();
+}
+
 void SharedData::setPostProcessingCallback(u8 key, std::function<void(const json&)> callback)
 {
 	if (callback == nullptr)

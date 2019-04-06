@@ -226,6 +226,9 @@ void Engine::loop()
 		// Clear GUI environment
 		guienv->clear();
 
+		// Dispose unneeded resource for SharedData controller
+		SharedData::singleton->disposeResourcesAtFrameEnd();
+
 		// Update key states
 		EventManager::singleton->updateKeyStates();
 

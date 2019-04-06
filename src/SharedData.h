@@ -126,6 +126,9 @@ public:
 	// Display game over GUI menu
 	void displayGameOver();
 
+	// Dispose unneeded resource at frame end
+	void disposeResourcesAtFrameEnd();
+
 	/*
 		Set function for post processing effect.
 		Supply nullptr for callback to erase the desired key.

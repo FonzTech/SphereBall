@@ -1,8 +1,6 @@
 #include "Coin.h"
 #include "SharedData.h"
 
-s32 Coin::customMaterial = -1;
-
 std::shared_ptr<Coin> Coin::createInstance(const json &jsonData)
 {
 	return std::make_shared<Coin>();
@@ -19,20 +17,17 @@ Coin::Coin() : GameObject()
 	ITexture* texture = driver->getTexture("textures/coin.png");
 
 	// Create sparkle shader
-	if (customMaterial == -1)
-	{
-		SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
+	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
 
-		video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
-		customMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/coin.vs", "shaders/coin.fs", ssc);
+	video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+	customShader = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/coin.fs", ssc);
 
-		ssc->drop();
-	}
+	ssc->drop();
 
 	// Create model for player
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
-	model->material = customMaterial;
+	model->material = customShader;
 	models.push_back(model);
 
 	// Load mesh and texture

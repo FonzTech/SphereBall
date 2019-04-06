@@ -15,7 +15,7 @@ protected:
 	std::shared_ptr<Model> planeModel;
 
 	// Sparkle shader
-	static s32 customMaterial;
+	s32 customShader;
 
 public:
 

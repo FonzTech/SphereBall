@@ -36,7 +36,7 @@ void Key::draw()
 	model->rotation = vector3df(0, angle, 0);
 }
 
-u8 Key::pick()
+bool Key::pick()
 {
 	// Increment coin counter by one
 	SharedData::singleton->updateGameScoreValue(KEY_SCORE_KEY_PICKED, 1);
@@ -47,8 +47,8 @@ u8 Key::pick()
 	// Check if all of the keys have been picked
 	if (SharedData::singleton->getGameScoreValue(KEY_SCORE_KEY_PICKED) >= SharedData::singleton->getGameScoreValue(KEY_SCORE_KEY_TOTAL))
 	{
-		return 1;
+		return true;
 	}
 
-	return 0;
+	return false;
 }

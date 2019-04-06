@@ -19,9 +19,9 @@ public:
 
 	/*
 		Use this method to trigger item picking.
-		It returns 1 is all of the keys have been picked, 0 if not.
+		It returns true is all of the keys have been picked, false otherwise.
 	*/
-	u8 pick();
+	bool pick();
 
 	// Create specialized instance
 	static std::shared_ptr<Key> createInstance(const json &jsonData);

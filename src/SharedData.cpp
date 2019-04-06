@@ -176,9 +176,9 @@ void SharedData::buildGameScore()
 			const s32 y = windowSize.Y - size.Height - 32;
 
 			// Render sand on separate texture
-			renderTargetTextures[KEY_GUI_HOURGLASS] = driver->addRenderTargetTexture(dimension2d<u32>(128, 256));
+			frameResources[KEY_GUI_HOURGLASS] = driver->addRenderTargetTexture(dimension2d<u32>(128, 256));
 			{
-				driver->setRenderTarget(renderTargetTextures[KEY_GUI_HOURGLASS]);
+				driver->setRenderTarget(frameResources[KEY_GUI_HOURGLASS]);
 
 				// Top part
 				{
@@ -215,7 +215,7 @@ void SharedData::buildGameScore()
 			}
 
 			// Draw hourglass
-			IGUIImage* image = guienv->addImage(renderTargetTextures[KEY_GUI_HOURGLASS], vector2di(x, y));
+			IGUIImage* image = guienv->addImage(frameResources[KEY_GUI_HOURGLASS], vector2di(x, y));
 
 			// Draw hourglass
 			image = guienv->addImage(guiTextures[KEY_GUI_HOURGLASS], vector2di(x, y));
@@ -399,11 +399,11 @@ void SharedData::displayGameOver()
 
 void SharedData::disposeResourcesAtFrameEnd()
 {
-	for (auto& entry : renderTargetTextures)
+	for (auto& entry : frameResources)
 	{
 		driver->removeTexture(entry.second);
 	}
-	renderTargetTextures.clear();
+	frameResources.clear();
 }
 
 void SharedData::setPostProcessingCallback(u8 key, std::function<void(const json&)> callback)

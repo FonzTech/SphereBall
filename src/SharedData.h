@@ -64,7 +64,7 @@ protected:
 	IGUIFont* font;
 
 	// Map to hold render target textures
-	std::unordered_map<u8, ITexture*> renderTargetTextures;
+	std::unordered_map<u8, ITexture*> frameResources;
 
 	// Map to hold post processing effect
 	std::unordered_map<u8, std::function<void(const json&)>> ppCallbacks;

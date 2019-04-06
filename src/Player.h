@@ -6,6 +6,7 @@
 
 #include "GameObject.h"
 #include "Alarm.h"
+#include "ShaderCallback.h"
 
 class Player : public GameObject
 {
@@ -18,10 +19,15 @@ protected:
 	void die();
 	void dead();
 
+	// Shader variables
+	s32 customShader;
+	matrix4 transformMatrix;
+
 	// Motion
 	s8 direction;
 	s8 moving;
 	s8 falling;
+	f32 breathing;
 	std::unique_ptr<vector3df> fallLine;
 
 	// Alarms
@@ -31,6 +37,20 @@ protected:
 	// Custom collision check function
 	std::function<bool(const GameObject* go)> coinCollisionCheck;
 	std::function<bool(const GameObject* go)> spikesCollisionCheck;
+
+	// Update transform matrix
+	void updateTransformMatrix();
+
+	// ShaderCallBack
+	class SpecializedShaderCallback : public ShaderCallback
+	{
+	protected:
+		Player* player;
+
+	public:
+		SpecializedShaderCallback(Player* coin);
+		virtual void OnSetConstants(video::IMaterialRendererServices* services, s32 userData);
+	};
 
 public:
 

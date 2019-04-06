@@ -34,6 +34,7 @@ Player::Player() : GameObject()
 	direction = 1;
 	moving = 0;
 	falling = 0;
+	breathing = 0.0f;
 
 	fallLine = nullptr;
 	dieAlarm = nullptr;
@@ -66,6 +67,14 @@ Player::Player() : GameObject()
 
 	// Play Start Level sound
 	playSound(KEY_SOUND_LEVEL_START, nullptr);
+
+	// Create sparkle shader
+	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
+
+	video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+	customShader = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/player.fs", ssc);
+
+	ssc->drop();
 }
 
 void Player::update()
@@ -73,6 +82,10 @@ void Player::update()
 	// Execute code for matching player state
 	if (state == STATE_WALKING)
 	{
+		// Breathing animation
+		breathing += 0.001f * deltaTime;
+
+		// Walk code
 		walk();
 	}
 	else if (state == STATE_DEAD)
@@ -92,9 +105,14 @@ void Player::draw()
 	{
 		if (state == STATE_WALKING)
 		{
+			// Update matrix for shader
+			updateTransformMatrix();
+
+			// Update model parameters
 			std::shared_ptr<Model> model = models.at(0);
-			model->position = position;
-			model->rotation = vector3df(-45.0f, 0, -position.X * 3);
+			model->position = vector3df(0);
+			model->rotation = vector3df(0);
+			model->material = customShader;
 		}
 		else if (state == STATE_DEAD)
 		{
@@ -106,6 +124,32 @@ void Player::draw()
 	// Reposition camera
 	Camera::singleton->position = position + vector3df(0, 40, -100);
 	Camera::singleton->lookAt = position;
+}
+
+void Player::updateTransformMatrix()
+{
+	// Get required values
+	f32 height = models.at(0)->mesh->getBoundingBox().getExtent().Y;
+	f32 phaseAngle = (f32)std::sin(breathing);
+
+	f32 scaleHeight = phaseAngle * 0.25f + 0.75f;
+	f32 translateHeight = height * -0.25f + (phaseAngle * 0.5f + 0.5f) * height * 0.25f;
+
+	// Rotation
+	matrix4 rotation;
+	rotation.setRotationDegrees(vector3df(-45.0f, 0.0f, -position.X * 3.0f));
+
+	// Scaling
+	matrix4 scaling;
+	scaling.setScale(vector3df(1.0f, scaleHeight, 1.0f));
+	scaling.setTranslation(vector3df(0.0f, translateHeight, 0.0f));
+
+	// Translation
+	matrix4 translation;
+	translation.setTranslation(position);
+
+	// Final matrix
+	transformMatrix = translation * scaling * rotation;
 }
 
 void Player::walk()
@@ -427,4 +471,21 @@ void Player::dead()
 			}
 		}
 	}
+}
+
+Player::SpecializedShaderCallback::SpecializedShaderCallback(Player* player)
+{
+	this->player = player;
+}
+
+void Player::SpecializedShaderCallback::OnSetConstants(video::IMaterialRendererServices* services, s32 userData)
+{
+	// Set custom world matrix
+	driver->setTransform(ETS_WORLD, player->transformMatrix);
+
+	// Execute parent method
+	ShaderCallback::OnSetConstants(services, userData);
+
+	// Restore world matrix
+	driver->setTransform(ETS_WORLD, IdentityMatrix);
 }

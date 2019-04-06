@@ -284,8 +284,10 @@ void Player::walk()
 				playSound(KEY_SOUND_BOUNCE);
 			}
 
-			// Reposition object correctly
+			// Stop vertical movement
 			speed.Y = 0;
+
+			// Reposition object correctly
 			if (i)
 			{
 				position.Y = go->position.Y + bbox.getExtent().Y;

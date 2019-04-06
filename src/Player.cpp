@@ -20,12 +20,21 @@ std::shared_ptr<Player> Player::createInstance(const json &jsonData)
 
 Player::Player() : GameObject()
 {
+	// Load custom shader for player
+	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
+
+	video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+	customShader = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/player.fs", ssc);
+
+	ssc->drop();
+
 	// Load model for player
 	IAnimatedMesh* mesh = smgr->getMesh("models/sphere.obj");
 	ITexture* texture = driver->getTexture("textures/player.png");
 
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
+	model->material = customShader;
 	models.push_back(model);
 
 	// Initialize variables
@@ -67,14 +76,6 @@ Player::Player() : GameObject()
 
 	// Play Start Level sound
 	playSound(KEY_SOUND_LEVEL_START, nullptr);
-
-	// Create sparkle shader
-	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
-
-	video::IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
-	customShader = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/player.fs", ssc);
-
-	ssc->drop();
 }
 
 void Player::update()
@@ -112,7 +113,6 @@ void Player::draw()
 			std::shared_ptr<Model> model = models.at(0);
 			model->position = vector3df(0);
 			model->rotation = vector3df(0);
-			model->material = customShader;
 		}
 		else if (state == STATE_DEAD)
 		{

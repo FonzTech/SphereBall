@@ -19,7 +19,7 @@ public:
 
 	/*
 		Use this method to trigger item picking.
-		It returns true is all of the keys have been picked, false otherwise.
+		It returns wheter the all the keys have been picked.
 	*/
 	bool pick();
 

@@ -191,14 +191,18 @@ void Player::walk()
 		{
 			speed += vector3df(0.01f, 0, 0);
 			if (speed.X > 0)
+			{
 				speed.X = 0;
+			}
 		}
 		// Right
 		else
 		{
 			speed += vector3df(-0.01f, 0, 0);
 			if (speed.X < 0)
+			{
 				speed.X = 0;
+			}
 		}
 	}
 

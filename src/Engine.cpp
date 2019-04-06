@@ -169,7 +169,7 @@ void Engine::loop()
 						node->setMaterialFlag(video::EMF_LIGHTING, false);
 					}
 
-					// Set material type, if availablew
+					// Set material type, if available
 					if (model->material != -1)
 					{
 						node->setMaterialType((video::E_MATERIAL_TYPE) model->material);

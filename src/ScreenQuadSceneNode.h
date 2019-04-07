@@ -8,6 +8,8 @@ using namespace video;
 
 class ScreenQuadSceneNode : public scene::ISceneNode
 {
+protected:
+
 	// An axis aligned bounding box. Actually not needed.
 	core::aabbox3df aabb;
 

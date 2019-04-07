@@ -286,7 +286,7 @@ void SharedData::buildGameScore()
 
 				// Draw hourglass on a separate quad
 				GUIImageSceneNode imageNode(smgr->getRootSceneNode(), smgr, -1);
-				imageNode.setVertices(containerSize, vertices[0], vertices[1], vertices[2], vertices[3], &vector3df(size.Width * 0.5f, size.Height * 0.5f, 0.0f), &vector3df(0, 0, 0));
+				imageNode.setVertices(containerSize, vertices[0], vertices[1], vertices[2], vertices[3], &vector3df(size.Width * 0.5f, size.Height * 0.5f, 0.0f), &vector3df(0));
 				imageNode.getMaterial(0).setTexture(0, frameResources[KEY_GUI_HOURGLASS]);
 				imageNode.getMaterial(0).setFlag(EMF_BLEND_OPERATION, true);
 				imageNode.render();

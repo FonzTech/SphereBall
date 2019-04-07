@@ -206,6 +206,7 @@ void Engine::loop()
 
 			// Draw scene RTT quad
 			screenQuad.render();
+			screenQuad.remove();
 		}
 
 		// Set Delta Time

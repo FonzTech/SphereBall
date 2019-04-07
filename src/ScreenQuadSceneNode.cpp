@@ -64,10 +64,9 @@ void ScreenQuadSceneNode::render()
 {
 	IVideoDriver* drv = getSceneManager()->getVideoDriver();
 	core::matrix4 proj;
-	u16 indices[] = { 0,1,2,3,1,2 };
+	u16 indices[] = { 0, 1, 2, 3, 1, 2 };
 
 	// A triangle list
-
 	drv->setMaterial(material);
 
 	drv->setTransform(ETS_PROJECTION, core::IdentityMatrix);

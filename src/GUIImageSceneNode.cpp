@@ -114,16 +114,13 @@ void GUIImageSceneNode::setVertices(const core::vector3df & containerSize, core:
 		utility::rotateVectorAroundPivot(lowerRight, lowerRight, *rotationCenter, *rotationDegrees);
 	}
 
-	vector3df vectors[4]
-	{
-		(upperLeft / containerSize * 2.0f - 1.0f) * vector3df(1, -1, 1),
-		(upperRight / containerSize * 2.0f - 1.0f) * vector3df(1, -1, 1),
-		(lowerLeft / containerSize * 2.0f - 1.0f) * vector3df(1, -1, 1),
-		(lowerRight / containerSize * 2.0f - 1.0f) * vector3df(1, -1, 1)
-	};
+	upperLeft = (upperLeft / containerSize * 2.0f - 1.0f) * vector3df(1, -1, 1);
+	upperRight = (upperRight / containerSize * 2.0f - 1.0f) * vector3df(1, -1, 1);
+	lowerLeft = (lowerLeft / containerSize * 2.0f - 1.0f) * vector3df(1, -1, 1);
+	lowerRight = (lowerRight / containerSize * 2.0f - 1.0f) * vector3df(1, -1, 1);
 
-	vertices[0] = S3DVertex2TCoords(vectors[0], vector3df(0.0f, 0.0f, -1.0f), SColor(255, 255, 255, 255), vector2df(0), vector2df(0));
-	vertices[1] = S3DVertex2TCoords(vectors[1], vector3df(0.0f, 0.0f, -1.0f), SColor(255, 255, 255, 255), vector2df(1, 0), vector2df(1, 0));
-	vertices[2] = S3DVertex2TCoords(vectors[2], vector3df(0.0f, 0.0f, -1.0f), SColor(255, 255, 255, 255), vector2df(0, 1), vector2df(0, 1));
-	vertices[3] = S3DVertex2TCoords(vectors[3], vector3df(0.0f, 0.0f, -1.0f), SColor(255, 255, 255, 255), vector2df(1, 1), vector2df(1, 1));
+	vertices[0] = S3DVertex2TCoords(upperLeft, vector3df(0.0f, 0.0f, -1.0f), SColor(255, 255, 255, 255), vector2df(0), vector2df(0));
+	vertices[1] = S3DVertex2TCoords(upperRight, vector3df(0.0f, 0.0f, -1.0f), SColor(255, 255, 255, 255), vector2df(1, 0), vector2df(1, 0));
+	vertices[2] = S3DVertex2TCoords(lowerLeft, vector3df(0.0f, 0.0f, -1.0f), SColor(255, 255, 255, 255), vector2df(0, 1), vector2df(0, 1));
+	vertices[3] = S3DVertex2TCoords(lowerRight, vector3df(0.0f, 0.0f, -1.0f), SColor(255, 255, 255, 255), vector2df(1, 1), vector2df(1, 1));
 }

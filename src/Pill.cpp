@@ -52,7 +52,7 @@ void Pill::draw()
 	// Exit model
 	std::shared_ptr<Model> model = models.at(0);
 	model->position = position;
-	model->rotation += vector3df(0.125, 0.25, 0.5) * deltaTime;
+	model->rotation += vector3df(0.125f, 0.25f, 0.5f) * deltaTime;
 }
 
 Pill::SpecializedShaderCallback::SpecializedShaderCallback(Pill* pill)

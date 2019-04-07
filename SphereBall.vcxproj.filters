@@ -96,6 +96,9 @@
     <ClCompile Include="src\ScreenQuadSceneNode.cpp">
       <Filter>Sources\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\GUIImageSceneNode.cpp">
+      <Filter>Sources\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src/Engine.h">
@@ -165,6 +168,9 @@
       <Filter>Headers\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\ScreenQuadSceneNode.h">
+      <Filter>Headers\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GUIImageSceneNode.h">
       <Filter>Headers\Core</Filter>
     </ClInclude>
   </ItemGroup>

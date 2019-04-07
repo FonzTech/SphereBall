@@ -63,6 +63,9 @@ namespace utility
 
 	// Generate Bezier's Curve
 	const vector2df getCubicBezierAt(const vector2df& a, const vector2df& b, const f32 t);
+
+	// Vector rotation around a pivot
+	void rotateVectorAroundPivot(const vector3df & input, vector3df & out, const vector3df & pivot, const vector3df & angles);
 }
 
 #endif // UTILITY_H

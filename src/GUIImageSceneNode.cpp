@@ -108,13 +108,10 @@ void GUIImageSceneNode::setVertices(const core::vector3df & containerSize, core:
 	matrix4 rotation;
 	if (rotationCenter != nullptr)
 	{
-		rotation.setRotationCenter(*rotationCenter, *rotationCenter);
-		rotation.setRotationDegrees(*rotationDegrees);
-
-		rotation.transformVect(upperLeft);
-		rotation.transformVect(upperRight);
-		rotation.transformVect(lowerLeft);
-		rotation.transformVect(lowerRight);
+		utility::rotateVectorAroundPivot(upperLeft, upperLeft, *rotationCenter, *rotationDegrees);
+		utility::rotateVectorAroundPivot(upperRight, upperRight, *rotationCenter, *rotationDegrees);
+		utility::rotateVectorAroundPivot(lowerLeft, lowerLeft, *rotationCenter, *rotationDegrees);
+		utility::rotateVectorAroundPivot(lowerRight, lowerRight, *rotationCenter, *rotationDegrees);
 	}
 
 	vector3df vectors[4]

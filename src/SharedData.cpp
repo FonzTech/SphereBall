@@ -210,10 +210,7 @@ void SharedData::buildGameScore()
 			dimension2du imageSize = guiTextures[KEY_GUI_HOURGLASS]->getOriginalSize();
 			dimension2du size(192 * imageSize.Width / imageSize.Height, 192);
 
-			const s32 x = windowSize.X - size.Width - 32;
-			const s32 y = windowSize.Y - size.Height - 32;
-
-			f32 width;
+			vector2df hudSize;
 
 			// Render sand on separate texture
 			frameResources[KEY_GUI_HOURGLASS] = driver->addRenderTargetTexture(dimension2d<u32>(128, 256));
@@ -231,7 +228,8 @@ void SharedData::buildGameScore()
 					recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND_TOP]);
 
 					// Compute common width
-					width = (f32)sourceRect.getWidth() / (f32)sourceRect.getHeight() * 192.0f;
+					hudSize.Y = 192.0f;
+					hudSize.X = (f32)sourceRect.getWidth() / (f32)sourceRect.getHeight() * hudSize.Y;
 
 					// Compute common destination rect
 					destRect = recti(vector2di(0), size);
@@ -268,25 +266,27 @@ void SharedData::buildGameScore()
 			}
 
 			// Render hourglass on separate texture
-			frameResources[KEY_GUI_HOURGLASS_SAND_TOP] = driver->addRenderTargetTexture(dimension2d<u32>((s32)width, 192));
+			frameResources[KEY_GUI_HOURGLASS_SAND_TOP] = driver->addRenderTargetTexture(dimension2d<u32>(256, 256));
 			{
 				driver->setRenderTarget(frameResources[KEY_GUI_HOURGLASS_SAND_TOP]);
 
 				// Get container size
-				dimension2df size = (dimension2df)frameResources[KEY_GUI_HOURGLASS]->getSize();
+				size = (dimension2df)frameResources[KEY_GUI_HOURGLASS_SAND_TOP]->getSize();
 
-				vector3df containerSize(size.Width, size.Height, 1);
+				vector3df containerSize((f32)size.Width, (f32)size.Height, 1.0f);
+				vector3df halfSize = containerSize * 0.5f - vector3df(hudSize.X, hudSize.Y, 0.0f) * 0.5f;
+
 				vector3df vertices[] =
 				{
-					vector3df(0, 0, 0),
-					vector3df(size.Width, 0, 0),
-					vector3df(0, size.Height, 0),
-					vector3df(size.Width, size.Height, 0)
+					vector3df(0, 0, 0) + halfSize,
+					vector3df(hudSize.X, 0, 0) + halfSize,
+					vector3df(0, hudSize.Y, 0) + halfSize,
+					vector3df(hudSize.X, hudSize.Y, 0) + halfSize
 				};
 
 				// Draw hourglass on a separate quad
 				GUIImageSceneNode imageNode(smgr->getRootSceneNode(), smgr, -1);
-				imageNode.setVertices(containerSize, vertices[0], vertices[1], vertices[2], vertices[3], &vector3df(size.Width * 0.5f, size.Height * 0.5f, 0.0f), &vector3df(0));
+				imageNode.setVertices(containerSize, vertices[0], vertices[1], vertices[2], vertices[3], &vector3df(containerSize.X * 0.5f, containerSize.Y * 0.5f, 0.0f), &vector3df(0));
 				imageNode.getMaterial(0).setTexture(0, frameResources[KEY_GUI_HOURGLASS]);
 				imageNode.getMaterial(0).setFlag(EMF_BLEND_OPERATION, true);
 				imageNode.render();
@@ -296,8 +296,11 @@ void SharedData::buildGameScore()
 				driver->setRenderTarget(0, false, false);
 			}
 
+			// Compute final position
+			const vector2di position(windowSize.X - size.Width, windowSize.Y - size.Height);
+
 			// Draw full hourglass
-			guienv->addImage(frameResources[KEY_GUI_HOURGLASS_SAND_TOP], vector2di(x, y));
+			guienv->addImage(frameResources[KEY_GUI_HOURGLASS_SAND_TOP], position);
 
 			// Draw remaining time
 			if (amount <= 20)
@@ -305,10 +308,10 @@ void SharedData::buildGameScore()
 				f32 coeff = 1.0f - (f32)amount / 20.0f;
 				s32 alpha = std::min((s32)(coeff * 510.0f), 255);
 
-				IGUIStaticText* text = guienv->addStaticText(std::to_wstring(amount).c_str(), recti(vector2di(x - (s32)width - 32, y), dimension2di(128, 192)));
+				IGUIStaticText* text = guienv->addStaticText(std::to_wstring(amount).c_str(), recti(position, size));
 				text->setOverrideFont(font);
 				text->setOverrideColor(SColor(alpha, 255, 255, 255));
-				text->setTextAlignment(EGUIA_LOWERRIGHT, EGUIA_CENTER);
+				text->setTextAlignment(EGUIA_CENTER, EGUIA_CENTER);
 			}
 		}
 	}

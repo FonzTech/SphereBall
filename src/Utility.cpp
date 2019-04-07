@@ -70,4 +70,10 @@ namespace utility
 		f32 y = pow(1.0f - t, 3.0f) * 0.0f + 3.0f * t * pow(1.0f - t, 2.0f) * a.Y + 3.0f * pow(t, 2.0f) * (1.0f - t) * b.Y + pow(t, 3.0f) * 1.0f;
 		return vector2df(x, y);
 	}
+
+	void rotateVectorAroundPivot(const vector3df & input, vector3df & out, const vector3df & pivot, const vector3df & angles)
+	{
+		quaternion q = quaternion::quaternion(angles);
+		out = vector3df(q * (input - pivot) + pivot);
+	}
 }

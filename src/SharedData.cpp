@@ -5,6 +5,7 @@
 #include "EventManager.h"
 #include "SoundManager.h"
 #include "RoomManager.h"
+#include "GUIImageSceneNode.h"
 
 const std::string SharedData::ROOM_OBJECT_KEY = "SharedData";
 
@@ -219,15 +220,24 @@ void SharedData::buildGameScore()
 			{
 				driver->setRenderTarget(frameResources[KEY_GUI_HOURGLASS]);
 
+				dimension2du size = frameResources[KEY_GUI_HOURGLASS]->getSize();
+
+				// Data for later
+				recti destRect;
+
 				// Top part
 				{
-					// Compute required data
+					// Compute source rect
 					recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND_TOP]);
+
+					// Compute common width
 					width = (f32)sourceRect.getWidth() / (f32)sourceRect.getHeight() * 192.0f;
 
-					recti destRect(0, 0, (s32)width, 192);
-					f32 height = (f32)destRect.getHeight() * 0.5f;
+					// Compute common destination rect
+					destRect = recti(vector2di(0), size);
 
+					// Compute clip rect
+					f32 height = (f32)destRect.getHeight() * 0.5f;
 					recti clipRect(0, (s32)(height * (1.0f - ratio)), destRect.getWidth(), destRect.getHeight());
 
 					// Draw rectangle
@@ -236,29 +246,58 @@ void SharedData::buildGameScore()
 
 				// Bottom part
 				{
-					// Compute required data
+					// Compute source rect
 					recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND_BOTTOM]);
 
-					recti destRect(0, 0, (s32)width, 192);
+					// Compute common destination rect
 					f32 height = (f32)destRect.getHeight() * 0.5f;
-
 					recti clipRect(0, (s32)height + (s32)(height * ratio), destRect.getWidth(), destRect.getHeight());
 
 					// Draw rectangle
 					driver->draw2DImage(guiTextures[KEY_GUI_HOURGLASS_SAND_BOTTOM], destRect, sourceRect, &clipRect, 0, true);
 				}
 
+				// Front part
+				{
+					recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS]);
+					driver->draw2DImage(guiTextures[KEY_GUI_HOURGLASS], destRect, sourceRect, 0, 0, true);
+				}
+
 				// Restore old render target
 				driver->setRenderTarget(0, false, false);
 			}
 
-			// Draw hourglass
-			IGUIImage* image = guienv->addImage(frameResources[KEY_GUI_HOURGLASS], vector2di(x, y));
+			// Render hourglass on separate texture
+			frameResources[KEY_GUI_HOURGLASS_SAND_TOP] = driver->addRenderTargetTexture(dimension2d<u32>((s32)width, 192));
+			{
+				driver->setRenderTarget(frameResources[KEY_GUI_HOURGLASS_SAND_TOP]);
 
-			// Draw hourglass
-			image = guienv->addImage(guiTextures[KEY_GUI_HOURGLASS], vector2di(x, y));
-			image->setMaxSize(size);
-			image->setScaleImage(true);
+				// Get container size
+				dimension2df size = (dimension2df)frameResources[KEY_GUI_HOURGLASS]->getSize();
+
+				vector3df containerSize(size.Width, size.Height, 1);
+				vector3df vertices[] =
+				{
+					vector3df(0, 0, 0),
+					vector3df(size.Width, 0, 0),
+					vector3df(0, size.Height, 0),
+					vector3df(size.Width, size.Height, 0)
+				};
+
+				// Draw hourglass on a separate quad
+				GUIImageSceneNode imageNode(smgr->getRootSceneNode(), smgr, -1);
+				imageNode.setVertices(containerSize, vertices[0], vertices[1], vertices[2], vertices[3], &vector3df(size.Width * 0.5f, size.Height * 0.5f, 0.0f), &vector3df(0, 0, 0));
+				imageNode.getMaterial(0).setTexture(0, frameResources[KEY_GUI_HOURGLASS]);
+				imageNode.getMaterial(0).setFlag(EMF_BLEND_OPERATION, true);
+				imageNode.render();
+				imageNode.remove();
+
+				// Restore old render target
+				driver->setRenderTarget(0, false, false);
+			}
+
+			// Draw full hourglass
+			guienv->addImage(frameResources[KEY_GUI_HOURGLASS_SAND_TOP], vector2di(x, y));
 
 			// Draw remaining time
 			if (amount <= 20)

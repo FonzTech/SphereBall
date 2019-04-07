@@ -142,6 +142,16 @@
 		}
 	},
 	{
+		"name": "Coin",
+		"required": {
+			"position": {
+				"x": -20.0,
+				"y": 60.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
 		"name": "Exit",
 		"required": {
 			"position": {
@@ -216,6 +226,16 @@
 		"required": {
 			"position": {
 				"x": 220.0,
+				"y": 40.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Hourglass",
+		"required": {
+			"position": {
+				"x": 120.0,
 				"y": 40.0,
 				"z": 0.0
 			}

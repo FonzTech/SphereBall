@@ -99,6 +99,9 @@
     <ClCompile Include="src\GUIImageSceneNode.cpp">
       <Filter>Sources\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hourglass.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src/Engine.h">
@@ -172,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="src\GUIImageSceneNode.h">
       <Filter>Headers\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hourglass.h">
+      <Filter>Headers\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

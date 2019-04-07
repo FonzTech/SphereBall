@@ -18,6 +18,7 @@ protected:
 	s32 customMaterial;
 
 public:
+
 	// Constructor
 	Pill();
 	Pill(u8 type);

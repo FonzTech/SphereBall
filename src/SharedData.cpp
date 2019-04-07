@@ -212,6 +212,8 @@ void SharedData::buildGameScore()
 			const s32 x = windowSize.X - size.Width - 32;
 			const s32 y = windowSize.Y - size.Height - 32;
 
+			f32 width;
+
 			// Render sand on separate texture
 			frameResources[KEY_GUI_HOURGLASS] = driver->addRenderTargetTexture(dimension2d<u32>(128, 256));
 			{
@@ -221,7 +223,7 @@ void SharedData::buildGameScore()
 				{
 					// Compute required data
 					recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND_TOP]);
-					f32 width = (f32)sourceRect.getWidth() / (f32)sourceRect.getHeight() * 192.0f;
+					width = (f32)sourceRect.getWidth() / (f32)sourceRect.getHeight() * 192.0f;
 
 					recti destRect(0, 0, (s32)width, 192);
 					f32 height = (f32)destRect.getHeight() * 0.5f;
@@ -236,7 +238,6 @@ void SharedData::buildGameScore()
 				{
 					// Compute required data
 					recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND_BOTTOM]);
-					f32 width = (f32)sourceRect.getWidth() / (f32)sourceRect.getHeight() * 192.0f;
 
 					recti destRect(0, 0, (s32)width, 192);
 					f32 height = (f32)destRect.getHeight() * 0.5f;
@@ -258,6 +259,18 @@ void SharedData::buildGameScore()
 			image = guienv->addImage(guiTextures[KEY_GUI_HOURGLASS], vector2di(x, y));
 			image->setMaxSize(size);
 			image->setScaleImage(true);
+
+			// Draw remaining time
+			if (amount <= 20)
+			{
+				f32 coeff = 1.0f - (f32)amount / 20.0f;
+				s32 alpha = std::min((s32)(coeff * 510.0f), 255);
+
+				IGUIStaticText* text = guienv->addStaticText(std::to_wstring(amount).c_str(), recti(vector2di(x - (s32)width - 32, y), dimension2di(128, 192)));
+				text->setOverrideFont(font);
+				text->setOverrideColor(SColor(alpha, 255, 255, 255));
+				text->setTextAlignment(EGUIA_LOWERRIGHT, EGUIA_CENTER);
+			}
 		}
 	}
 }

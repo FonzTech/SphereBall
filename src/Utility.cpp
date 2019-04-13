@@ -66,9 +66,7 @@ namespace utility
 
 	const vector2df getCubicBezierAt(const vector2df& a, const vector2df& b, const f32 t)
 	{
-		f32 x = pow(1.0f - t, 3.0f) * 0.0f + 3.0f * t * pow(1.0f - t, 2.0f) * a.X + 3.0f * pow(t, 2.0f) * (1.0f - t) * b.X + pow(t, 3.0f) * 1.0f;
-		f32 y = pow(1.0f - t, 3.0f) * 0.0f + 3.0f * t * pow(1.0f - t, 2.0f) * a.Y + 3.0f * pow(t, 2.0f) * (1.0f - t) * b.Y + pow(t, 3.0f) * 1.0f;
-		return vector2df(x, y);
+		return 3.0f * std::pow(1.0f - t, 2.0f) * t * a + 3.0f * (1.0f - t) * std::pow(t, 2.0f) * b + pow(t, 3.0f);
 	}
 
 	void rotateVectorAroundPivot(const vector3df & input, vector3df & out, const vector3df & pivot, const vector3df & angles)

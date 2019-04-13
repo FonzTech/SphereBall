@@ -27,6 +27,9 @@ public:
 	void update();
 	void draw();
 
+	// Specialized methods
+	void pick();
+
 	// Create specialized instance
 	static std::shared_ptr<Pill> createInstance(const json &jsonData);
 

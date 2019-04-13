@@ -405,7 +405,7 @@ void Player::walk()
 			playSound(KEY_SOUND_LETHARGY_PILL);
 
 			// Destroy object
-			collision.getGameObject<Pill>()->destroy = 1;
+			collision.getGameObject<Pill>()->pick();
 
 			// Trigger wave effect
 			json data;

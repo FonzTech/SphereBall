@@ -55,6 +55,11 @@ void Pill::draw()
 	model->rotation += vector3df(0.125f, 0.25f, 0.5f) * deltaTime;
 }
 
+void Pill::pick()
+{
+	destroy = 1;
+}
+
 Pill::SpecializedShaderCallback::SpecializedShaderCallback(Pill* pill)
 {
 	this->pill = pill;

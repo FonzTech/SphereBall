@@ -12,6 +12,7 @@
 #include "Key.h"
 #include "Spikes.h"
 #include "Pill.h"
+#include "Hourglass.h"
 
 const f32 Player::breathingDelta = 0.125f;
 
@@ -414,6 +415,22 @@ void Player::walk()
 
 			// Trigger fade out
 			SharedData::singleton->startFade(false, nullptr, 1.0f);
+		}
+	}
+
+	// Check collision with hourglass
+	{
+		aabbox3df rect(bbox);
+		utility::transformAABBox(rect, vector3df(0), vector3df(0), vector3df(0.9f, 0.8f, 0.8f));
+
+		Collision collision = checkBoundingBoxCollision<Hourglass>(RoomManager::singleton->gameObjects, rect);
+		if (collision.engineObject != nullptr)
+		{
+			// Play sound
+			playSound(KEY_SOUND_HOURGLASS);
+
+			// Destroy object
+			collision.getGameObject<Hourglass>()->pick();
 		}
 	}
 }

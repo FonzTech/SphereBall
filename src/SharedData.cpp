@@ -127,6 +127,13 @@ void SharedData::update(f32 deltaTime)
 			gameOverRects.push_back(r);
 		}
 	}
+
+	// Animate hourglass angle
+	hourglassRotation -= deltaTime * 0.0025f;
+	if (hourglassRotation < 0.0f)
+	{
+		hourglassRotation = 0.0f;
+	}
 }
 
 void SharedData::loadAssets()
@@ -142,6 +149,7 @@ void SharedData::loadAssets()
 	guiTextures[KEY_GUI_HOURGLASS] = driver->getTexture("textures/gui_hourglass.png");
 	guiTextures[KEY_GUI_HOURGLASS_SAND_TOP] = driver->getTexture("textures/gui_hourglass_sand_top.png");
 	guiTextures[KEY_GUI_HOURGLASS_SAND_BOTTOM] = driver->getTexture("textures/gui_hourglass_sand_bottom.png");
+	guiTextures[KEY_GUI_HOURGLASS_GLOW] = driver->getTexture("textures/gui_hourglass_glow.png");
 }
 
 void SharedData::buildGameScore()
@@ -225,7 +233,7 @@ void SharedData::buildGameScore()
 				// Top part
 				{
 					// Compute source rect
-					recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND_TOP]);
+					const recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND_TOP]);
 
 					// Compute common width
 					hudSize.Y = 192.0f;
@@ -236,7 +244,7 @@ void SharedData::buildGameScore()
 
 					// Compute clip rect
 					f32 height = (f32)destRect.getHeight() * 0.5f;
-					recti clipRect(0, (s32)(height * (1.0f - ratio)), destRect.getWidth(), destRect.getHeight());
+					const recti clipRect(0, (s32)(height * (1.0f - ratio)), destRect.getWidth(), destRect.getHeight());
 
 					// Draw rectangle
 					driver->draw2DImage(guiTextures[KEY_GUI_HOURGLASS_SAND_TOP], destRect, sourceRect, &clipRect, 0, true);
@@ -245,11 +253,11 @@ void SharedData::buildGameScore()
 				// Bottom part
 				{
 					// Compute source rect
-					recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND_BOTTOM]);
+					const recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND_BOTTOM]);
 
 					// Compute common destination rect
 					f32 height = (f32)destRect.getHeight() * 0.5f;
-					recti clipRect(0, (s32)height + (s32)(height * ratio), destRect.getWidth(), destRect.getHeight());
+					const recti clipRect(0, (s32)height + (s32)(height * ratio), destRect.getWidth(), destRect.getHeight());
 
 					// Draw rectangle
 					driver->draw2DImage(guiTextures[KEY_GUI_HOURGLASS_SAND_BOTTOM], destRect, sourceRect, &clipRect, 0, true);
@@ -257,8 +265,30 @@ void SharedData::buildGameScore()
 
 				// Front part
 				{
-					recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS]);
+					const recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS]);
 					driver->draw2DImage(guiTextures[KEY_GUI_HOURGLASS], destRect, sourceRect, 0, 0, true);
+				}
+
+				// Draw glow
+				{
+					const recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_GLOW]);
+					destRect = recti(0, size.Height / 2 - size.Width / 2, size.Width, size.Height / 2 + size.Width / 2);
+
+					f32 hourglassAlpha;
+					if (hourglassRotation < 0.5f)
+					{
+						hourglassAlpha = utility::getCubicBezierAt(vector2df(0.0f, 1.0f), vector2df(0.0f, 1.0f), hourglassRotation * 2.0f).Y;
+					}
+					else
+					{
+						hourglassAlpha = 1;
+					}
+
+					const u32 alpha = (u32)(hourglassAlpha * 255.0f);
+					const SColor color(alpha, 255, 255, 255);
+					const SColor colors[] = { color , color , color, color  };
+
+					driver->draw2DImage(guiTextures[KEY_GUI_HOURGLASS_GLOW], destRect, sourceRect, 0, colors, true);
 				}
 
 				// Restore old render target
@@ -273,8 +303,8 @@ void SharedData::buildGameScore()
 				// Get container size
 				size = (dimension2df)frameResources[KEY_GUI_HOURGLASS_SAND_TOP]->getSize();
 
-				vector3df containerSize((f32)size.Width, (f32)size.Height, 1.0f);
-				vector3df halfSize = containerSize * 0.5f - vector3df(hudSize.X, hudSize.Y, 0.0f) * 0.5f;
+				const vector3df containerSize((f32)size.Width, (f32)size.Height, 1.0f);
+				const vector3df halfSize = containerSize * 0.5f - vector3df(hudSize.X, hudSize.Y, 0.0f) * 0.5f;
 
 				vector3df vertices[] =
 				{
@@ -284,9 +314,16 @@ void SharedData::buildGameScore()
 					vector3df(hudSize.X, hudSize.Y, 0) + halfSize
 				};
 
+				// Rotation animation
+				f32 rotationValue;
+				{
+					rotationValue = utility::getCubicBezierAt(vector2df(0.25f, 0.1f), vector2df(0.25f, 1.0f), hourglassRotation).Y;
+					rotationValue = degToRad(rotationValue * 180.0f);
+				}
+
 				// Draw hourglass on a separate quad
 				GUIImageSceneNode imageNode(smgr->getRootSceneNode(), smgr, -1);
-				imageNode.setVertices(containerSize, vertices[0], vertices[1], vertices[2], vertices[3], &vector3df(containerSize.X * 0.5f, containerSize.Y * 0.5f, 0.0f), &vector3df(0));
+				imageNode.setVertices(containerSize, vertices[0], vertices[1], vertices[2], vertices[3], &vector3df(containerSize.X * 0.5f, containerSize.Y * 0.5f, 0.0f), &vector3df(0, 0, rotationValue));
 				imageNode.getMaterial(0).setTexture(0, frameResources[KEY_GUI_HOURGLASS]);
 				imageNode.getMaterial(0).setFlag(EMF_BLEND_OPERATION, true);
 				imageNode.render();
@@ -536,4 +573,15 @@ bool SharedData::triggerPostProcessingCallback(u8 key, const json& data)
 	{
 	}
 	return false;
+}
+
+void SharedData::invertTime()
+{
+	// Invert time
+	s32 nowTime = getGameScoreValue(KEY_SCORE_KEY_TIME, 0);
+	s32 maxTime = getGameScoreValue(KEY_SCORE_KEY_TIME_MAX, 0);
+	initGameScoreValue(KEY_SCORE_KEY_TIME, maxTime - nowTime);
+
+	// Setup animation
+	hourglassRotation = 1;
 }

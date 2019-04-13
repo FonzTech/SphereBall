@@ -15,6 +15,7 @@
 #define KEY_GUI_HOURGLASS				5
 #define KEY_GUI_HOURGLASS_SAND_TOP		6
 #define KEY_GUI_HOURGLASS_SAND_BOTTOM	7
+#define KEY_GUI_HOURGLASS_GLOW			8
 
 #define KEY_TEXT_GAME_OVER	0
 
@@ -55,6 +56,9 @@ protected:
 	f32 gameOverAlpha;
 	s8 gameOverSelection;
 	std::vector<recti> gameOverRects;
+
+	// Hourglass
+	f32 hourglassRotation = 0.0f;
 
 	// Variables for fade transition
 	s8 fadeType;
@@ -153,6 +157,9 @@ public:
 
 	// Trigger post processing callback
 	bool triggerPostProcessingCallback(u8 key, const json& data);
+
+	// Invert time
+	void invertTime();
 };
 
 #endif // SHAREDDATA_H

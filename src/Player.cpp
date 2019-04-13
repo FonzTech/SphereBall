@@ -61,6 +61,7 @@ Player::Player() : GameObject()
 	sounds[KEY_SOUND_GAME_OVER] = SoundManager::singleton->getSound(KEY_SOUND_GAME_OVER);
 	sounds[KEY_SOUND_LETHARGY_PILL] = SoundManager::singleton->getSound(KEY_SOUND_LETHARGY_PILL);
 	sounds[KEY_SOUND_LEVEL_START] = SoundManager::singleton->getSound(KEY_SOUND_LEVEL_START);
+	sounds[KEY_SOUND_HOURGLASS] = SoundManager::singleton->getSound(KEY_SOUND_HOURGLASS);
 
 	// Create specialized functions
 	coinCollisionCheck = [](const GameObject* go)
@@ -431,6 +432,9 @@ void Player::walk()
 
 			// Destroy object
 			collision.getGameObject<Hourglass>()->pick();
+
+			// Invert time
+			SharedData::singleton->invertTime();
 		}
 	}
 }

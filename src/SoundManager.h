@@ -16,6 +16,7 @@
 #define KEY_SOUND_CLOCK_B		"clock_b"
 #define KEY_SOUND_TIME_OUT		"time_out"
 #define KEY_SOUND_HOURGLASS		"hourglass"
+#define KEY_SOUND_EXITED		"exited"
 
 #include <unordered_map>
 #include <string>

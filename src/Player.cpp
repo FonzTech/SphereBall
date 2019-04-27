@@ -13,6 +13,7 @@
 #include "Spikes.h"
 #include "Pill.h"
 #include "Hourglass.h"
+#include "Exit.h"
 
 const f32 Player::breathingDelta = 0.125f;
 
@@ -62,6 +63,7 @@ Player::Player() : GameObject()
 	sounds[KEY_SOUND_LETHARGY_PILL] = SoundManager::singleton->getSound(KEY_SOUND_LETHARGY_PILL);
 	sounds[KEY_SOUND_LEVEL_START] = SoundManager::singleton->getSound(KEY_SOUND_LEVEL_START);
 	sounds[KEY_SOUND_HOURGLASS] = SoundManager::singleton->getSound(KEY_SOUND_HOURGLASS);
+	sounds[KEY_SOUND_EXITED] = SoundManager::singleton->getSound(KEY_SOUND_EXITED);
 
 	// Create specialized functions
 	coinCollisionCheck = [](const GameObject* go)
@@ -97,7 +99,7 @@ void Player::update()
 			breathingSpeed = 0.001f;
 		}
 
-		breathing += breathingSpeed * deltaTime;
+		breathing = std::fmod(breathing + breathingSpeed * deltaTime, (f32)std::acos(-1) * 2.0f);
 
 		// Walk code
 		walk();
@@ -105,6 +107,14 @@ void Player::update()
 	else if (state == STATE_DEAD)
 	{
 		dead();
+	}
+	else if (state == STATE_EXITED)
+	{
+		// Reset breathing
+		breathing += ((f32)std::cos(-1) - breathing) * 0.005f * deltaTime;
+
+		// Execute behaviour
+		exited();
 	}
 
 	// Update listener position
@@ -117,7 +127,12 @@ void Player::draw()
 	// Update model
 	if (models.size() > 0)
 	{
-		if (state == STATE_WALKING)
+		if (state == STATE_DEAD)
+		{
+			std::shared_ptr<Model> model = models.at(0);
+			model->position = position + vector3df(0, 0, -11);
+		}
+		else // if (state == STATE_WALKING)
 		{
 			// Update matrix for shader
 			updateTransformMatrix();
@@ -126,11 +141,6 @@ void Player::draw()
 			std::shared_ptr<Model> model = models.at(0);
 			model->position = vector3df(0);
 			model->rotation = vector3df(0);
-		}
-		else if (state == STATE_DEAD)
-		{
-			std::shared_ptr<Model> model = models.at(0);
-			model->position = position + vector3df(0, 0, -11);
 		}
 	}
 
@@ -360,6 +370,7 @@ void Player::walk()
 	}
 
 	// Check collision with coin
+	if (state == STATE_WALKING)
 	{
 		aabbox3df rect(bbox);
 		Collision collision = checkBoundingBoxCollision<Coin>(RoomManager::singleton->gameObjects, rect, coinCollisionCheck);
@@ -371,6 +382,7 @@ void Player::walk()
 	}
 
 	// Check collision with key
+	if (state == STATE_WALKING)
 	{
 		aabbox3df rect(bbox);
 		Collision collision = checkBoundingBoxCollision<Key>(RoomManager::singleton->gameObjects, rect);
@@ -382,6 +394,7 @@ void Player::walk()
 	}
 
 	// Check collision with spikes
+	if (state == STATE_WALKING)
 	{
 		aabbox3df rect(bbox);
 		utility::transformAABBox(rect, vector3df(0), vector3df(0), vector3df(0.75f, 0.85f, 1.0f));
@@ -395,6 +408,7 @@ void Player::walk()
 	}
 
 	// Check collision with pill
+	if (state == STATE_WALKING)
 	{
 		aabbox3df rect(bbox);
 		utility::transformAABBox(rect, vector3df(0), vector3df(0), vector3df(0.9f, 0.8f, 0.8f));
@@ -420,6 +434,7 @@ void Player::walk()
 	}
 
 	// Check collision with hourglass
+	if (state == STATE_WALKING)
 	{
 		aabbox3df rect(bbox);
 		utility::transformAABBox(rect, vector3df(0), vector3df(0), vector3df(0.9f, 0.8f, 0.8f));
@@ -435,6 +450,34 @@ void Player::walk()
 
 			// Invert time
 			SharedData::singleton->invertTime();
+		}
+	}
+
+	// Check collision with exit
+	if (state == STATE_WALKING && !falling && speed.Y == 0.0f)
+	{
+		// Check for score
+		if (SharedData::singleton->getGameScoreValue(KEY_SCORE_KEY_PICKED) == SharedData::singleton->getGameScoreValue(KEY_SCORE_KEY_TOTAL))
+		{
+			aabbox3df rect(bbox);
+			utility::transformAABBox(rect, vector3df(0), vector3df(0), vector3df(0.9f, 0.8f, 0.8f));
+
+			Collision collision = checkBoundingBoxCollision<Exit>(RoomManager::singleton->gameObjects, rect);
+			if (collision.engineObject != nullptr)
+			{
+				// Play sound
+				playSound(KEY_SOUND_EXITED);
+
+				// Stop time
+				SharedData::singleton->stopTime();
+
+				// Change state
+				state = STATE_EXITED;
+
+				std::shared_ptr<Exit> exit = collision.getGameObject<Exit>();
+				exitedPosition = exit->position;
+				exit->fade();
+			}
 		}
 	}
 }
@@ -515,6 +558,29 @@ void Player::dead()
 			}
 		}
 	}
+}
+
+void Player::exited()
+{
+	if (position.X >= exitedPosition.X - 1.0f && position.X <= exitedPosition.X + 1.0f)
+	{
+		// Fixed horizontal position
+		position.X = exitedPosition.X;
+
+		// Move vertically down
+		position.Y -= 0.05f * deltaTime;
+		if (position.Y <= exitedPosition.Y - 24)
+		{
+			position.Y = exitedPosition.Y - 24;
+		}
+	}
+	else
+	{
+		f32 direction = position.X < exitedPosition.X ? 1.0f : -1.0f;
+		position += vector3df(0.05f * deltaTime, 0, 0) * direction;
+	}
+
+	position.Z = 0.5f;
 }
 
 Player::SpecializedShaderCallback::SpecializedShaderCallback(Player* player)

@@ -3,6 +3,7 @@
 
 #define STATE_WALKING	0
 #define STATE_DEAD		1
+#define STATE_EXITED	2
 
 #include "GameObject.h"
 #include "Alarm.h"
@@ -21,6 +22,7 @@ protected:
 	void walk();
 	void die();
 	void dead();
+	void exited();
 
 	// Shader variables
 	s32 customMaterial;
@@ -33,6 +35,7 @@ protected:
 	f32 breathing;
 	f32 breathingSpeed;
 	std::unique_ptr<vector3df> fallLine;
+	vector3df exitedPosition;
 
 	// Alarms
 	std::unique_ptr<Alarm> dieAlarm;

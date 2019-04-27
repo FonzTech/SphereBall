@@ -19,6 +19,11 @@ std::string RoomManager::ROOM_MAIN_MENU = "main_menu";
 
 RoomManager::RoomManager()
 {
+	// Fill array for pickupable item keysd
+	pickupableItemKeys.push_back("Coin");
+	pickupableItemKeys.push_back("Hourglass");
+	pickupableItemKeys.push_back("Key");
+
 	// Create vector to hold game objects
 	gameObjects = std::vector<std::shared_ptr<GameObject>>();
 
@@ -83,6 +88,10 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 				json item = (*it);
 				SharedData::singleton->initGameScoreValue(item.at("key"), item.at("value"));
 			}
+
+			// Initialize pickupable items counter
+			SharedData::singleton->initGameScoreValue(KEY_SCORE_ITEMS_PICKED, 0);
+			SharedData::singleton->initGameScoreValue(KEY_SCORE_ITEMS_MAX, 0);
 		}
 		// Regulary game object
 		else
@@ -102,6 +111,12 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 
 				// Get pointer to class instance
 				std::shared_ptr<GameObject> instance = classFunction(object);
+
+				// Check if item is a pickup
+				if (std::find(pickupableItemKeys.begin(), pickupableItemKeys.end(), goIterator->first) != pickupableItemKeys.end())
+				{
+					SharedData::singleton->updateGameScoreValue(KEY_SCORE_ITEMS_MAX, 1);
+				}
 
 				// Assign common data
 				instance->assignGameObjectCommonData(object.at("required"));

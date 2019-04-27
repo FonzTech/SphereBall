@@ -41,6 +41,9 @@ bool Key::pick()
 	// Increment coin counter by one
 	SharedData::singleton->updateGameScoreValue(KEY_SCORE_KEY_PICKED, 1);
 
+	// Increment items picked counter
+	SharedData::singleton->updateGameScoreValue(KEY_SCORE_ITEMS_PICKED, 1);
+
 	// Mark item to be destroyed
 	destroy = true;
 

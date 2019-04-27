@@ -1,11 +1,13 @@
 #ifndef SHAREDDATA_H
 #define SHAREDDATA_H
 
-#define KEY_SCORE_COIN				0
-#define KEY_SCORE_KEY_PICKED		1
-#define KEY_SCORE_KEY_TOTAL			2
-#define KEY_SCORE_KEY_TIME			3
-#define KEY_SCORE_KEY_TIME_MAX		4
+#define KEY_SCORE_COIN			0
+#define KEY_SCORE_KEY_PICKED	1
+#define KEY_SCORE_KEY_TOTAL		2
+#define KEY_SCORE_TIME			3
+#define KEY_SCORE_TIME_MAX		4
+#define KEY_SCORE_ITEMS_PICKED	5
+#define KEY_SCORE_ITEMS_MAX		6
 
 #define KEY_GUI_COIN					0
 #define KEY_GUI_KEY						1

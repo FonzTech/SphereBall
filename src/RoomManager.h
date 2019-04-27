@@ -13,6 +13,9 @@ class RoomManager
 {
 protected:
 
+	// Array to hold pickupable item keys
+	std::vector<std::string> pickupableItemKeys;
+
 	// Map structure to hold factory pattern for game objects
 	std::unordered_map<std::string, std::function<std::shared_ptr<GameObject>(const json& jsonData)>> gameObjectFactory;
 

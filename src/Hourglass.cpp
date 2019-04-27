@@ -32,5 +32,9 @@ void Hourglass::draw()
 
 void Hourglass::pick()
 {
+	// Increment items picked counter
+	SharedData::singleton->updateGameScoreValue(KEY_SCORE_ITEMS_PICKED, 1);
+
+	// Mark item as to be destroyed
 	destroy = true;
 }

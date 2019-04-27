@@ -77,6 +77,9 @@ void Coin::pick()
 	// Increment coin counter by one
 	SharedData::singleton->updateGameScoreValue(KEY_SCORE_COIN, 1);
 
+	// Increment items picked counter
+	SharedData::singleton->updateGameScoreValue(KEY_SCORE_ITEMS_PICKED, 1);
+
 	// Mark item as unpickable
 	notPicked = false;
 	angle = 0;

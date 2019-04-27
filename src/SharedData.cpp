@@ -43,7 +43,7 @@ void SharedData::update(f32 deltaTime)
 		if (timeAlarm->isTriggered())
 		{
 			// Check for time out
-			s32 time = gameScores[KEY_SCORE_KEY_TIME].value;
+			s32 time = gameScores[KEY_SCORE_TIME].value;
 			if (time <= 0)
 			{
 				// Play time out sound
@@ -55,7 +55,7 @@ void SharedData::update(f32 deltaTime)
 			else
 			{
 				// Decrease time
-				updateGameScoreValue(KEY_SCORE_KEY_TIME, -1);
+				updateGameScoreValue(KEY_SCORE_TIME, -1);
 
 				// Play clock sound
 				if (time <= 20)
@@ -205,11 +205,11 @@ void SharedData::buildGameScore()
 
 	// Draw time
 	{
-		s32 amount = getGameScoreValue(KEY_SCORE_KEY_TIME);
+		s32 amount = getGameScoreValue(KEY_SCORE_TIME);
 		if (amount >= 0)
 		{
 			// Get maximum time
-			s32 maxTime = getGameScoreValue(KEY_SCORE_KEY_TIME_MAX);
+			s32 maxTime = getGameScoreValue(KEY_SCORE_TIME_MAX);
 
 			// Get time ratio
 			f32 ratio = (f32)amount / (f32)maxTime;
@@ -308,7 +308,7 @@ void SharedData::buildGameScore()
 
 				vector3df vertices[] =
 				{
-					vector3df(0, 0, 0) + halfSize,
+					vector3df(0) + halfSize,
 					vector3df(hudSize.X, 0, 0) + halfSize,
 					vector3df(0, hudSize.Y, 0) + halfSize,
 					vector3df(hudSize.X, hudSize.Y, 0) + halfSize
@@ -359,6 +359,9 @@ void SharedData::buildGameOver()
 	// Check if Game Over screen has been triggered
 	if (gameOverAlpha > 0)
 	{
+		// Get window size
+		vector2df windowSize = utility::getWindowSize<f32>(driver);
+
 		// Compute alpha value in unsigned integer form
 		u32 alpha[] = {
 			(u32)(gameOverAlpha * 192.0f),
@@ -406,6 +409,17 @@ void SharedData::buildGameOver()
 			}
 		}
 		gameOverSelection = currentSelection;
+
+		// Draw completion percentage
+		{
+			f32 percentage = std::floor((f32)gameScores[KEY_SCORE_ITEMS_PICKED].value / (f32)gameScores[KEY_SCORE_ITEMS_MAX].value * 100.0f);
+			std::wstring str = std::wstring(L"Level Failed: ") + std::to_wstring((s32)percentage) + std::wstring(L"%");
+
+			IGUIStaticText* text = guienv->addStaticText(str.c_str(), recti(0, 0, (s32)windowSize.X, (s32)(windowSize.Y * 0.5f)));
+			text->setTextAlignment(EGUIA_CENTER, EGUIA_CENTER);
+			text->setOverrideColor(SColor(alpha[1], 255, 64, 64));
+			text->setOverrideFont(font);
+		}
 
 		// Game Over menu selection
 		if (EventManager::singleton->keyStates[KEY_LBUTTON] == KEY_RELEASED)
@@ -464,7 +478,7 @@ void SharedData::initGameScoreValue(s32 key, s32 value)
 	gameScores[key] = ScoreValue(1, value);
 
 	// Check for special key
-	if (key == KEY_SCORE_KEY_TIME)
+	if (key == KEY_SCORE_TIME)
 	{
 		timeAlarm = std::make_unique<Alarm>(1000.0f);
 	}
@@ -578,9 +592,9 @@ bool SharedData::triggerPostProcessingCallback(u8 key, const json& data)
 void SharedData::invertTime()
 {
 	// Invert time
-	s32 nowTime = getGameScoreValue(KEY_SCORE_KEY_TIME, 0);
-	s32 maxTime = getGameScoreValue(KEY_SCORE_KEY_TIME_MAX, 0);
-	initGameScoreValue(KEY_SCORE_KEY_TIME, maxTime - nowTime);
+	s32 nowTime = getGameScoreValue(KEY_SCORE_TIME, 0);
+	s32 maxTime = getGameScoreValue(KEY_SCORE_TIME_MAX, 0);
+	initGameScoreValue(KEY_SCORE_TIME, maxTime - nowTime);
 
 	// Setup animation
 	hourglassRotation = 1;

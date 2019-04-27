@@ -13,15 +13,24 @@ Exit::Exit() : GameObject()
 	// Initialize variables
 	angle = 0;
 	picked = 0;
+	color = SColorf(1.0f, 0.0f, 0.0f);
+
+	// Create custom material
+	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
+
+	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+	customMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/exit.fs", ssc);
+
+	ssc->drop();
 
 	// Load mesh and texture for Exit model
 	IAnimatedMesh* mesh = smgr->getMesh("models/exit.obj");
-	ITexture* texture = driver->getTexture("textures/exit_red.png");
+	ITexture* texture = driver->getTexture("textures/exit.png");
 	
-	// Create model for player
+	// Create model for exit
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
-	model->material = EMT_TRANSPARENT_ALPHA_CHANNEL;
+	model->material = customMaterial;
 	models.push_back(model);
 
 	// Load mesh and texture for Base model
@@ -38,7 +47,8 @@ Exit::Exit() : GameObject()
 
 void Exit::update()
 {
-	if (SharedData::singleton->getGameScoreValue(KEY_GUI_KEY_PICKED) >= SharedData::singleton->getGameScoreValue(KEY_GUI_KEY))
+	// Check for total amount of keys picked
+	if (SharedData::singleton->getGameScoreValue(KEY_SCORE_KEY_PICKED) >= SharedData::singleton->getGameScoreValue(KEY_SCORE_KEY_TOTAL))
 	{
 		if (picked)
 		{
@@ -53,14 +63,21 @@ void Exit::update()
 	{
 		angle += 0.1f * deltaTime;
 	}
+
+	// Fade away
+	if (color.a < 1.0f)
+	{
+		color.a -= 0.005f * deltaTime;
+	}
 }
 
 void Exit::draw()
 {
 	// Exit model
 	std::shared_ptr<Model> model = models.at(0);
-	model->position = position;
+	model->position = color.a <= 0.0f ? vector3df(std::numeric_limits<f32>::infinity()) : position;
 	model->rotation = vector3df(0, angle, 0);
+	model->material = customMaterial;
 
 	// Base model
 	model = models.at(1);
@@ -72,7 +89,32 @@ void Exit::pick()
 	// Mark item as picked
 	picked = 1;
 
-	// Replace textures
-	models.at(0)->textures[0] = driver->getTexture("textures/exit_green.png");
+	// Replace texture
 	models.at(1)->textures[0] = driver->getTexture("textures/exit_base_green.png");
+
+	// Make exit color green
+	color = SColorf(0.0f, 1.0f, 0.0f);
+}
+
+void Exit::fade()
+{
+	color.a = 0.999f;
+}
+
+Exit::SpecializedShaderCallback::SpecializedShaderCallback(Exit* exit)
+{
+	this->exit = exit;
+}
+
+void Exit::SpecializedShaderCallback::OnSetConstants(IMaterialRendererServices* services, s32 userData)
+{
+	// Execute parent method
+	ShaderCallback::OnSetConstants(services, userData);
+
+	// Set texture layer
+	s32 layer0 = 0;
+	services->setPixelShaderConstant("tex", (s32*)&layer0, 1);
+
+	// Set position
+	services->setPixelShaderConstant("color", &exit->color.r, 4);
 }

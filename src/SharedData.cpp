@@ -589,6 +589,12 @@ bool SharedData::triggerPostProcessingCallback(u8 key, const json& data)
 	return false;
 }
 
+void SharedData::stopTime()
+{
+	// Remove time counter alarm
+	timeAlarm = nullptr;
+}
+
 void SharedData::invertTime()
 {
 	// Invert time

@@ -160,6 +160,9 @@ public:
 	// Trigger post processing callback
 	bool triggerPostProcessingCallback(u8 key, const json& data);
 
+	// Stop time
+	void stopTime();
+
 	// Invert time
 	void invertTime();
 };

@@ -15,7 +15,9 @@
 
 std::shared_ptr<RoomManager> RoomManager::singleton = nullptr;
 
-std::string RoomManager::ROOM_MAIN_MENU = "main_menu";
+const std::string RoomManager::ROOM_MAIN_MENU = "main_menu";
+
+const std::string RoomManager::LEVEL_PREFIX = "level_";
 
 RoomManager::RoomManager()
 {
@@ -45,6 +47,14 @@ RoomManager::RoomManager()
 
 void RoomManager::loadRoom(const std::string roomToLoad)
 {
+	// Check if requested room is a level
+	if (utility::startsWith(roomToLoad, LEVEL_PREFIX))
+	{
+		const std::string suffix = roomToLoad.substr(LEVEL_PREFIX.length());
+		levelIndex = std::atoi(suffix.c_str());
+		printf("levelIndex: %d\n", levelIndex);
+	}
+
 	// Read room from file and parse JSON
 	json jsonData;
 	{
@@ -134,4 +144,9 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 void RoomManager::restartRoom()
 {
 	loadRoom(roomName);
+}
+
+void RoomManager::jumpToNextLevel()
+{
+	loadRoom(LEVEL_PREFIX + std::to_string(levelIndex + 1));
 }

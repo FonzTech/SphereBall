@@ -13,6 +13,8 @@ class RoomManager
 {
 protected:
 
+	static const std::string LEVEL_PREFIX;
+
 	// Array to hold pickupable item keys
 	std::vector<std::string> pickupableItemKeys;
 
@@ -22,10 +24,13 @@ protected:
 	// Room name holder
 	std::string roomName;
 
+	// Level index holder
+	u32 levelIndex;
+
 public:
 
 	// Main Menu static room name value
-	static std::string ROOM_MAIN_MENU;
+	const static std::string ROOM_MAIN_MENU;
 
 	// Singleton holder
 	static std::shared_ptr<RoomManager> singleton;
@@ -44,6 +49,9 @@ public:
 
 	// Method to restart room
 	void restartRoom();
+
+	// Method to jump to next level
+	void jumpToNextLevel();
 };
 
 #endif // ROOMMANAGER_H

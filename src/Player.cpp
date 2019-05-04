@@ -469,7 +469,7 @@ void Player::walk()
 				playSound(KEY_SOUND_EXITED);
 
 				// Stop time
-				SharedData::singleton->stopTime();
+				SharedData::singleton->displayExit();
 
 				// Change state
 				state = STATE_EXITED;
@@ -523,7 +523,7 @@ void Player::dead()
 			playSound(KEY_SOUND_GAME_OVER);
 
 			// Display game over GUI menu
-			SharedData::singleton->displayGameOver();
+			SharedData::singleton->displayLevelEnd();
 		}
 	}
 

@@ -74,4 +74,9 @@ namespace utility
 		quaternion q = quaternion::quaternion(angles);
 		out = vector3df(q * (input - pivot) + pivot);
 	}
+
+	bool startsWith(const std::string& s, const std::string& prefix)
+	{
+		return s.size() >= prefix.size() && s.compare(0, prefix.size(), prefix) == 0;
+	}
 }

@@ -66,6 +66,9 @@ namespace utility
 
 	// Vector rotation around a pivot
 	void rotateVectorAroundPivot(const vector3df & input, vector3df & out, const vector3df & pivot, const vector3df & angles);
+
+	// Starts With utility method for strings
+	bool startsWith(const std::string& s, const std::string& prefix);
 }
 
 #endif // UTILITY_H

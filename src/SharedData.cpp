@@ -17,15 +17,27 @@ SharedData::SharedData()
 	gameOverAlpha = 0.0f;
 	gameOverSelection = -1;
 
+	isLevelPassed = false;
+
 	fadeType = 0;
 	fadeValue = 0.0f;
 	fadeCallback = nullptr;
 
 	// Initialize texts for game over
-	std::vector<std::wstring> textGameOver;
-	textGameOver.push_back(L"Riprova Livello");
-	textGameOver.push_back(L"Esci Dal Livello");
-	textGroups[KEY_TEXT_GAME_OVER] = textGameOver;
+	{
+		std::vector<std::wstring> textGameOver;
+		textGameOver.push_back(L"Riprova Livello");
+		textGameOver.push_back(L"Esci Dal Livello");
+		textGroups[KEY_TEXT_GAME_OVER] = textGameOver;
+	}
+
+	// Initialize texts for level passed
+	{
+		std::vector<std::wstring> textLevelPassed;
+		textLevelPassed.push_back(L"Livello Successivo");
+		textLevelPassed.push_back(L"Torna Al Menu");
+		textGroups[KEY_TEXT_LEVEL_PASSED] = textLevelPassed;
+	}
 
 	// Load sounds
 	sounds[KEY_SOUND_SELECT] = SoundManager::singleton->getSound(KEY_SOUND_SELECT);
@@ -67,6 +79,20 @@ void SharedData::update(f32 deltaTime)
 				// Reset alarm
 				timeAlarm->setTime(1000.0f);
 			}
+		}
+	}
+
+	// Check for exit timer
+	if (exitTimer != nullptr)
+	{
+		exitTimer->stepDecrement(deltaTime);
+		if (exitTimer->isTriggered())
+		{
+			// Display exit screen
+			displayLevelEnd();
+
+			// Delete timer
+			exitTimer = nullptr;
 		}
 	}
 
@@ -376,7 +402,7 @@ void SharedData::buildGameOver()
 
 		// Calculate text rectangles, then draw them
 		s8 currentSelection = -1;
-		const auto& texts = textGroups[KEY_TEXT_GAME_OVER];
+		const auto& texts = textGroups[isLevelPassed ? KEY_TEXT_LEVEL_PASSED : KEY_TEXT_GAME_OVER];
 
 		for (u8 i = 0; i < texts.size(); ++i)
 		{
@@ -412,12 +438,15 @@ void SharedData::buildGameOver()
 
 		// Draw completion percentage
 		{
-			f32 percentage = std::floor((f32)gameScores[KEY_SCORE_ITEMS_PICKED].value / (f32)gameScores[KEY_SCORE_ITEMS_MAX].value * 100.0f);
-			std::wstring str = std::wstring(L"Level Failed: ") + std::to_wstring((s32)percentage) + std::wstring(L"%");
+			const std::wstring prefix = std::wstring(isLevelPassed ? L"Level Passed: " : L"Level Failed: ");
+			const SColor color = isLevelPassed ? SColor(alpha[1], 0, 255, 0) : SColor(alpha[1], 255, 64, 64);
+
+			const f32 percentage = std::floor((f32)gameScores[KEY_SCORE_ITEMS_PICKED].value / (f32)gameScores[KEY_SCORE_ITEMS_MAX].value * 100.0f);
+			const std::wstring str = prefix + std::to_wstring((s32)percentage) + std::wstring(L"%");
 
 			IGUIStaticText* text = guienv->addStaticText(str.c_str(), recti(0, 0, (s32)windowSize.X, (s32)(windowSize.Y * 0.5f)));
 			text->setTextAlignment(EGUIA_CENTER, EGUIA_CENTER);
-			text->setOverrideColor(SColor(alpha[1], 255, 64, 64));
+			text->setOverrideColor(color);
 			text->setOverrideFont(font);
 		}
 
@@ -426,7 +455,8 @@ void SharedData::buildGameOver()
 		{
 			if (gameOverSelection == 0)
 			{
-				SharedData::singleton->startFade(true, std::bind(&SharedData::restartRoom, this));
+				const auto functionToTrigger = isLevelPassed ? &SharedData::jumpToNextLevel : &SharedData::restartRoom;
+				SharedData::singleton->startFade(true, std::bind(functionToTrigger, this));
 			}
 			else if (gameOverSelection == 1)
 			{
@@ -440,6 +470,15 @@ void SharedData::buildGameOver()
 		image = guienv->addImage(r);
 		image->setImage(mouse);
 	}
+}
+
+void SharedData::jumpToNextLevel()
+{
+	// Turn off game over scren
+	gameOverAlpha = 0.0f;
+
+	// Restart current room
+	RoomManager::singleton->jumpToNextLevel();
 }
 
 void SharedData::restartRoom()
@@ -546,13 +585,25 @@ void SharedData::buildGUI()
 	buildFadeTransition();
 }
 
-void SharedData::displayGameOver()
+void SharedData::displayLevelEnd()
 {
 	// Trigger game over for GUI
 	gameOverAlpha = 0.05f;
 
 	// Remove time counter alarm
 	timeAlarm = nullptr;
+}
+
+void SharedData::displayExit()
+{
+	// Stop time elapsing
+	stopTime();
+
+	// Mark level as passed
+	isLevelPassed = true;
+
+	// Trigger exit menu
+	exitTimer = std::make_unique<Alarm>(750.0f);
 }
 
 void SharedData::disposeResourcesAtFrameEnd()

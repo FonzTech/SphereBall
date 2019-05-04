@@ -19,7 +19,8 @@
 #define KEY_GUI_HOURGLASS_SAND_BOTTOM	7
 #define KEY_GUI_HOURGLASS_GLOW			8
 
-#define KEY_TEXT_GAME_OVER	0
+#define KEY_TEXT_GAME_OVER		0
+#define KEY_TEXT_LEVEL_PASSED	1
 
 #define KEY_PP_WAVE	0
 
@@ -58,6 +59,10 @@ protected:
 	f32 gameOverAlpha;
 	s8 gameOverSelection;
 	std::vector<recti> gameOverRects;
+
+	// Exit screen
+	std::unique_ptr<Alarm> exitTimer;
+	bool isLevelPassed;
 
 	// Hourglass
 	f32 hourglassRotation = 0.0f;
@@ -105,6 +110,9 @@ protected:
 	// Restart room method
 	void restartRoom();
 
+	// Jump to next level method
+	void jumpToNextLevel();
+
 	// Back to menu room method
 	void jumpToMenuRoom();
 
@@ -146,7 +154,10 @@ public:
 	void buildGUI();
 
 	// Display game over GUI menu
-	void displayGameOver();
+	void displayLevelEnd();
+
+	// Display exit menu
+	void displayExit();
 
 	// Dispose unneeded resource at frame end
 	void disposeResourcesAtFrameEnd();

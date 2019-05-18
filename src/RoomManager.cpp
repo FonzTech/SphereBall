@@ -129,7 +129,13 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 				}
 
 				// Assign common data
-				instance->assignGameObjectCommonData(object.at("required"));
+				try
+				{
+					instance->assignGameObjectCommonData(object.at("required"));
+				}
+				catch (json::exception e)
+				{
+				}
 
 				// Insert into current room
 				gameObjects.push_back(instance);

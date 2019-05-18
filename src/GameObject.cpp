@@ -10,10 +10,12 @@ void GameObject::assignGameObjectCommonData(const json& commonData)
 	for (u8 i = 0; i < 3; ++i)
 	{
 		std::string key = i == 0 ? "position" : i == 1 ? "rotation" : "scale";
-		vector3df v(0.0f, 0.0f, 0.0f);
+		vector3df v;
 
 		if (commonData.find(key) == commonData.end())
+		{
 			v = i == 2 ? vector3df(1, 1, 1) : vector3df(0, 0, 0);
+		}
 		else
 		{
 			v.X = (float)commonData[key]["x"];

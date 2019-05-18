@@ -21,24 +21,6 @@
 		]
 	},
 	{
-		"name": "SkyBox",
-		"required": {
-			"position": {
-				"x": 0.0,
-				"y": 0.0,
-				"z": 0.0
-			},
-			"scale": {
-				"x": 128.0,
-				"y": 128.0,
-				"z": 128.0
-			}
-		},
-		"optional": {
-			"texture": "skybox_egypt.jpg"
-		}
-	},
-	{
 		"name": "Player",
 		"required": {
 			"position": {
@@ -46,6 +28,12 @@
 				"y": 20.0,
 				"z": 0.0
 			}
+		}
+	},
+	{
+		"name": "SkyBox",
+		"optional": {
+			"texture": "egypt"
 		}
 	},
 	{

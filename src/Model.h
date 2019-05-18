@@ -21,6 +21,7 @@ public:
 	s32 material;
 
 	// Constructor
+	Model(Model* model);
 	Model(IAnimatedMesh* mesh);
 
 	// Texture adder for layer

@@ -97,7 +97,7 @@ void Engine::loop()
 {
 	// Setup camera
 	Camera::singleton->position = vector3df(0, 40, -100);
-	Camera::singleton->lookAt = vector3df(0, 40, -100);
+	Camera::singleton->lookAt = vector3df(0);
 
 	// Loop while game is still running
 	while (device->run() && RoomManager::singleton->isProgramRunning)

@@ -43,6 +43,7 @@ RoomManager::RoomManager()
 
 	// Initialize variables
 	isProgramRunning = true;
+	levelIndex = 0;
 }
 
 void RoomManager::loadRoom(const std::string roomToLoad)
@@ -52,7 +53,10 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 	{
 		const std::string suffix = roomToLoad.substr(LEVEL_PREFIX.length());
 		levelIndex = std::atoi(suffix.c_str());
-		printf("levelIndex: %d\n", levelIndex);
+	}
+	else
+	{
+		levelIndex = 0;
 	}
 
 	// Read room from file and parse JSON

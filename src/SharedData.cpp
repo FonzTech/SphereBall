@@ -568,12 +568,10 @@ void SharedData::initGameScoreValue(s32 key, s32 value)
 void SharedData::clearGameScore()
 {
 	// Clear game score map
-	for (auto it = gameScores.begin(); it != gameScores.end(); ++it)
 	{
-		if (it->first != KEY_SCORE_POINTS_TOTAL)
-		{
-			gameScores.erase(it->first);
-		}
+		ScoreValue sv = gameScores[KEY_SCORE_POINTS_TOTAL];
+		gameScores.clear();
+		gameScores[KEY_SCORE_POINTS_TOTAL] = sv;
 	}
 
 	// Remove alarm for time counter

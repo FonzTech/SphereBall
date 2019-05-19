@@ -76,7 +76,6 @@ public:
 
 	// Object properties
 	bool destroy;
-	f32 deltaTime;
 	vector3df position;
 	vector3df speed;
 

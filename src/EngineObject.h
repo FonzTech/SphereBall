@@ -34,6 +34,9 @@ public:
 
 	// Set engine instances
 	static void setEngineInstances(IrrlichtDevice* device, ISceneManager* smgr, IGUIEnvironment* guienv);
+
+	// Delta time
+	f32 deltaTime;
 };
 
 #endif // ENGINEOBJECT_H

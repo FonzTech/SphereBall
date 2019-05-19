@@ -44,6 +44,9 @@ SharedData::SharedData()
 	sounds[KEY_SOUND_CLOCK_A] = SoundManager::singleton->getSound(KEY_SOUND_CLOCK_A);
 	sounds[KEY_SOUND_CLOCK_B] = SoundManager::singleton->getSound(KEY_SOUND_CLOCK_B);
 	sounds[KEY_SOUND_TIME_OUT] = SoundManager::singleton->getSound(KEY_SOUND_TIME_OUT);
+
+	// Initialize total game score
+	initGameScoreValue(KEY_SCORE_POINTS_TOTAL, 0);
 }
 
 void SharedData::update(f32 deltaTime)

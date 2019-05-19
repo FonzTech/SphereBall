@@ -53,6 +53,9 @@ SharedData::SharedData()
 
 void SharedData::update(f32 deltaTime)
 {
+	// Assign delta time
+	this->deltaTime = deltaTime;
+
 	// Step alarms
 	if (timeAlarm != nullptr)
 	{

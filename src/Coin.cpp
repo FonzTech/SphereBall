@@ -74,6 +74,9 @@ void Coin::draw()
 
 void Coin::pick()
 {
+	// Increment score
+	SharedData::singleton->updateGameScoreValue(KEY_SCORE_POINTS, 50);
+
 	// Increment coin counter by one
 	SharedData::singleton->updateGameScoreValue(KEY_SCORE_COIN, 1);
 

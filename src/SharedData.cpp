@@ -378,6 +378,24 @@ void SharedData::buildGameScore()
 			}
 		}
 	}
+
+
+	// Draw score points
+	for (int i = 0; i < 2; ++i)
+	{
+		// Get value to display
+		s32 amount = getGameScoreValue(i ? KEY_SCORE_POINTS : KEY_SCORE_POINTS_TOTAL);
+
+		// Compute vertical position
+		s32 y = i ? 192 : 112;
+		SColor color = i ? SColor(255, 255, 255, 255) : SColor(255, 192, 192, 192);
+
+		// Draw counter
+		IGUIStaticText* text = guienv->addStaticText(std::to_wstring(amount).c_str(), recti(windowSize.X / 8 * 3, windowSize.Y - y, windowSize.X, windowSize.Y - y + 96));
+		text->setOverrideFont(font);
+		text->setOverrideColor(color);
+		text->setTextAlignment(EGUIA_UPPERLEFT, EGUIA_CENTER);
+	}
 }
 
 void SharedData::buildGameOver()

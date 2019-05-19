@@ -23,6 +23,8 @@ SharedData::SharedData()
 	fadeValue = 0.0f;
 	fadeCallback = nullptr;
 
+	scorePointsValue = 0.0f;
+
 	// Initialize texts for game over
 	{
 		std::vector<std::wstring> textGameOver;
@@ -382,12 +384,28 @@ void SharedData::buildGameScore()
 		}
 	}
 
+	// Animate score points value
+	{
+		f32 value = (f32)getGameScoreValue(KEY_SCORE_POINTS);
+		if (scorePointsValue < value)
+		{
+			// Increment by fraction
+			f32 diff = value - scorePointsValue;
+			scorePointsValue += diff * 0.0075f * deltaTime;
+
+			// Jump to final value (to avoid animation slowdown)
+			if (diff < 0.5f)
+			{
+				scorePointsValue = value;
+			}
+		}
+	}
 
 	// Draw score points
 	for (int i = 0; i < 2; ++i)
 	{
 		// Get value to display
-		s32 amount = getGameScoreValue(i ? KEY_SCORE_POINTS : KEY_SCORE_POINTS_TOTAL);
+		s32 amount = i ? (s32)scorePointsValue : getGameScoreValue(KEY_SCORE_POINTS_TOTAL);
 
 		// Compute vertical position
 		s32 y = i ? 192 : 112;
@@ -557,6 +575,9 @@ void SharedData::clearGameScore()
 
 	// Remove alarm for time counter
 	timeAlarm = nullptr;
+
+	// Reset level score value
+	scorePointsValue = 0.0f;
 }
 
 s32 SharedData::getGameScoreValue(const s32 key, const s32 defaultValue)

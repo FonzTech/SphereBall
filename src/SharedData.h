@@ -80,6 +80,9 @@ protected:
 	// Font for GUI
 	IGUIFont* font;
 
+	// Level score points value for animation purposes
+	f32 scorePointsValue;
+
 	/*
 		This map holds all the textures that must be disposed
 		at the end of the frame, otherwise severe memory leaks

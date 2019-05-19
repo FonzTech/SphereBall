@@ -154,10 +154,11 @@ void SharedData::update(f32 deltaTime)
 		for (u8 i = 0; i < 2; ++i)
 		{
 			// Get window size
-			const dimension2di windowSize = utility::getWindowSize<s32>(driver);
+			const vector2di windowSize = utility::getWindowSize<s32>(driver);
 
 			// Compute text rectangle
-			recti r(0, windowSize.Height / 4 * (2 + i), windowSize.Width, windowSize.Height / 4 * (3 + i));
+			s32 y = (s32)(windowSize.Y * 0.6f + 128.0f * (f32)i);
+			recti r(0, y, windowSize.X, y + 128);
 			gameOverRects.push_back(r);
 		}
 	}
@@ -412,7 +413,8 @@ void SharedData::buildGameScore()
 
 		// Compute vertical position
 		s32 y = i ? 192 : 112;
-		SColor color = i ? SColor(255, 255, 255, 255) : SColor(255, 192, 192, 192);
+		s32 alpha = (s32)(255.0f - gameOverAlpha * 255.0f);
+		SColor color = i ? SColor(alpha, 255, 255, 255) : SColor(alpha, 192, 192, 192);
 
 		// Draw counter
 		IGUIStaticText* text = guienv->addStaticText(std::to_wstring(amount).c_str(), recti(windowSize.X / 8 * 3, windowSize.Y - y, windowSize.X, windowSize.Y - y + 96));
@@ -425,93 +427,114 @@ void SharedData::buildGameScore()
 void SharedData::buildGameOver()
 {
 	// Check if Game Over screen has been triggered
-	if (gameOverAlpha > 0)
+	if (gameOverAlpha <= 0)
 	{
-		// Get window size
-		vector2df windowSize = utility::getWindowSize<f32>(driver);
+		return;
+	}
 
-		// Compute alpha value in unsigned integer form
-		u32 alpha[] = {
-			(u32)(gameOverAlpha * 192.0f),
-			(u32)(gameOverAlpha * 255.0f)
-		};
+	// Get window size
+	vector2df windowSize = utility::getWindowSize<f32>(driver);
 
-		// Draw background image
-		IGUIImage* image = guienv->addImage(guiTextures[KEY_GUI_RECTANGLE], vector2di(0, 0));
-		image->setMinSize(utility::getWindowSize<u32>(driver));
-		image->setScaleImage(true);
-		image->setColor(SColor(alpha[0], 0, 0, 0));
+	// Compute alpha value in unsigned integer form
+	u32 alpha[] = {
+		(u32)(gameOverAlpha * 192.0f),
+		(u32)(gameOverAlpha * 255.0f)
+	};
 
-		// Calculate text rectangles, then draw them
-		s8 currentSelection = -1;
-		const auto& texts = textGroups[isLevelPassed ? KEY_TEXT_LEVEL_PASSED : KEY_TEXT_GAME_OVER];
+	// Draw background image
+	IGUIImage* image = guienv->addImage(guiTextures[KEY_GUI_RECTANGLE], vector2di(0, 0));
+	image->setMinSize(utility::getWindowSize<u32>(driver));
+	image->setScaleImage(true);
+	image->setColor(SColor(alpha[0], 0, 0, 0));
 
-		for (u8 i = 0; i < texts.size(); ++i)
+	// Calculate text rectangles, then draw them
+	s8 currentSelection = -1;
+	const auto& texts = textGroups[isLevelPassed ? KEY_TEXT_LEVEL_PASSED : KEY_TEXT_GAME_OVER];
+
+	for (u8 i = 0; i < texts.size(); ++i)
+	{
+		// Default text color
+		SColor color(alpha[1], 255, 255, 255);
+
+		// Check if mouse is inside the text rectangle
+		if (gameOverRects[i].isPointInside(EventManager::singleton->mousePosition))
 		{
-			// Default text color
-			SColor color(alpha[1], 255, 255, 255);
+			// Make text color different
+			color.setBlue(0);
 
-			// Check if mouse is inside the text rectangle
-			if (gameOverRects[i].isPointInside(EventManager::singleton->mousePosition))
-			{
-				// Make text color different
-				color.setBlue(0);
-
-				// Store selection index for later
-				currentSelection = i;
-			}
-
-			// Draw text
-			IGUIStaticText* text = guienv->addStaticText(texts.at(i).c_str(), gameOverRects[i]);
-			text->setOverrideFont(font);
-			text->setOverrideColor(color);
-			text->setTextAlignment(EGUIA_CENTER, EGUIA_CENTER);
+			// Store selection index for later
+			currentSelection = i;
 		}
 
-		// Commit menu selection
-		if (gameOverSelection != currentSelection)
-		{
-			if (currentSelection >= 0)
-			{
-				playSound(KEY_SOUND_SELECT);
-			}
-		}
-		gameOverSelection = currentSelection;
+		// Draw text
+		IGUIStaticText* text = guienv->addStaticText(texts.at(i).c_str(), gameOverRects[i]);
+		text->setOverrideFont(font);
+		text->setOverrideColor(color);
+		text->setTextAlignment(EGUIA_CENTER, EGUIA_CENTER);
+	}
 
-		// Draw completion percentage
+	// Commit menu selection
+	if (gameOverSelection != currentSelection)
+	{
+		if (currentSelection >= 0)
 		{
-			const std::wstring prefix = std::wstring(isLevelPassed ? L"Level Passed: " : L"Level Failed: ");
-			const SColor color = isLevelPassed ? SColor(alpha[1], 0, 255, 0) : SColor(alpha[1], 255, 64, 64);
+			playSound(KEY_SOUND_SELECT);
+		}
+	}
+	gameOverSelection = currentSelection;
+
+	// Draw completion percentage
+	for (int i = 0; i < 3; ++i)
+	{
+		s32 y = (s32)(windowSize.Y * 0.1f) + 128 * i;
+
+		std::wstring str;
+		SColor color;
+
+		if (i == 0)
+		{
+			const std::wstring prefix = isLevelPassed ? L"Level Passed: " : L"Level Failed: ";
+			color = isLevelPassed ? SColor(alpha[1], 0, 255, 0) : SColor(alpha[1], 255, 64, 64);
 
 			const f32 percentage = std::floor((f32)gameScores[KEY_SCORE_ITEMS_PICKED].value / (f32)gameScores[KEY_SCORE_ITEMS_MAX].value * 100.0f);
-			const std::wstring str = prefix + std::to_wstring((s32)percentage) + std::wstring(L"%");
-
-			IGUIStaticText* text = guienv->addStaticText(str.c_str(), recti(0, 0, (s32)windowSize.X, (s32)(windowSize.Y * 0.5f)));
-			text->setTextAlignment(EGUIA_CENTER, EGUIA_CENTER);
-			text->setOverrideColor(color);
-			text->setOverrideFont(font);
+			str = prefix + std::to_wstring((s32)percentage) + L"%";
 		}
-
-		// Game Over menu selection
-		if (EventManager::singleton->keyStates[KEY_LBUTTON] == KEY_RELEASED)
+		else if (i == 1)
 		{
-			if (gameOverSelection == 0)
-			{
-				const auto functionToTrigger = isLevelPassed ? &SharedData::jumpToNextLevel : &SharedData::restartRoom;
-				SharedData::singleton->startFade(true, std::bind(functionToTrigger, this));
-			}
-			else if (gameOverSelection == 1)
-			{
-				SharedData::singleton->startFade(true, std::bind(&SharedData::jumpToMenuRoom, this));
-			}
+			str = L"Level Points: " + std::to_wstring(getGameScoreValue(KEY_SCORE_POINTS));
+			color = SColor(255, 255, 255, 0);
+		}
+		else if (i == 2)
+		{
+			str = L"Total Points: " + std::to_wstring(getGameScoreValue(KEY_SCORE_POINTS_TOTAL));
+			color = SColor(255, 192, 192, 192);
 		}
 
-		// Draw mouse pointer
-		ITexture* mouse = guiTextures[KEY_GUI_MOUSE];
-		const recti r = utility::getSourceRect(mouse) + EventManager::singleton->mousePosition;
-		image = guienv->addImage(r);
-		image->setImage(mouse);
+		IGUIStaticText* text = guienv->addStaticText(str.c_str(), recti(0, y, (s32)windowSize.X, y + 96));
+		text->setTextAlignment(EGUIA_CENTER, EGUIA_CENTER);
+		text->setOverrideColor(color);
+		text->setOverrideFont(font);
 	}
+
+	// Game Over menu selection
+	if (EventManager::singleton->keyStates[KEY_LBUTTON] == KEY_RELEASED)
+	{
+		if (gameOverSelection == 0)
+		{
+			const auto functionToTrigger = isLevelPassed ? &SharedData::jumpToNextLevel : &SharedData::restartRoom;
+			SharedData::singleton->startFade(true, std::bind(functionToTrigger, this));
+		}
+		else if (gameOverSelection == 1)
+		{
+			SharedData::singleton->startFade(true, std::bind(&SharedData::jumpToMenuRoom, this));
+		}
+	}
+
+	// Draw mouse pointer
+	ITexture* mouse = guiTextures[KEY_GUI_MOUSE];
+	const recti r = utility::getSourceRect(mouse) + EventManager::singleton->mousePosition;
+	image = guienv->addImage(r);
+	image->setImage(mouse);
 }
 
 void SharedData::jumpToNextLevel()
@@ -624,11 +647,15 @@ void SharedData::startFade(bool in, std::function<void(void)> fadeCallback)
 
 void SharedData::buildGUI()
 {
-	// Game score first
-	buildGameScore();
+	// Draw in-level HUD
+	if (RoomManager::singleton->isCurrentRoomALevel())
+	{
+		// Game score first
+		buildGameScore();
 
-	// Game over screen on top
-	buildGameOver();
+		// Game over screen on top
+		buildGameOver();
+	}
 
 	// Fade transition over all
 	buildFadeTransition();

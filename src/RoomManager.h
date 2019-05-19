@@ -52,6 +52,9 @@ public:
 
 	// Method to jump to next level
 	void jumpToNextLevel();
+
+	// Check if current room is a level
+	bool isCurrentRoomALevel();
 };
 
 #endif // ROOMMANAGER_H

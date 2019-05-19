@@ -161,3 +161,8 @@ void RoomManager::jumpToNextLevel()
 {
 	loadRoom(LEVEL_PREFIX + std::to_string(levelIndex + 1));
 }
+
+bool RoomManager::isCurrentRoomALevel()
+{
+	return levelIndex > 0;
+}

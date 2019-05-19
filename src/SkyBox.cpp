@@ -6,7 +6,7 @@ const std::string SkyBox::FRAMES[] = {
 };
 const f32 SkyBox::DEFAULT_MODEL_ANGLE = 90.0f;
 const f32 SkyBox::FACE_DISTANCE = 1000.0f;
-const f32 SkyBox::FACE_BIAS = 11.0f;
+const f32 SkyBox::FACE_BIAS = 11.01f;
 
 std::shared_ptr<SkyBox> SkyBox::createInstance(const json &jsonData)
 {

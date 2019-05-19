@@ -102,6 +102,7 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 			// Initialize pickupable items counter
 			SharedData::singleton->initGameScoreValue(KEY_SCORE_ITEMS_PICKED, 0);
 			SharedData::singleton->initGameScoreValue(KEY_SCORE_ITEMS_MAX, 0);
+			SharedData::singleton->initGameScoreValue(KEY_SCORE_POINTS, 0);
 		}
 		// Regulary game object
 		else

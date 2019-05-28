@@ -1,12 +1,13 @@
 #include "EngineObject.h"
 #include "Utility.h"
+#include "SoundManager.h"
 
 IrrlichtDevice* EngineObject::device = nullptr;
 IVideoDriver* EngineObject::driver = nullptr;
 ISceneManager* EngineObject::smgr = nullptr;
 IGUIEnvironment* EngineObject::guienv = nullptr;
 
-std::shared_ptr<sf::Sound> EngineObject::playSound(const std::string& key, const vector3df* position)
+std::shared_ptr<sf::Sound> EngineObject::playSound(const std::string& key, const vector3df* position, const bool isMusic)
 {
 	std::shared_ptr<sf::Sound> sound = sounds[key];
 
@@ -20,6 +21,8 @@ std::shared_ptr<sf::Sound> EngineObject::playSound(const std::string& key, const
 		sound->setRelativeToListener(false);
 		sound->setPosition(utility::irrVectorToSf(*position));
 	}
+
+	sound->setVolume(SoundManager::singleton->volumeLevels[isMusic ? KEY_SETTING_MUSIC : KEY_SETTING_SOUND]);
 	sound->play();
 
 	return sound;

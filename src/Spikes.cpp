@@ -101,7 +101,7 @@ void Spikes::update()
 			timer->setTime(1500);
 
 			// Play spatial sound
-			playSound(KEY_SOUND_SPIKE_OUT, &position);
+			playAudio(KEY_SOUND_SPIKE_OUT, &position);
 		}
 		else
 		{
@@ -110,7 +110,7 @@ void Spikes::update()
 			timer->setTime(2250);
 
 			// Play spatial sound
-			playSound(KEY_SOUND_SPIKE_IN, &position);
+			playAudio(KEY_SOUND_SPIKE_IN, &position);
 		}
 	}
 

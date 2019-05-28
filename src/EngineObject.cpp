@@ -7,7 +7,7 @@ IVideoDriver* EngineObject::driver = nullptr;
 ISceneManager* EngineObject::smgr = nullptr;
 IGUIEnvironment* EngineObject::guienv = nullptr;
 
-std::shared_ptr<sf::Sound> EngineObject::playSound(const std::string& key, const vector3df* position, const bool isMusic)
+std::shared_ptr<sf::Sound> EngineObject::playAudio(const std::string& key, const vector3df* position, const bool isMusic)
 {
 	std::shared_ptr<sf::Sound> sound = sounds[key];
 

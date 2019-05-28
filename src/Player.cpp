@@ -82,7 +82,7 @@ Player::Player() : GameObject()
 	SharedData::singleton->startFade(false, nullptr);
 
 	// Play Start Level sound
-	playSound(KEY_SOUND_LEVEL_START, nullptr);
+	playAudio(KEY_SOUND_LEVEL_START, nullptr);
 }
 
 void Player::update()
@@ -305,7 +305,7 @@ void Player::walk()
 			if ((!i && speed.Y > 0.1) || (i && speed.Y < -0.1))
 			{
 				// Play sound
-				playSound(KEY_SOUND_BOUNCE);
+				playAudio(KEY_SOUND_BOUNCE);
 
 				// Reset breathing
 				breathingSpeed = 0.025f;
@@ -359,7 +359,7 @@ void Player::walk()
 			// Play sound
 			if ((!i && speed.X < -0.1) || (i && speed.X > 0.1))
 			{
-				playSound(KEY_SOUND_BOUNCE);
+				playAudio(KEY_SOUND_BOUNCE);
 			}
 
 			// Reposition object correctly
@@ -376,7 +376,7 @@ void Player::walk()
 		Collision collision = checkBoundingBoxCollision<Coin>(RoomManager::singleton->gameObjects, rect, coinCollisionCheck);
 		if (collision.engineObject != nullptr)
 		{
-			playSound(KEY_SOUND_COIN, &collision.getGameObject<Coin>()->position);
+			playAudio(KEY_SOUND_COIN, &collision.getGameObject<Coin>()->position);
 			collision.getGameObject<Coin>()->pick();
 		}
 	}
@@ -389,7 +389,7 @@ void Player::walk()
 		if (collision.engineObject != nullptr)
 		{
 			std::string soundToPlay = collision.getGameObject<Key>()->pick() ? KEY_SOUND_KEY_FINAL : KEY_SOUND_KEY;
-			playSound(soundToPlay, &collision.getGameObject<Key>()->position);
+			playAudio(soundToPlay, &collision.getGameObject<Key>()->position);
 		}
 	}
 
@@ -402,7 +402,7 @@ void Player::walk()
 		Collision collision = checkBoundingBoxCollision<Spikes>(RoomManager::singleton->gameObjects, rect, spikesCollisionCheck);
 		if (collision.engineObject != nullptr)
 		{
-			playSound(KEY_SOUND_NAILED);
+			playAudio(KEY_SOUND_NAILED);
 			die();
 		}
 	}
@@ -417,7 +417,7 @@ void Player::walk()
 		if (collision.engineObject != nullptr)
 		{
 			// Play sound
-			playSound(KEY_SOUND_LETHARGY_PILL);
+			playAudio(KEY_SOUND_LETHARGY_PILL);
 
 			// Destroy object
 			collision.getGameObject<Pill>()->pick();
@@ -443,7 +443,7 @@ void Player::walk()
 		if (collision.engineObject != nullptr)
 		{
 			// Play sound
-			playSound(KEY_SOUND_HOURGLASS);
+			playAudio(KEY_SOUND_HOURGLASS);
 
 			// Destroy object
 			collision.getGameObject<Hourglass>()->pick();
@@ -466,7 +466,7 @@ void Player::walk()
 			if (collision.engineObject != nullptr)
 			{
 				// Play sound
-				playSound(KEY_SOUND_EXITED);
+				playAudio(KEY_SOUND_EXITED);
 
 				// Stop time
 				SharedData::singleton->displayExit();
@@ -520,7 +520,7 @@ void Player::dead()
 			dieAlarm = nullptr;
 
 			// Play game over sound
-			playSound(KEY_SOUND_GAME_OVER);
+			playAudio(KEY_SOUND_GAME_OVER);
 
 			// Display game over GUI menu
 			SharedData::singleton->displayLevelEnd();

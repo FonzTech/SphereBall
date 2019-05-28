@@ -144,7 +144,7 @@ void MainMenu::update()
 		currentIndex = tmpIndex;
 		if (currentIndex >= 0)
 		{
-			playSound(KEY_SOUND_SELECT);
+			playAudio(KEY_SOUND_SELECT);
 		}
 	}
 

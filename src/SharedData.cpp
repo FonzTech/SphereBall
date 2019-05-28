@@ -68,7 +68,7 @@ void SharedData::update(f32 deltaTime)
 			if (time <= 0)
 			{
 				// Play time out sound
-				playSound(KEY_SOUND_TIME_OUT);
+				playAudio(KEY_SOUND_TIME_OUT);
 
 				// Delete alarm
 				timeAlarm = nullptr;
@@ -82,7 +82,7 @@ void SharedData::update(f32 deltaTime)
 				if (time <= 20)
 				{
 					f32 volume = (f32)(21 - time) * 5.0f;
-					playSound(time % 2 ? KEY_SOUND_CLOCK_B : KEY_SOUND_CLOCK_A)->setVolume(volume);
+					playAudio(time % 2 ? KEY_SOUND_CLOCK_B : KEY_SOUND_CLOCK_A)->setVolume(volume);
 				}
 
 				// Reset alarm
@@ -475,7 +475,7 @@ void SharedData::buildGameOver()
 	{
 		if (currentSelection >= 0)
 		{
-			playSound(KEY_SOUND_SELECT);
+			playAudio(KEY_SOUND_SELECT);
 		}
 	}
 	gameOverSelection = currentSelection;

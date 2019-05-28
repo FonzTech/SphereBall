@@ -18,14 +18,27 @@
 #define KEY_SOUND_HOURGLASS		"hourglass"
 #define KEY_SOUND_EXITED		"exited"
 
+#define KEY_SETTING_MUSIC	1
+#define KEY_SETTING_SOUND	2
+
 #include <unordered_map>
 #include <string>
 #include <memory>
+
 #include <SFML/Audio.hpp>
+#include <irrlicht.h>
+
+using namespace irr;
 
 class SoundManager
 {
 public:
+
+	SoundManager();
+
+	// Map to hold volume levels
+	std::unordered_map<u8, f32> volumeLevels;
+
 	// Singleton holder
 	static std::shared_ptr<SoundManager> singleton;
 

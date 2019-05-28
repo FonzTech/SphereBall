@@ -23,7 +23,8 @@ SharedData::SharedData()
 	fadeValue = 0.0f;
 	fadeCallback = nullptr;
 
-	scorePointsValue = 0.0f;
+	levelPointsValue = 0.0f;
+	globalPointsValue = 0.0f;
 
 	// Initialize texts for game over
 	{
@@ -390,26 +391,15 @@ void SharedData::buildGameScore()
 
 	// Animate score points value
 	{
-		f32 value = (f32)getGameScoreValue(KEY_SCORE_POINTS);
-		if (scorePointsValue < value)
-		{
-			// Increment by fraction
-			f32 diff = value - scorePointsValue;
-			scorePointsValue += diff * 0.0075f * deltaTime;
-
-			// Jump to final value (to avoid animation slowdown)
-			if (diff < 0.5f)
-			{
-				scorePointsValue = value;
-			}
-		}
+		f32 points = (f32)getGameScoreValue(KEY_SCORE_POINTS);
+		utility::animateFloatValue(deltaTime, &levelPointsValue, points);
 	}
 
 	// Draw score points
 	for (int i = 0; i < 2; ++i)
 	{
 		// Get value to display
-		s32 amount = i ? (s32)scorePointsValue : getGameScoreValue(KEY_SCORE_POINTS_TOTAL);
+		s32 amount = i ? (s32)levelPointsValue : getGameScoreValue(KEY_SCORE_POINTS_TOTAL);
 
 		// Compute vertical position
 		s32 y = i ? 192 : 112;
@@ -430,6 +420,13 @@ void SharedData::buildGameOver()
 	if (gameOverAlpha <= 0)
 	{
 		return;
+	}
+
+	// Animate global points value
+	if (gameOverAlpha >= 1.0f)
+	{
+		f32 points = (f32)(getGameScoreValue(KEY_SCORE_POINTS_TOTAL) + getGameScoreValue(KEY_SCORE_POINTS));
+		utility::animateFloatValue(deltaTime, &globalPointsValue, points);
 	}
 
 	// Get window size
@@ -506,7 +503,7 @@ void SharedData::buildGameOver()
 		}
 		else if (i == 2)
 		{
-			str = L"Total Points: " + std::to_wstring(getGameScoreValue(KEY_SCORE_POINTS_TOTAL));
+			str = L"Total Points: " + std::to_wstring((s32)globalPointsValue);
 			color = SColor(255, 192, 192, 192);
 		}
 
@@ -539,6 +536,10 @@ void SharedData::buildGameOver()
 
 void SharedData::jumpToNextLevel()
 {
+	// Add current level score to global score
+	s32 points = SharedData::singleton->getGameScoreValue(KEY_SCORE_POINTS);
+	SharedData::singleton->updateGameScoreValue(KEY_SCORE_POINTS_TOTAL, points);
+
 	// Turn off game over scren
 	gameOverAlpha = 0.0f;
 
@@ -601,7 +602,7 @@ void SharedData::clearGameScore()
 	timeAlarm = nullptr;
 
 	// Reset level score value
-	scorePointsValue = 0.0f;
+	levelPointsValue = 0.0f;
 }
 
 s32 SharedData::getGameScoreValue(const s32 key, const s32 defaultValue)

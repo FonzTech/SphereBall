@@ -79,4 +79,20 @@ namespace utility
 	{
 		return s.size() >= prefix.size() && s.compare(0, prefix.size(), prefix) == 0;
 	}
+
+	void animateFloatValue(const f32 deltaTime, f32* variableToAnimate, const f32 targetValue)
+	{
+		if (*variableToAnimate < targetValue)
+		{
+			// Increment by fraction
+			f32 diff = targetValue - *variableToAnimate;
+			*variableToAnimate += diff * 0.0075f * deltaTime;
+
+			// Jump to final value (to avoid animation slowdown)
+			if (diff < 0.5f)
+			{
+				*variableToAnimate = targetValue;
+			}
+		}
+	}
 }

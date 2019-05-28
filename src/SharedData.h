@@ -81,7 +81,8 @@ protected:
 	IGUIFont* font;
 
 	// Level score points value for animation purposes
-	f32 scorePointsValue;
+	f32 levelPointsValue;
+	f32 globalPointsValue;
 
 	/*
 		This map holds all the textures that must be disposed

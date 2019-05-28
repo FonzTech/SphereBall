@@ -69,6 +69,9 @@ namespace utility
 
 	// Starts With utility method for strings
 	bool startsWith(const std::string& s, const std::string& prefix);
+
+	// Animate floating point value
+	void animateFloatValue(const f32 deltaTime, f32* variableToAnimate, const f32 targetValue);
 }
 
 #endif // UTILITY_H

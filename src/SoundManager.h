@@ -50,6 +50,9 @@ public:
 
 	// Method to obtain playable sound
 	std::shared_ptr<sf::Sound> getSound(const std::string& fname);
+
+	// Step volume level, preventing going outside bounds
+	void updateVolumeLevel(const bool isMusic, const f32 stepValue);
 };
 
 #endif // SOUNDMANAGER_H

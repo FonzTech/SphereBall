@@ -41,7 +41,6 @@ MainMenu::MainMenu() : GameObject()
 
 	// Load sound
 	sounds[KEY_SOUND_SELECT] = SoundManager::singleton->getSound(KEY_SOUND_SELECT);
-	sounds[KEY_SOUND_SELECT]->setRelativeToListener(true);
 
 	// Initialize members
 	currentSection = 1;
@@ -165,32 +164,54 @@ void MainMenu::update()
 				SharedData::singleton->startFade(true, callback);
 			}
 		}
-		else
+		else if (currentIndex == 0)
 		{
-			if (currentIndex == 0)
+			if (currentSection == 1)
 			{
-				if (currentSection == 1)
-				{
-					currentSection = 0;
-				}
+				currentSection = 0;
 			}
-			else if (currentIndex == 2)
+		}
+		else if (currentIndex == 1)
+		{
+			if (currentSection == 1)
 			{
-				if (currentSection == 1)
-				{
-					currentSection = 2;
-				}
+				printf("Not yet implemented!\n");
 			}
-			else if (currentIndex == 3)
+			else
 			{
-				if (currentSection == 1)
-				{
-					RoomManager::singleton->isProgramRunning = false;
-				}
-				else
-				{
-					currentSection = 1;
-				}
+				// Increment or decrement value
+				const f32 value = EventManager::singleton->mousePosition.X < windowSize.Width / 2 ? -10.0f : 10.0f;
+				SoundManager::singleton->updateVolumeLevel(false, value);
+
+				// Play sound effect
+				playAudio(KEY_SOUND_SELECT);
+			}
+		}
+		else if (currentIndex == 2)
+		{
+			if (currentSection == 1)
+			{
+				currentSection = 2;
+			}
+			else
+			{
+				// Increment or decrement value
+				const f32 value = EventManager::singleton->mousePosition.X < windowSize.Width / 2 ? -10.0f : 10.0f;
+				SoundManager::singleton->updateVolumeLevel(true, value);
+
+				// Play sound effect
+				playAudio(KEY_SOUND_SELECT);
+			}
+		}
+		else if (currentIndex == 3)
+		{
+			if (currentSection == 1)
+			{
+				RoomManager::singleton->isProgramRunning = false;
+			}
+			else
+			{
+				currentSection = 1;
 			}
 		}
 	}
@@ -258,18 +279,29 @@ void MainMenu::draw()
 
 	// Draw main menu and options
 	size_t limit = animation < 0 ? optionsAreas.size() / 2 : optionsAreas.size();
-	for (u8 i = 0; i != limit; ++i)
+	for (s8 i = 0; i != limit; ++i)
 	{
+		// Get index for menu entry
+		const s8 entryIndex = i % 4;
+
 		// Get right color
-		SColor color = i % 4 == currentIndex ? SColor(255, 255, 255, 0) : SColor(255, 255, 255, 255);
+		SColor color = entryIndex == currentIndex ? SColor(255, 255, 255, 0) : SColor(255, 255, 255, 255);
 
 		// Compute right animated position
 		s32 x = (s32)(animatedValue * (f32)windowSize.Width * (animation < 0 ? 1.0f : -1.0f));
 		optionsAreas[i].UpperLeftCorner.X += x;
 		optionsAreas[i].LowerRightCorner.X += x;
 
+		// Get right string for text
+		std::wstring str = optionTitles[i];
+		if (i == 5 || i == 6)
+		{
+			f32 value = SoundManager::singleton->volumeLevels[i == 5 ? KEY_SETTING_MUSIC : KEY_SETTING_SOUND];
+			str += L": " + std::to_wstring((s32)(value * 0.1f));
+		}
+
 		// Create text to be drawn
-		IGUIStaticText* text = guienv->addStaticText(optionTitles[i].c_str(), optionsAreas[i]);
+		IGUIStaticText* text = guienv->addStaticText(str.c_str(), optionsAreas[i]);
 		text->setOverrideFont(font);
 		text->setOverrideColor(color);
 		text->setTextAlignment(EGUIA_CENTER, EGUIA_CENTER);

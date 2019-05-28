@@ -1,4 +1,4 @@
-#include "SoundManager.h"
+		#include "SoundManager.h"
 
 std::shared_ptr<SoundManager> SoundManager::singleton = nullptr;
 
@@ -43,4 +43,10 @@ std::shared_ptr<sf::Sound> SoundManager::getSound(const std::string& fname)
 
 	// Return the handleable sound
 	return std::make_shared<sf::Sound>(*sb.get());
+}
+
+void SoundManager::updateVolumeLevel(const bool isMusic, const f32 stepValue)
+{
+	f32* value = &volumeLevels[isMusic ? KEY_SETTING_MUSIC : KEY_SETTING_SOUND];
+	*value = std::max(0.0f, std::min(*value + stepValue, 100.0f));
 }

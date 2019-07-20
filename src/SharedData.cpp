@@ -519,11 +519,11 @@ void SharedData::buildGameOver()
 		if (gameOverSelection == 0)
 		{
 			const auto functionToTrigger = isLevelPassed ? &SharedData::jumpToNextLevel : &SharedData::restartRoom;
-			SharedData::singleton->startFade(true, std::bind(functionToTrigger, this));
+			startFade(true, std::bind(functionToTrigger, this));
 		}
 		else if (gameOverSelection == 1)
 		{
-			SharedData::singleton->startFade(true, std::bind(&SharedData::jumpToMenuRoom, this));
+			startFade(true, std::bind(&SharedData::jumpToMenuRoom, this));
 		}
 	}
 
@@ -537,8 +537,8 @@ void SharedData::buildGameOver()
 void SharedData::jumpToNextLevel()
 {
 	// Add current level score to global score
-	s32 points = SharedData::singleton->getGameScoreValue(KEY_SCORE_POINTS);
-	SharedData::singleton->updateGameScoreValue(KEY_SCORE_POINTS_TOTAL, points);
+	s32 points = getGameScoreValue(KEY_SCORE_POINTS);
+	updateGameScoreValue(KEY_SCORE_POINTS_TOTAL, points);
 
 	// Turn off game over scren
 	gameOverAlpha = 0.0f;
@@ -575,7 +575,7 @@ void SharedData::subtractLevelPointsOnLose()
 {
 	if (gameOverAlpha > 0.0f && !isLevelPassed)
 	{
-		SharedData::singleton->updateGameScoreValue(KEY_SCORE_POINTS_TOTAL, -getGameScoreValue(KEY_SCORE_POINTS, 0));
+		updateGameScoreValue(KEY_SCORE_POINTS_TOTAL, -getGameScoreValue(KEY_SCORE_POINTS, 0));
 	}
 }
 

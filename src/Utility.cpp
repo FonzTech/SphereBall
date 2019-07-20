@@ -82,14 +82,14 @@ namespace utility
 
 	void animateFloatValue(const f32 deltaTime, f32* variableToAnimate, const f32 targetValue)
 	{
-		if (*variableToAnimate < targetValue)
+		if (std::abs(*variableToAnimate) < std::abs(targetValue))
 		{
 			// Increment by fraction
 			f32 diff = targetValue - *variableToAnimate;
 			*variableToAnimate += diff * 0.0075f * deltaTime;
 
 			// Jump to final value (to avoid animation slowdown)
-			if (diff < 0.5f)
+			if (std::abs(diff) < 0.5f)
 			{
 				*variableToAnimate = targetValue;
 			}

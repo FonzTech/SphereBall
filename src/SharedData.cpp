@@ -29,16 +29,16 @@ SharedData::SharedData()
 	// Initialize texts for game over
 	{
 		std::vector<std::wstring> textGameOver;
-		textGameOver.push_back(L"Riprova Livello");
-		textGameOver.push_back(L"Esci Dal Livello");
+		textGameOver.push_back(L"Retry Level");
+		textGameOver.push_back(L"Return To Menu");
 		textGroups[KEY_TEXT_GAME_OVER] = textGameOver;
 	}
 
 	// Initialize texts for level passed
 	{
 		std::vector<std::wstring> textLevelPassed;
-		textLevelPassed.push_back(L"Livello Successivo");
-		textLevelPassed.push_back(L"Torna Al Menu");
+		textLevelPassed.push_back(L"Next Level");
+		textLevelPassed.push_back(L"Return To Menu");
 		textGroups[KEY_TEXT_LEVEL_PASSED] = textLevelPassed;
 	}
 

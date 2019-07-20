@@ -376,7 +376,7 @@ void Player::walk()
 		Collision collision = checkBoundingBoxCollision<Coin>(RoomManager::singleton->gameObjects, rect, coinCollisionCheck);
 		if (collision.engineObject != nullptr)
 		{
-			playAudio(KEY_SOUND_COIN, &collision.getGameObject<Coin>()->position);
+			playAudio(KEY_SOUND_COIN);
 			collision.getGameObject<Coin>()->pick();
 		}
 	}
@@ -389,7 +389,7 @@ void Player::walk()
 		if (collision.engineObject != nullptr)
 		{
 			std::string soundToPlay = collision.getGameObject<Key>()->pick() ? KEY_SOUND_KEY_FINAL : KEY_SOUND_KEY;
-			playAudio(soundToPlay, &collision.getGameObject<Key>()->position);
+			playAudio(soundToPlay);
 		}
 	}
 

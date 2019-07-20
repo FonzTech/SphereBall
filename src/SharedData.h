@@ -122,6 +122,9 @@ protected:
 	// Back to menu room method
 	void jumpToMenuRoom();
 
+	// Subtract current level points to global game score
+	void subtractLevelPointsOnLose();
+
 public:
 
 	// Key for room loader

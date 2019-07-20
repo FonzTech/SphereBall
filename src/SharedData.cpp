@@ -425,7 +425,7 @@ void SharedData::buildGameOver()
 	// Animate global points value
 	if (gameOverAlpha >= 1.0f)
 	{
-		f32 points = (f32)(getGameScoreValue(KEY_SCORE_POINTS_TOTAL) + getGameScoreValue(KEY_SCORE_POINTS));
+		f32 points = (f32)(getGameScoreValue(KEY_SCORE_POINTS_TOTAL) + getGameScoreValue(KEY_SCORE_POINTS) * (isLevelPassed ? 1 : -1));
 		utility::animateFloatValue(deltaTime, &globalPointsValue, points);
 	}
 
@@ -549,6 +549,9 @@ void SharedData::jumpToNextLevel()
 
 void SharedData::restartRoom()
 {
+	// Update game score
+	subtractLevelPointsOnLose();
+
 	// Turn off game over scren
 	gameOverAlpha = 0.0f;
 
@@ -558,11 +561,22 @@ void SharedData::restartRoom()
 
 void SharedData::jumpToMenuRoom()
 {
+	// Update game score
+	subtractLevelPointsOnLose();
+
 	// Turn off game over scren
 	gameOverAlpha = 0.0f;
 
 	// Jump to main menu room
 	RoomManager::singleton->loadRoom(RoomManager::ROOM_MAIN_MENU);
+}
+
+void SharedData::subtractLevelPointsOnLose()
+{
+	if (gameOverAlpha > 0.0f && !isLevelPassed)
+	{
+		SharedData::singleton->updateGameScoreValue(KEY_SCORE_POINTS_TOTAL, -getGameScoreValue(KEY_SCORE_POINTS, 0));
+	}
 }
 
 void SharedData::buildFadeTransition()

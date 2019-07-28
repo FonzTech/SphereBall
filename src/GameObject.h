@@ -17,7 +17,7 @@ protected:
 
 	// Check for collision with another game object
 	template <typename T>
-	Collision checkBoundingBoxCollision(const std::vector<std::shared_ptr<GameObject>>& gameObjects, aabbox3df& rect, const std::function<bool(const GameObject* go)>& specializedCheck = nullptr)
+	Collision checkBoundingBoxCollision(const std::vector<std::shared_ptr<GameObject>>& gameObjects, aabbox3df& rect, const std::function<bool(GameObject* go)>& specializedCheck = nullptr)
 	{
 		// Create data structure to hold the return value
 		Collision collision;

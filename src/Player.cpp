@@ -55,25 +55,25 @@ Player::Player() : GameObject()
 
 	// Load sounds
 	sounds[KEY_SOUND_BOUNCE] = SoundManager::singleton->getSound(KEY_SOUND_BOUNCE);
+	sounds[KEY_SOUND_NAILED] = SoundManager::singleton->getSound(KEY_SOUND_NAILED);
+	sounds[KEY_SOUND_GAME_OVER] = SoundManager::singleton->getSound(KEY_SOUND_GAME_OVER);
+	sounds[KEY_SOUND_LEVEL_START] = SoundManager::singleton->getSound(KEY_SOUND_LEVEL_START);
+	sounds[KEY_SOUND_EXITED] = SoundManager::singleton->getSound(KEY_SOUND_EXITED);
+
 	sounds[KEY_SOUND_COIN] = SoundManager::singleton->getSound(KEY_SOUND_COIN);
 	sounds[KEY_SOUND_KEY] = SoundManager::singleton->getSound(KEY_SOUND_KEY);
 	sounds[KEY_SOUND_KEY_FINAL] = SoundManager::singleton->getSound(KEY_SOUND_KEY_FINAL);
-	sounds[KEY_SOUND_NAILED] = SoundManager::singleton->getSound(KEY_SOUND_NAILED);
-	sounds[KEY_SOUND_GAME_OVER] = SoundManager::singleton->getSound(KEY_SOUND_GAME_OVER);
 	sounds[KEY_SOUND_LETHARGY_PILL] = SoundManager::singleton->getSound(KEY_SOUND_LETHARGY_PILL);
-	sounds[KEY_SOUND_LEVEL_START] = SoundManager::singleton->getSound(KEY_SOUND_LEVEL_START);
 	sounds[KEY_SOUND_HOURGLASS] = SoundManager::singleton->getSound(KEY_SOUND_HOURGLASS);
-	sounds[KEY_SOUND_EXITED] = SoundManager::singleton->getSound(KEY_SOUND_EXITED);
 	sounds[KEY_SOUND_FRUIT] = SoundManager::singleton->getSound(KEY_SOUND_FRUIT);
 
 	// Create specialized functions
-	coinCollisionCheck = [](const GameObject* go)
+	pickupCollisionCheck = [](GameObject* go)
 	{
-		Coin* coin = (Coin*)go;
-		return coin->notPicked;
+		return ((Pickup*)go)->notPicked;
 	};
 
-	spikesCollisionCheck = [](const GameObject* go)
+	spikesCollisionCheck = [](GameObject* go)
 	{
 		Spikes* spikes = (Spikes*)go;
 		return spikes->isHarmful();
@@ -370,27 +370,19 @@ void Player::walk()
 		}
 	}
 
-	// Check collision with coin
+	// Check collision with pickup
 	if (state == STATE_WALKING)
 	{
 		aabbox3df rect(bbox);
-		Collision collision = checkBoundingBoxCollision<Coin>(RoomManager::singleton->gameObjects, rect, coinCollisionCheck);
+		Collision collision = checkBoundingBoxCollision<Pickup>(RoomManager::singleton->gameObjects, rect, pickupCollisionCheck);
 		if (collision.engineObject != nullptr)
 		{
-			playAudio(KEY_SOUND_COIN);
-			collision.getGameObject<Coin>()->pick();
-		}
-	}
+			// Trigger pick
+			std::shared_ptr<Pickup> pickup = collision.getGameObject<Pickup>();
+			pickup->pick();
 
-	// Check collision with key
-	if (state == STATE_WALKING)
-	{
-		aabbox3df rect(bbox);
-		Collision collision = checkBoundingBoxCollision<Key>(RoomManager::singleton->gameObjects, rect);
-		if (collision.engineObject != nullptr)
-		{
-			std::string soundToPlay = collision.getGameObject<Key>()->pick() ? KEY_SOUND_KEY_FINAL : KEY_SOUND_KEY;
-			playAudio(soundToPlay);
+			// Play audio
+			playAudio(pickup->soundIndex);
 		}
 	}
 
@@ -405,52 +397,6 @@ void Player::walk()
 		{
 			playAudio(KEY_SOUND_NAILED);
 			die();
-		}
-	}
-
-	// Check collision with pill
-	if (state == STATE_WALKING)
-	{
-		aabbox3df rect(bbox);
-		utility::transformAABBox(rect, vector3df(0), vector3df(0), vector3df(0.9f, 0.8f, 0.8f));
-
-		Collision collision = checkBoundingBoxCollision<Pill>(RoomManager::singleton->gameObjects, rect);
-		if (collision.engineObject != nullptr)
-		{
-			// Play sound
-			playAudio(KEY_SOUND_LETHARGY_PILL);
-
-			// Destroy object
-			collision.getGameObject<Pill>()->pick();
-
-			// Trigger wave effect
-			json data;
-			data["speed"] = 0.00001f;
-			data["strength"] = 0.05f;
-			SharedData::singleton->triggerPostProcessingCallback(KEY_PP_WAVE, data);
-
-			// Trigger fade out
-			SharedData::singleton->startFade(false, nullptr, 1.0f);
-		}
-	}
-
-	// Check collision with hourglass
-	if (state == STATE_WALKING)
-	{
-		aabbox3df rect(bbox);
-		utility::transformAABBox(rect, vector3df(0), vector3df(0), vector3df(0.9f, 0.8f, 0.8f));
-
-		Collision collision = checkBoundingBoxCollision<Hourglass>(RoomManager::singleton->gameObjects, rect);
-		if (collision.engineObject != nullptr)
-		{
-			// Play sound
-			playAudio(KEY_SOUND_HOURGLASS);
-
-			// Destroy object
-			collision.getGameObject<Hourglass>()->pick();
-
-			// Invert time
-			SharedData::singleton->invertTime();
 		}
 	}
 

@@ -1,4 +1,6 @@
 #include "Pill.h"
+#include "SharedData.h"
+#include "SoundManager.h"
 
 std::shared_ptr<Pill> Pill::createInstance(const json &jsonData)
 {
@@ -19,7 +21,7 @@ Pill::Pill() : Pill(0)
 {
 }
 
-Pill::Pill(u8 type) : GameObject()
+Pill::Pill(u8 type) : Pickup()
 {
 	// Assign variables
 	this->type = type;
@@ -29,7 +31,7 @@ Pill::Pill(u8 type) : GameObject()
 	ITexture* texture = driver->getTexture("textures/lethargy_pill.png");
 
 	// Create sparkle shader
-	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
+	PillShaderCallback* ssc = new PillShaderCallback(this);
 
 	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
 	customMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/pill.vs", "shaders/pill.fs", ssc);
@@ -45,27 +47,47 @@ Pill::Pill(u8 type) : GameObject()
 
 void Pill::update()
 {
+	Pickup::update();
 }
 
 void Pill::draw()
 {
+	Pickup::draw();
+
 	// Exit model
 	std::shared_ptr<Model> model = models.at(0);
 	model->position = position;
 	model->rotation += vector3df(0.125f, 0.25f, 0.5f) * deltaTime;
 }
 
-void Pill::pick()
+bool Pill::pick()
 {
-	destroy = 1;
+	if (Pickup::pick())
+	{
+		return true;
+	}
+
+	// Trigger wave effect
+	json data;
+	data["speed"] = 0.00001f;
+	data["strength"] = 0.05f;
+	SharedData::singleton->triggerPostProcessingCallback(KEY_PP_WAVE, data);
+
+	// Trigger fade out
+	SharedData::singleton->startFade(false, nullptr, 1.0f);
+
+	// Set sound to play
+	soundIndex = KEY_SOUND_LETHARGY_PILL;
+
+	return false;
 }
 
-Pill::SpecializedShaderCallback::SpecializedShaderCallback(Pill* pill)
+Pill::PillShaderCallback::PillShaderCallback(Pill* pill)
 {
 	this->pill = pill;
 }
 
-void Pill::SpecializedShaderCallback::OnSetConstants(IMaterialRendererServices* services, s32 userData)
+void Pill::PillShaderCallback::OnSetConstants(IMaterialRendererServices* services, s32 userData)
 {
 	// Execute parent method
 	ShaderCallback::OnSetConstants(services, userData);

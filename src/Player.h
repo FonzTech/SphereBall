@@ -42,8 +42,8 @@ protected:
 	std::unique_ptr<Alarm> popAlarm;
 
 	// Custom collision check function
-	std::function<bool(const GameObject* go)> coinCollisionCheck;
-	std::function<bool(const GameObject* go)> spikesCollisionCheck;
+	std::function<bool(GameObject* go)> pickupCollisionCheck;
+	std::function<bool(GameObject* go)> spikesCollisionCheck;
 
 	// Update transform matrix
 	void updateTransformMatrix();

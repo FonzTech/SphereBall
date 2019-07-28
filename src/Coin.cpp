@@ -1,79 +1,50 @@
 #include "Coin.h"
 #include "SharedData.h"
+#include "SoundManager.h"
 
 std::shared_ptr<Coin> Coin::createInstance(const json &jsonData)
 {
 	return std::make_shared<Coin>();
 }
 
-Coin::Coin() : GameObject()
+Coin::Coin() : Pickup()
 {
-	// Initialize variables
-	angle = 0;
-	notPicked = true;
-
 	// Load mesh and texture
 	IAnimatedMesh* mesh = smgr->getMesh("models/coin.obj");
 	ITexture* texture = driver->getTexture("textures/coin.png");
 
-	// Create sparkle shader
-	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
-
-	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
-	customShader = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/coin.fs", ssc);
-
-	ssc->drop();
-
-	// Create model for player
+	// Load model
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
-	model->material = customShader;
+	model->scale = vector3df(1, 1, 1);
 	models.push_back(model);
-
-	// Load mesh and texture
-	mesh = smgr->getMesh("models/plane.obj");
-	texture = driver->getTexture("textures/coin_glare.png");
-
-	// Load plane model
-	planeModel = std::make_shared<Model>(mesh);
-	planeModel->addTexture(0, texture);
-	planeModel->material = EMT_TRANSPARENT_ALPHA_CHANNEL;
-	planeModel->scale = vector3df(2, 2, 0);
 }
 
 void Coin::update()
 {
-	// Update angle
-	if (notPicked)
-	{
-		angle += 0.25f * deltaTime;
-	}
+	Pickup::update();
 }
 
 void Coin::draw()
 {
-	std::shared_ptr<Model> &model = models.at(0);
-	model->position = position;
-	model->rotation = vector3df(0, angle, 0);
+	Pickup::draw();
 
-	if (!notPicked)
+	// Draw model with behaviour
+	if (notPicked)
 	{
-		f32 s = (angle > 0.5f ? -0.05f : 0.05f) * deltaTime;
-		model->scale += vector3df(s, s, 0);
-
-		if (model->scale.X >= 16)
-		{
-			angle = 1;
-		}
-		else if (model->scale.X <= 0)
-		{
-			destroy = true;
-		}
+		std::shared_ptr<Model> &model = models.at(0);
+		model->position = position;
+		model->rotation = vector3df(0, angle, 0);
 	}
 }
 
-void Coin::pick()
+bool Coin::pick()
 {
+	if (Pickup::pick())
+	{
+		return true;
+	}
+
 	// Increment score
 	SharedData::singleton->updateGameScoreValue(KEY_SCORE_POINTS, 50);
 
@@ -83,31 +54,8 @@ void Coin::pick()
 	// Increment items picked counter
 	SharedData::singleton->updateGameScoreValue(KEY_SCORE_ITEMS_PICKED, 1);
 
-	// Mark item as unpickable
-	notPicked = false;
-	angle = 0;
+	// Set sound to play
+	soundIndex = KEY_SOUND_COIN;
 
-	// Replace model with plane
-	models.erase(models.begin());
-	models.push_back(planeModel);
-}
-
-Coin::SpecializedShaderCallback::SpecializedShaderCallback(Coin* coin)
-{
-	this->coin = coin;
-}
-
-void Coin::SpecializedShaderCallback::OnSetConstants(IMaterialRendererServices* services, s32 userData)
-{
-	// Execute parent method
-	ShaderCallback::OnSetConstants(services, userData);
-
-	// Set shader values
-	if (coin->notPicked)
-	{
-		f32 shaderValues[1] = { coin->angle };
-		s32 layer0 = 0;
-		services->setPixelShaderConstant("tex", (s32*) &layer0, 1);
-		services->setPixelShaderConstant("angle", shaderValues, 1);
-	}
+	return false;
 }

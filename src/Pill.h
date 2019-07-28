@@ -1,10 +1,9 @@
 #ifndef PILL_H
 #define PILL_H
 
-#include "GameObject.h"
-#include "ShaderCallback.h"
+#include "Pickup.h"
 
-class Pill : public GameObject
+class Pill : public Pickup
 {
 protected:
 
@@ -27,20 +26,19 @@ public:
 	void update();
 	void draw();
 
-	// Specialized methods
-	void pick();
+	bool pick();
 
 	// Create specialized instance
 	static std::shared_ptr<Pill> createInstance(const json &jsonData);
 
 	// ShaderCallBack
-	class SpecializedShaderCallback : public ShaderCallback
+	class PillShaderCallback : public ShaderCallback
 	{
 	protected:
 		Pill* pill;
 
 	public:
-		SpecializedShaderCallback(Pill* pill);
+		PillShaderCallback(Pill* pill);
 		virtual void OnSetConstants(IMaterialRendererServices* services, s32 userData);
 	};
 };

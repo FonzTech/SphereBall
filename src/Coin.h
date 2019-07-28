@@ -1,26 +1,11 @@
 #ifndef COIN_H
 #define COIN_H
 
-#include "GameObject.h"
-#include "EventManager.h"
-#include "ShaderCallback.h"
-#include <SFML/Audio.hpp>
+#include "Pickup.h"
 
-class Coin : public GameObject
+class Coin : public Pickup
 {
-protected:
-	f32 angle;
-
-	// Plane model
-	std::shared_ptr<Model> planeModel;
-
-	// Sparkle shader
-	s32 customShader;
-
 public:
-
-	// Specialized variables
-	bool notPicked;
 
 	// Constructor
 	Coin();
@@ -29,22 +14,10 @@ public:
 	void update();
 	void draw();
 
-	// Specialized methods
-	void pick();
+	bool pick();
 
 	// Create specialized instance
 	static std::shared_ptr<Coin> createInstance(const json &jsonData);
-
-	// ShaderCallBack
-	class SpecializedShaderCallback : public ShaderCallback
-	{
-	protected:
-		Coin* coin;
-
-	public:
-		SpecializedShaderCallback(Coin* coin);
-		virtual void OnSetConstants(IMaterialRendererServices* services, s32 userData);
-	};
 };
 
 #endif // COIN_H

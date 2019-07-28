@@ -1,13 +1,13 @@
 #ifndef FRUIT_H
 #define FRUIT_H
 
-#include "GameObject.h"
+#include "Pickup.h"
 
-class Fruit : public GameObject
+class Fruit : public Pickup
 {
 protected:
 
-	f32 angle, floatEffect;
+	f32 floatEffect;
 
 public:
 	// Constructor
@@ -17,10 +17,7 @@ public:
 	void update();
 	void draw();
 
-	/*
-		Use this method to trigger item picking.
-	*/
-	void pick();
+	bool pick();
 
 	// Create specialized instance
 	static std::shared_ptr<Fruit> createInstance(const json &jsonData);

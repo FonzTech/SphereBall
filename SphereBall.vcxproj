@@ -185,6 +185,7 @@
     <ClCompile Include="src\Fruit.cpp" />
     <ClCompile Include="src\GUIImageSceneNode.cpp" />
     <ClCompile Include="src\Hourglass.cpp" />
+    <ClCompile Include="src\Pickup.cpp" />
     <ClCompile Include="src\ScreenQuadSceneNode.cpp" />
     <ClCompile Include="src\ShaderCallback.cpp" />
     <ClCompile Include="src/SharedData.cpp" />
@@ -213,6 +214,7 @@
     <ClInclude Include="src\Fruit.h" />
     <ClInclude Include="src\GUIImageSceneNode.h" />
     <ClInclude Include="src\Hourglass.h" />
+    <ClInclude Include="src\Pickup.h" />
     <ClInclude Include="src\ScreenQuadSceneNode.h" />
     <ClInclude Include="src\ShaderCallback.h" />
     <ClInclude Include="src/SharedData.h" />

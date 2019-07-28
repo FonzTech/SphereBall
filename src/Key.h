@@ -1,15 +1,12 @@
 #ifndef KEY_H
 #define KEY_H
 
-#include "GameObject.h"
+#include "Pickup.h"
 
-class Key : public GameObject
+class Key : public Pickup
 {
-protected:
-
-	f32 angle;
-
 public:
+
 	// Constructor
 	Key();
 
@@ -17,10 +14,6 @@ public:
 	void update();
 	void draw();
 
-	/*
-		Use this method to trigger item picking.
-		It returns wheter the all the keys have been picked.
-	*/
 	bool pick();
 
 	// Create specialized instance

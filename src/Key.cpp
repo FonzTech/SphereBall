@@ -1,43 +1,54 @@
 #include "Key.h"
 #include "SharedData.h"
+#include "SoundManager.h"
 
 std::shared_ptr<Key> Key::createInstance(const json &jsonData)
 {
 	return std::make_shared<Key>();
 }
 
-Key::Key() : GameObject()
+Key::Key() : Pickup()
 {
-	// Load mesh
+	// Load mesh and texture
 	IAnimatedMesh* mesh = smgr->getMesh("models/key.obj");
-
-	// Load texture
 	ITexture* texture = driver->getTexture("textures/key.png");
 
-	// Create model for player
+	// Load model
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
+	model->scale = vector3df(1, 1, 1);
 	models.push_back(model);
 
-	// Initialize variables
-	angle = 0;
+	// Load sounds
+	sounds[KEY_SOUND_KEY] = SoundManager::singleton->getSound(KEY_SOUND_KEY);
+	sounds[KEY_SOUND_KEY_FINAL] = SoundManager::singleton->getSound(KEY_SOUND_KEY_FINAL);
 }
 
 void Key::update()
 {
-	angle += 0.25f * deltaTime;
+	Pickup::update();
 }
 
 void Key::draw()
 {
-	// Update model
-	std::shared_ptr<Model> model = models.at(0);
-	model->position = position;
-	model->rotation = vector3df(0, angle, 0);
+	Pickup::draw();
+
+	// Draw model with behaviour
+	if (notPicked)
+	{
+		std::shared_ptr<Model> &model = models.at(0);
+		model->position = position;
+		model->rotation = vector3df(0, angle, 0);
+	}
 }
 
 bool Key::pick()
 {
+	if (Pickup::pick())
+	{
+		return true;
+	}
+
 	// Increment score
 	SharedData::singleton->updateGameScoreValue(KEY_SCORE_POINTS, 100);
 
@@ -47,14 +58,8 @@ bool Key::pick()
 	// Increment items picked counter
 	SharedData::singleton->updateGameScoreValue(KEY_SCORE_ITEMS_PICKED, 1);
 
-	// Mark item to be destroyed
-	destroy = true;
-
-	// Check if all of the keys have been picked
-	if (SharedData::singleton->getGameScoreValue(KEY_SCORE_KEY_PICKED) >= SharedData::singleton->getGameScoreValue(KEY_SCORE_KEY_TOTAL))
-	{
-		return true;
-	}
+	// Set sound to play
+	soundIndex = SharedData::singleton->getGameScoreValue(KEY_SCORE_KEY_PICKED) >= SharedData::singleton->getGameScoreValue(KEY_SCORE_KEY_TOTAL) ? KEY_SOUND_KEY_FINAL : KEY_SOUND_KEY;
 
 	return false;
 }

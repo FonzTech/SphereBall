@@ -1,18 +1,10 @@
 #ifndef HOURGLASS_H
 #define HOURGLASS_H
 
-#include "GameObject.h"
-#include "EventManager.h"
-#include "ShaderCallback.h"
-#include <SFML/Audio.hpp>
+#include "Pickup.h"
 
-class Hourglass : public GameObject
+class Hourglass : public Pickup
 {
-protected:
-
-	// Plane model
-	std::shared_ptr<Model> planeModel;
-
 public:
 
 	// Constructor
@@ -22,8 +14,7 @@ public:
 	void update();
 	void draw();
 
-	// Specialized methods
-	void pick();
+	bool pick();
 
 	// Create specialized instance
 	static std::shared_ptr<Hourglass> createInstance(const json &jsonData);

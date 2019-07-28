@@ -10,6 +10,7 @@
 #define KEY_SCORE_ITEMS_MAX		6
 #define KEY_SCORE_POINTS		7
 #define KEY_SCORE_POINTS_TOTAL	8
+#define KEY_SCORE_FRUITS		9
 
 #define KEY_GUI_COIN					0
 #define KEY_GUI_KEY						1

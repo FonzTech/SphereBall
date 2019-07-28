@@ -102,6 +102,9 @@
     <ClCompile Include="src\Hourglass.cpp">
       <Filter>Sources\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Fruit.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src/Engine.h">
@@ -177,6 +180,9 @@
       <Filter>Headers\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Hourglass.h">
+      <Filter>Headers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fruit.h">
       <Filter>Headers\Game</Filter>
     </ClInclude>
   </ItemGroup>

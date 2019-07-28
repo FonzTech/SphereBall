@@ -284,5 +284,15 @@
 		"optional": {
 			"type": 0
 		}
+	},
+	{
+		"name": "Fruit",
+		"required": {
+			"position": {
+				"x": 20.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
 	}
 ]

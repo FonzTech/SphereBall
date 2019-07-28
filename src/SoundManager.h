@@ -17,6 +17,7 @@
 #define KEY_SOUND_TIME_OUT		"time_out"
 #define KEY_SOUND_HOURGLASS		"hourglass"
 #define KEY_SOUND_EXITED		"exited"
+#define KEY_SOUND_FRUIT			"fruit"
 
 #define KEY_SETTING_MUSIC	1
 #define KEY_SETTING_SOUND	2

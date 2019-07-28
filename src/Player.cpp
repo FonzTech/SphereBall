@@ -64,6 +64,7 @@ Player::Player() : GameObject()
 	sounds[KEY_SOUND_LEVEL_START] = SoundManager::singleton->getSound(KEY_SOUND_LEVEL_START);
 	sounds[KEY_SOUND_HOURGLASS] = SoundManager::singleton->getSound(KEY_SOUND_HOURGLASS);
 	sounds[KEY_SOUND_EXITED] = SoundManager::singleton->getSound(KEY_SOUND_EXITED);
+	sounds[KEY_SOUND_FRUIT] = SoundManager::singleton->getSound(KEY_SOUND_FRUIT);
 
 	// Create specialized functions
 	coinCollisionCheck = [](const GameObject* go)

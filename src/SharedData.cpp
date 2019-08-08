@@ -186,6 +186,11 @@ void SharedData::loadAssets()
 	guiTextures[KEY_GUI_HOURGLASS_SAND_TOP] = driver->getTexture("textures/gui_hourglass_sand_top.png");
 	guiTextures[KEY_GUI_HOURGLASS_SAND_BOTTOM] = driver->getTexture("textures/gui_hourglass_sand_bottom.png");
 	guiTextures[KEY_GUI_HOURGLASS_GLOW] = driver->getTexture("textures/gui_hourglass_glow.png");
+	guiTextures[KEY_GUI_APPLE] = driver->getTexture("textures/gui_apple.png");
+	guiTextures[KEY_GUI_BANANA] = driver->getTexture("textures/gui_banana.png");
+	guiTextures[KEY_GUI_STRAWBERRY] = driver->getTexture("textures/gui_strawberry.png");
+	guiTextures[KEY_GUI_WATERMELON] = driver->getTexture("textures/gui_watermelon.png");
+	guiTextures[KEY_GUI_PINEAPPLE] = driver->getTexture("textures/gui_pineapple.png");
 }
 
 void SharedData::buildGameScore()
@@ -412,6 +417,23 @@ void SharedData::buildGameScore()
 		text->setOverrideColor(color);
 		text->setTextAlignment(EGUIA_UPPERLEFT, EGUIA_CENTER);
 	}
+
+	// Draw fruits
+	{
+		u8 fruitKeys[] = {
+			KEY_GUI_APPLE, KEY_GUI_BANANA, KEY_GUI_STRAWBERRY, KEY_GUI_WATERMELON, KEY_GUI_PINEAPPLE
+		};
+		s32 alpha = (s32)(255.0f - gameOverAlpha * 255.0f);
+
+		for (int i = 0; i < 5; ++i)
+		{
+			s32 x = 640 - i * 128;
+			s32 color = getGameScoreValue(KEY_SCORE_FRUITS) > i ? 255 : 0;
+
+			IGUIImage* image = guienv->addImage(guiTextures[fruitKeys[i]], vector2di(windowSize.X - x, 8));
+			image->setColor(SColor(alpha, color, color, color));
+		}
+	}
 }
 
 void SharedData::buildGameOver()
@@ -607,9 +629,13 @@ void SharedData::clearGameScore()
 {
 	// Clear game score map
 	{
-		ScoreValue sv = gameScores[KEY_SCORE_POINTS_TOTAL];
+		ScoreValue sv1 = &gameScores[KEY_SCORE_POINTS_TOTAL];
+		ScoreValue sv2 = &gameScores[KEY_SCORE_FRUITS];
+
 		gameScores.clear();
-		gameScores[KEY_SCORE_POINTS_TOTAL] = sv;
+
+		gameScores[KEY_SCORE_POINTS_TOTAL] = sv1;
+		gameScores[KEY_SCORE_FRUITS] = sv2;
 	}
 
 	// Remove alarm for time counter

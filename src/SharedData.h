@@ -47,6 +47,9 @@ class SharedData : public EngineObject
 {
 protected:
 
+	// Keys to avoid when clearing game score
+	static const std::vector<s32> GAMESCORE_AVOID_KEYS;
+
 	// Structure for GUI score value
 	struct ScoreValue {
 		s8 visible;

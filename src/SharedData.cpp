@@ -1,4 +1,5 @@
 #include <string>
+#include <iterator>
 
 #include "SharedData.h"
 #include "Utility.h"
@@ -8,6 +9,10 @@
 #include "GUIImageSceneNode.h"
 
 const std::string SharedData::ROOM_OBJECT_KEY = "SharedData";
+
+const std::vector<s32> SharedData::GAMESCORE_AVOID_KEYS = {
+	KEY_SCORE_POINTS_TOTAL, KEY_SCORE_FRUITS
+};
 
 std::shared_ptr<SharedData> SharedData::singleton = nullptr;
 
@@ -327,7 +332,7 @@ void SharedData::buildGameScore()
 
 					const u32 alpha = (u32)(hourglassAlpha * 255.0f);
 					const SColor color(alpha, 255, 255, 255);
-					const SColor colors[] = { color , color , color, color  };
+					const SColor colors[] = { color, color, color, color };
 
 					driver->draw2DImage(guiTextures[KEY_GUI_HOURGLASS_GLOW], destRect, sourceRect, 0, colors, true);
 				}
@@ -628,14 +633,16 @@ void SharedData::initGameScoreValue(s32 key, s32 value)
 void SharedData::clearGameScore()
 {
 	// Clear game score map
+	for (auto it = gameScores.cbegin(); it != gameScores.cend();)
 	{
-		ScoreValue sv1 = &gameScores[KEY_SCORE_POINTS_TOTAL];
-		ScoreValue sv2 = &gameScores[KEY_SCORE_FRUITS];
-
-		gameScores.clear();
-
-		gameScores[KEY_SCORE_POINTS_TOTAL] = sv1;
-		gameScores[KEY_SCORE_FRUITS] = sv2;
+		if (std::find(GAMESCORE_AVOID_KEYS.cbegin(), GAMESCORE_AVOID_KEYS.cend(), it->first) == GAMESCORE_AVOID_KEYS.cend())
+		{
+			it = gameScores.erase(it);
+		}
+		else
+		{
+			++it;
+		}
 	}
 
 	// Remove alarm for time counter

@@ -1,3 +1,5 @@
+#include <string>
+
 #include "Fruit.h"
 #include "SharedData.h"
 #include "SoundManager.h"
@@ -9,11 +11,21 @@ std::shared_ptr<Fruit> Fruit::createInstance(const json &jsonData)
 
 Fruit::Fruit() : Pickup()
 {
-	// Load mesh
-	IAnimatedMesh* mesh = smgr->getMesh("models/apple.obj");
+	// Load mesh and model
+	IAnimatedMesh* mesh;
+	ITexture* texture;
 
-	// Load texture
-	ITexture* texture = driver->getTexture("textures/apple.png");
+	{
+		std::string fruitToLoad = "apple";
+
+		if (SharedData::singleton->getGameScoreValue(KEY_SCORE_FRUITS) == 1)
+		{
+			fruitToLoad = "banana";
+		}
+
+		mesh = smgr->getMesh(std::string("models/" + fruitToLoad + ".obj").c_str());
+		texture = driver->getTexture(std::string("textures/" + fruitToLoad + ".png").c_str());
+	}
 
 	// Create model for player
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);

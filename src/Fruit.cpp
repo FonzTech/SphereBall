@@ -16,11 +16,28 @@ Fruit::Fruit() : Pickup()
 	ITexture* texture;
 
 	{
-		std::string fruitToLoad = "apple";
+		std::string fruitToLoad;
 
-		if (SharedData::singleton->getGameScoreValue(KEY_SCORE_FRUITS) == 1)
+		switch (SharedData::singleton->getGameScoreValue(KEY_SCORE_FRUITS))
 		{
+		case 1:
 			fruitToLoad = "banana";
+			break;
+
+		case 2:
+			fruitToLoad = "strawberry";
+			break;
+
+		case 3:
+			fruitToLoad = "watermelon";
+			break;
+
+		case 4:
+			fruitToLoad = "pineapple";
+			break;
+
+		default:
+			fruitToLoad = "apple";
 		}
 
 		mesh = smgr->getMesh(std::string("models/" + fruitToLoad + ".obj").c_str());

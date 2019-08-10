@@ -12,19 +12,26 @@ std::shared_ptr<Spikes> Spikes::createInstance(const json &jsonData)
 		json optional = jsonData.at("optional");
 		optional.at("mode").get_to(initialMode);
 
-		try
+		if (initialMode == -1)
 		{
-			optional.at("delay").get_to(delay);
+			delay = -1;
 		}
-		catch (json::exception ex)
+		else
 		{
-			if (initialMode)
+			try
 			{
-				delay = 2250;
+				optional.at("delay").get_to(delay);
 			}
-			else
+			catch (json::exception ex)
 			{
-				delay = 1500;
+				if (initialMode)
+				{
+					delay = 2250;
+				}
+				else
+				{
+					delay = 1500;
+				}
 			}
 		}
 	}
@@ -45,50 +52,73 @@ Spikes::Spikes() : Spikes(1, 2500)
 
 Spikes::Spikes(s8 initialMode, f32 delay) : GameObject()
 {
-	// Load mesh
-	IAnimatedMesh* meshA = smgr->getMesh("models/spikes_base.obj");
-	IAnimatedMesh* meshB = smgr->getMesh("models/spikes_tip.obj");
-
-	// Load texture
-	ITexture* texture = driver->getTexture("textures/spikes.png");
-
-	// Create model for base
-	std::shared_ptr<Model> model = std::make_shared<Model>(meshA);
-	model->addTexture(0, texture);
-	models.push_back(model);
-
-	// Create model for tip
-	model = std::make_shared<Model>(meshB);
-	model->addTexture(0, texture);
-	model->scale = vector3df(1, 1, 1);
-	models.push_back(model);
-
-	// Load sounds
-	sounds[KEY_SOUND_SPIKE_IN] = SoundManager::singleton->getSound(KEY_SOUND_SPIKE_IN);
-	sounds[KEY_SOUND_SPIKE_IN]->setMinDistance(50.0f);
-	sounds[KEY_SOUND_SPIKE_IN]->setAttenuation(25.0f);
-
-	sounds[KEY_SOUND_SPIKE_OUT] = SoundManager::singleton->getSound(KEY_SOUND_SPIKE_OUT);
-	sounds[KEY_SOUND_SPIKE_OUT]->setMinDistance(50.0f);
-	sounds[KEY_SOUND_SPIKE_OUT]->setAttenuation(25.0f);
-
-	// Initialize alarms
-	timer = std::make_unique<Alarm>(delay);
-
-	// Initialize variables
-	mode = initialMode;
-	if (mode)
+	// Check for mode
+	if (delay < 0)
 	{
-		tipY = 1;
+		// Load mesh
+		IAnimatedMesh* mesh = smgr->getMesh("models/spikes_b.obj");
+
+		// Load texture
+		ITexture* texture = driver->getTexture("textures/spikes_b.png");
+
+		// Create model for base
+		std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
+		model->addTexture(0, texture);
+		models.push_back(model);
 	}
 	else
 	{
-		tipY = 0;
+		// Load mesh
+		IAnimatedMesh* meshA = smgr->getMesh("models/spikes_base.obj");
+		IAnimatedMesh* meshB = smgr->getMesh("models/spikes_tip.obj");
+
+		// Load texture
+		ITexture* texture = driver->getTexture("textures/spikes.png");
+
+		// Create model for base
+		std::shared_ptr<Model> model = std::make_shared<Model>(meshA);
+		model->addTexture(0, texture);
+		models.push_back(model);
+
+		// Create model for tip
+		model = std::make_shared<Model>(meshB);
+		model->addTexture(0, texture);
+		model->scale = vector3df(1, 1, 1);
+		models.push_back(model);
+
+		// Load sounds
+		sounds[KEY_SOUND_SPIKE_IN] = SoundManager::singleton->getSound(KEY_SOUND_SPIKE_IN);
+		sounds[KEY_SOUND_SPIKE_IN]->setMinDistance(50.0f);
+		sounds[KEY_SOUND_SPIKE_IN]->setAttenuation(25.0f);
+
+		sounds[KEY_SOUND_SPIKE_OUT] = SoundManager::singleton->getSound(KEY_SOUND_SPIKE_OUT);
+		sounds[KEY_SOUND_SPIKE_OUT]->setMinDistance(50.0f);
+		sounds[KEY_SOUND_SPIKE_OUT]->setAttenuation(25.0f);
+
+		// Initialize alarms
+		timer = std::make_unique<Alarm>(delay);
+
+		// Initialize variables
+		mode = initialMode;
+		if (mode)
+		{
+			tipY = 1;
+		}
+		else
+		{
+			tipY = 0;
+		}
 	}
 }
 
 void Spikes::update()
 {
+	// Check for timer management
+	if (timer == nullptr)
+	{
+		return;
+	}
+
 	// Control mode switching
 	timer->stepDecrement(deltaTime);
 	if (timer->isTriggered())
@@ -138,12 +168,16 @@ void Spikes::draw()
 	// Update model
 	std::shared_ptr<Model> model = models.at(0);
 	model->position = position;
+	model->scale = vector3df(1);
 
-	model = models.at(1);
-	model->position = position + vector3df(0, 3 - TIP_HEIGHT * tipY, 0);
+	if (models.size() > 1)
+	{
+		model = models.at(1);
+		model->position = position + vector3df(0, 3 - TIP_HEIGHT * tipY, 0);
+	}
 }
 
 s8 Spikes::isHarmful()
 {
-	return tipY < 0.5f;
+	return mode < 0 || tipY < 0.5f;
 }

@@ -5,10 +5,15 @@
 
 class Coin : public Pickup
 {
+protected:
+
+	// Coin type - 0 = Yellow, 1 = Blue
+	u8 type;
+
 public:
 
 	// Constructor
-	Coin();
+	Coin(const u8 type);
 
 	// Mandatory methods
 	void update();

@@ -4,14 +4,29 @@
 
 std::shared_ptr<Coin> Coin::createInstance(const json &jsonData)
 {
-	return std::make_shared<Coin>();
+	u8 type = 0;
+	try
+	{
+		json optional = jsonData.at("optional");
+		optional.at("type").get_to(type);
+	}
+	catch (json::exception e)
+	{
+	}
+	return std::make_shared<Coin>(type);
 }
 
-Coin::Coin() : Pickup()
+Coin::Coin(const u8 type) : Pickup()
 {
+	// Assign type
+	this->type = type;
+
+	// Get correct texture
+	std::string textureFile = std::string("textures/") + (type == 1 ? "coin_blue" : "coin") + ".png";
+
 	// Load mesh and texture
 	IAnimatedMesh* mesh = smgr->getMesh("models/coin.obj");
-	ITexture* texture = driver->getTexture("textures/coin.png");
+	ITexture* texture = driver->getTexture(textureFile.c_str());
 
 	// Load model
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
@@ -46,7 +61,7 @@ bool Coin::pick()
 	}
 
 	// Increment score
-	SharedData::singleton->updateGameScoreValue(KEY_SCORE_POINTS, 50);
+	SharedData::singleton->updateGameScoreValue(KEY_SCORE_POINTS, type == 1 ? 100 : 50);
 
 	// Increment coin counter by one
 	SharedData::singleton->updateGameScoreValue(KEY_SCORE_COIN, 1);

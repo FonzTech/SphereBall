@@ -8,6 +8,8 @@ Model::Model(IAnimatedMesh* mesh)
 	// Initialize members
 	textures = std::unordered_map<u32, ITexture*>();
 	material = -1;
+
+	currentFrame = 0.0f;
 }
 
 Model::Model(Model* model)
@@ -18,6 +20,8 @@ Model::Model(Model* model)
 	// Initialize members
 	textures = std::unordered_map<u32, ITexture*>(model->textures);
 	material = model->material;
+
+	currentFrame = 0.0f;
 }
 
 void Model::addTexture(u32 layer, ITexture* texture)

@@ -19,6 +19,7 @@ public:
 	vector3df rotation;
 	vector3df scale;
 	s32 material;
+	f32 currentFrame;
 
 	// Constructor
 	Model(Model* model);

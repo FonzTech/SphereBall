@@ -157,11 +157,14 @@ void Engine::loop()
 			for (std::shared_ptr<Model> &model : gameObject->models)
 			{
 				// Create scene node from this mesh
-				IMeshSceneNode* node = smgr->addMeshSceneNode(model->mesh, nullptr, -1, model->position, model->rotation, model->scale);
+				IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode(model->mesh, nullptr, -1, model->position, model->rotation, model->scale);
 
 				// Add all texture layer for this mesh (obtained from model)
 				if (node != nullptr)
 				{
+					// Set current frame position
+					node->setCurrentFrame(model->currentFrame);
+
 					// Apply texture to all layers
 					for (auto &entry : model->textures)
 					{

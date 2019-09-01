@@ -56,7 +56,8 @@ namespace utility
 					unzipper.close();
 
 					// Return extracted mesh
-					return smgr->getMesh((dir + fpath.filename().string()).c_str());
+					const std::string file = dir + fpath.filename().string();
+					return smgr->getMesh(file.c_str());
 				}
 			}
 

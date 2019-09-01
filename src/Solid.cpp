@@ -1,7 +1,7 @@
 #include "Solid.h"
 #include "EventManager.h"
-#include "SoundManager.h""
-#include "RoomManager.h""
+#include "SoundManager.h"
+#include "RoomManager.h"
 #include "Player.h"
 
 const f32 Solid::BREAKING_THRESHOLD = 8.0f;
@@ -106,6 +106,11 @@ void Solid::update()
 					{
 						playAudio(KEY_SOUND_BREAKING, &position);
 					}
+				}
+				else
+				{
+					// Stop "breaking" sound
+					sounds[KEY_SOUND_BREAKING]->stop();
 				}
 			}
 

@@ -68,12 +68,17 @@ Player::Player() : GameObject()
 	sounds[KEY_SOUND_FRUIT] = SoundManager::singleton->getSound(KEY_SOUND_FRUIT);
 
 	// Create specialized functions
-	pickupCollisionCheck = [](GameObject* go)
+	collisionChecks["solid"] = [](GameObject* go)
+	{
+		return ((Solid*)go)->isSolid();
+	};
+
+	collisionChecks["pickup"] = [](GameObject* go)
 	{
 		return ((Pickup*)go)->notPicked;
 	};
 
-	spikesCollisionCheck = [](GameObject* go)
+	collisionChecks["spikes"] = [](GameObject* go)
 	{
 		Spikes* spikes = (Spikes*)go;
 		return spikes->isHarmful();
@@ -293,10 +298,10 @@ void Player::walk()
 
 		// Get shifted BB
 		aabbox3df rect(bbox);
-		utility::getVerticalAABBox(bbox, rect, (1.0f + (0.25f * abs(speed.Y))) * j, 0.9f - abs(speed.X * 2));
+		utility::getVerticalAABBox(bbox, rect, (1.0f + (0.25f * abs(speed.Y))) * j, 0.35f - abs(speed.X * 2));
 
 		// Check for collision
-		Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect);
+		Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect, collisionChecks["solid"]);
 		if (collision.engineObject != nullptr)
 		{
 			// Cast to game object
@@ -348,10 +353,10 @@ void Player::walk()
 
 		// Get shifted BB
 		aabbox3df rect(bbox);
-		utility::getHorizontalAABBox(bbox, rect, (1.0f + (0.25f * abs(speed.X))) * j, 0.9f);
+		utility::getHorizontalAABBox(bbox, rect, (0.75f + (0.25f * abs(speed.X))) * j, 0.9f);
 
 		// Check for collision
-		Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect);
+		Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect, collisionChecks["solid"]);
 		if (collision.engineObject != nullptr)
 		{
 			// Cast to game object
@@ -365,7 +370,7 @@ void Player::walk()
 
 			// Reposition object correctly
 			position.X = go->position.X;
-			position.X += i ? -bbox.getExtent().X : collision.otherBoundingBox.getExtent().X;
+			position.X += (i ? -bbox.getExtent().X : collision.otherBoundingBox.getExtent().X) * 0.9f;
 			speed.X = 0;
 		}
 	}
@@ -374,7 +379,7 @@ void Player::walk()
 	if (state == STATE_WALKING)
 	{
 		aabbox3df rect(bbox);
-		Collision collision = checkBoundingBoxCollision<Pickup>(RoomManager::singleton->gameObjects, rect, pickupCollisionCheck);
+		Collision collision = checkBoundingBoxCollision<Pickup>(RoomManager::singleton->gameObjects, rect, collisionChecks["pickup"]);
 		if (collision.engineObject != nullptr)
 		{
 			// Trigger pick
@@ -392,7 +397,7 @@ void Player::walk()
 		aabbox3df rect(bbox);
 		utility::transformAABBox(rect, vector3df(0), vector3df(0), vector3df(0.75f, 0.85f, 1.0f));
 
-		Collision collision = checkBoundingBoxCollision<Spikes>(RoomManager::singleton->gameObjects, rect, spikesCollisionCheck);
+		Collision collision = checkBoundingBoxCollision<Spikes>(RoomManager::singleton->gameObjects, rect, collisionChecks["spikes"]);
 		if (collision.engineObject != nullptr)
 		{
 			playAudio(KEY_SOUND_NAILED);

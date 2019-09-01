@@ -40,6 +40,12 @@ protected:
 				continue;
 			}
 
+			// Check if object has any model attached
+			else if (gameObject->models.size() == 0)
+			{
+				continue;
+			}
+
 			// Get bounding box of mesh
 			aabbox3df otherBox(gameObject->models.at(0)->mesh->getBoundingBox());
 			utility::transformAABBox(otherBox, gameObject->position);

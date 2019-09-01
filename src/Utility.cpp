@@ -63,6 +63,22 @@ namespace utility
 		return smgr->getMesh(path.c_str());
 	}
 
+	const std::wstring getTempDirectory()
+	{
+		#ifdef __linux__
+		return L"/tmp/";
+
+		#elif _WIN32
+		WCHAR path[MAX_PATH];
+		GetTempPath(MAX_PATH, (LPTSTR)&path);
+
+		return std::wstring(path);
+
+		#endif
+
+		return L"./";
+	}
+
 	const void transformAABBox(aabbox3d<f32> &dest, const vector3df &translation, const vector3df &rotation, const vector3df &scale)
 	{
 		matrix4 trans;

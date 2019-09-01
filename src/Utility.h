@@ -53,6 +53,15 @@ namespace utility
 	IAnimatedMesh* getMesh(ISceneManager* smgr, const std::string& path);
 
 	/**
+		Get the system temporary directory. This is useful when working with temporary files which you don't need
+		between different launches of the application. The implementation of this method is platform specific.
+		If implementation for your system is not available, the current directory ("./") is returned.
+
+		@return the string representing the temporary directory if available, otherwise "./" is returned.
+	*/
+	const std::wstring getTempDirectory();
+
+	/**
 		Transform axis-aligned bounding box by point. This function does not return anything.
 
 		@param dest the destination bounding box, passed by reference

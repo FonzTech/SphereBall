@@ -45,13 +45,18 @@ namespace utility
 				if (entryName == name)
 				{
 					// Unzip file
-					unzipper.extractEntry(entry.name, "./");
+					std::string dir = "./";
+					{
+						const std::wstring tmpDir = getTempDirectory();
+						dir = std::string(tmpDir.cbegin(), tmpDir.cend());
+					}
+					unzipper.extractEntry(entry.name, dir);
 
 					// Close zip
 					unzipper.close();
 
 					// Return extracted mesh
-					return smgr->getMesh(fpath.filename().c_str());
+					return smgr->getMesh((dir + fpath.filename().string()).c_str());
 				}
 			}
 

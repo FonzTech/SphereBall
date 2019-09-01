@@ -5,9 +5,14 @@
 
 class Solid : public GameObject
 {
+protected:
+	static const f32 BREAKING_THRESHOLD;
+
+	f32 breakState;
+
 public:
 	// Constructor
-	Solid();
+	Solid(const f32 breakState);
 
 	// Mandatory methods
 	void update();
@@ -15,6 +20,9 @@ public:
 
 	// Create specialized instance
 	static std::shared_ptr<Solid> createInstance(const json &jsonData);
+	
+	// Behaviour
+	bool isSolid();
 };
 
 #endif // SOLID_H

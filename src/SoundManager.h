@@ -18,6 +18,8 @@
 #define KEY_SOUND_HOURGLASS		"hourglass"
 #define KEY_SOUND_EXITED		"exited"
 #define KEY_SOUND_FRUIT			"fruit"
+#define KEY_SOUND_BREAKING		"breaking"
+#define KEY_SOUND_BREAK			"break"
 
 #define KEY_SETTING_MUSIC	1
 #define KEY_SETTING_SOUND	2

@@ -12,3 +12,4 @@ Irrlicht.dll
 openal32.dll
 sfml-audio-d-2.dll
 sfml-system-d-2.dll
+zlib.dll

@@ -20,6 +20,26 @@ using nlohmann::json;
 namespace utility
 {
 	/**
+		Check whether a string begins with a certain prefix (a token, to say) or not.
+
+		@param s the string where to check the prefix on.
+		@param prefix the prefix to be checked.
+
+		@return "true" if "s" starts with "prefix", otherwise "false".
+	*/
+	bool startsWith(const std::string& s, const std::string& prefix);
+
+	/**
+		Check whether a string ends with a certain suffix (a token, to say) or not.
+
+		@param s the string where to check the suffix on.
+		@param suffix the suffix to be checked.
+
+		@return "true" if "s" ends with "suffix", otherwise "false".
+	*/
+	bool endsWith(const std::string& s, const std::string& suffix);
+
+	/**
 		Transform axis-aligned bounding box by point. This function does not return anything.
 
 		@param dest the destination bounding box, passed by reference
@@ -146,16 +166,6 @@ namespace utility
 		 @param angles the rotation to be performed for desired axes.
 	*/
 	void rotateVectorAroundPivot(const vector3df & input, vector3df & out, const vector3df & pivot, const vector3df & angles);
-
-	/**
-		Check whether a string begins with a certain prefix (a token, to say) or not.
-
-		@param s the string where to check the prefix on.
-		@param prefix the prefix to be checked.
-
-		@return "true" if "s" starts with "prefix", otherwise "false".
-	*/
-	bool startsWith(const std::string& s, const std::string& prefix);
 
 	/**
 		Animate a floating point value to a target one. This function uses a fixed non-linear interpolation, more

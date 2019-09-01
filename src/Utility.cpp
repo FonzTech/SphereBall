@@ -12,6 +12,16 @@
 
 namespace utility
 {
+	bool startsWith(const std::string& s, const std::string& prefix)
+	{
+		return s.size() >= prefix.size() && s.compare(0, prefix.size(), prefix) == 0;
+	}
+
+	bool endsWith(const std::string& s, const std::string& suffix)
+	{
+		return s.rfind(suffix) == (s.size() - suffix.size());
+	}
+
 	const void transformAABBox(aabbox3d<f32> &dest, const vector3df &translation, const vector3df &rotation, const vector3df &scale)
 	{
 		matrix4 trans;
@@ -73,11 +83,6 @@ namespace utility
 	{
 		quaternion q = quaternion::quaternion(angles);
 		out = vector3df(q * (input - pivot) + pivot);
-	}
-
-	bool startsWith(const std::string& s, const std::string& prefix)
-	{
-		return s.size() >= prefix.size() && s.compare(0, prefix.size(), prefix) == 0;
 	}
 
 	void animateFloatValue(const f32 deltaTime, f32* variableToAnimate, const f32 targetValue)

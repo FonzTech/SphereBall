@@ -12,6 +12,7 @@
 
 using namespace irr;
 using namespace core;
+using namespace scene;
 using namespace video;
 using namespace gui;
 
@@ -27,7 +28,7 @@ namespace utility
 
 		@return "true" if "s" starts with "prefix", otherwise "false".
 	*/
-	bool startsWith(const std::string& s, const std::string& prefix);
+	const bool startsWith(const std::string& s, const std::string& prefix);
 
 	/**
 		Check whether a string ends with a certain suffix (a token, to say) or not.
@@ -37,7 +38,19 @@ namespace utility
 
 		@return "true" if "s" ends with "suffix", otherwise "false".
 	*/
-	bool endsWith(const std::string& s, const std::string& suffix);
+	const bool endsWith(const std::string& s, const std::string& suffix);
+
+	/**
+		Provide a proxy pattern for mesh loading. By default, Irrlicht supports certain type of file formats.
+		Animated meshes, like x (DirectX), are huge compared to other static meshes. This problem is resolved
+		by zipping these large files, then unzipping when requested. Irrlicht's resource management is preserved.
+
+		@param smgr the Irrlicht's Scene Manager obtained from EngineObject class and subclasses.
+		@param name the file name, which can be a zip file or any file supported by the Irrlicht engine.
+
+		@return pointer to the requested IAnimatedMesh on success, otherwise "nullptr" is returned.
+	*/
+	IAnimatedMesh* getMesh(ISceneManager* smgr, const std::string& path);
 
 	/**
 		Transform axis-aligned bounding box by point. This function does not return anything.

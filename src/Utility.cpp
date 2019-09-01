@@ -1,6 +1,9 @@
 #include "Utility.h"
 #include "GameObject.h"
+
+#include <filesystem>
 #include <string>
+#include <zipper/unzipper.h>
 
 #ifdef __linux__ 
 // Not implemented yet
@@ -12,14 +15,52 @@
 
 namespace utility
 {
-	bool startsWith(const std::string& s, const std::string& prefix)
+	const bool startsWith(const std::string& s, const std::string& prefix)
 	{
 		return s.size() >= prefix.size() && s.compare(0, prefix.size(), prefix) == 0;
 	}
 
-	bool endsWith(const std::string& s, const std::string& suffix)
+	const bool endsWith(const std::string& s, const std::string& suffix)
 	{
 		return s.rfind(suffix) == (s.size() - suffix.size());
+	}
+
+	IAnimatedMesh* getMesh(ISceneManager* smgr, const std::string& path)
+	{
+		// Unzip if necessary
+		if (endsWith(path, ".zip"))
+		{
+			// Get file name
+			const auto name = std::filesystem::path(path).stem();
+
+			// Check for 3D model file
+			zipper::Unzipper unzipper(path);
+			std::vector<zipper::ZipEntry> entries = unzipper.entries();
+			for (auto& entry : entries)
+			{
+				const auto fpath = std::filesystem::path(entry.name);
+				const auto entryName = fpath.stem().string();
+
+				// If requested model is found
+				if (entryName == name)
+				{
+					// Unzip file
+					unzipper.extractEntry(entry.name, "./");
+
+					// Close zip
+					unzipper.close();
+
+					// Return extracted mesh
+					return smgr->getMesh(fpath.filename().c_str());
+				}
+			}
+
+			// Close zip
+			unzipper.close();
+		}
+
+		// Load the mesh
+		return smgr->getMesh(path.c_str());
 	}
 
 	const void transformAABBox(aabbox3d<f32> &dest, const vector3df &translation, const vector3df &rotation, const vector3df &scale)

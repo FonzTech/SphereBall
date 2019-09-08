@@ -58,7 +58,7 @@ namespace utility
 					if (std::filesystem::exists(std::filesystem::path(file)))
 					{
 						#if NDEBUG || _DEBUG
-							printf("ZIP Model - No need to extract %s\n", fpath.filename().string().c_str());
+						printf("ZIP Model - No need to extract %s\n", fpath.filename().string().c_str());
 						#endif
 					}
 					else

@@ -14,7 +14,7 @@ std::shared_ptr<sf::SoundBuffer> SoundManager::getSoundBuffer(const std::string&
 	if (soundBuffers.find(fname) != soundBuffers.end())
 	{
 		#if NDEBUG || _DEBUG
-			printf("SoundBuffer %s has been reused\n", fname.c_str());
+		printf("SoundBuffer %s has been reused\n", fname.c_str());
 		#endif
 
 		return soundBuffers[fname];
@@ -25,7 +25,7 @@ std::shared_ptr<sf::SoundBuffer> SoundManager::getSoundBuffer(const std::string&
 	if (!sb->loadFromFile("sounds/" + fname + ".ogg"))
 	{
 		#if NDEBUG || _DEBUG
-			printf("SoundBuffer %s has NOT been loaded\n", fname.c_str());
+		printf("SoundBuffer %s has NOT been loaded\n", fname.c_str());
 		#endif
 
 		return nullptr;
@@ -44,7 +44,7 @@ std::shared_ptr<sf::Sound> SoundManager::getSound(const std::string& fname)
 	if (sb == nullptr)
 	{
 		#if NDEBUG || _DEBUG
-			printf("Sound %s could NOT be created\n", fname.c_str());
+		printf("Sound %s could NOT be created\n", fname.c_str());
 		#endif
 
 		return std::make_shared<sf::Sound>();

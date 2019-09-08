@@ -1,4 +1,4 @@
-		#include "SoundManager.h"
+#include "SoundManager.h"
 
 std::shared_ptr<SoundManager> SoundManager::singleton = nullptr;
 
@@ -13,7 +13,10 @@ std::shared_ptr<sf::SoundBuffer> SoundManager::getSoundBuffer(const std::string&
 	// Check if sound buffer has been already loaded
 	if (soundBuffers.find(fname) != soundBuffers.end())
 	{
-		printf("SoundBuffer %s has been reused\n", fname.c_str());
+		#if NDEBUG || _DEBUG
+			printf("SoundBuffer %s has been reused\n", fname.c_str());
+		#endif
+
 		return soundBuffers[fname];
 	}
 
@@ -21,7 +24,10 @@ std::shared_ptr<sf::SoundBuffer> SoundManager::getSoundBuffer(const std::string&
 	std::shared_ptr<sf::SoundBuffer> sb = std::make_shared<sf::SoundBuffer>();
 	if (!sb->loadFromFile("sounds/" + fname + ".ogg"))
 	{
-		printf("SoundBuffer %s has NOT been loaded\n", fname.c_str());
+		#if NDEBUG || _DEBUG
+			printf("SoundBuffer %s has NOT been loaded\n", fname.c_str());
+		#endif
+
 		return nullptr;
 	}
 
@@ -37,7 +43,10 @@ std::shared_ptr<sf::Sound> SoundManager::getSound(const std::string& fname)
 	// Check if sound buffer creation has encountered an error
 	if (sb == nullptr)
 	{
-		printf("Sound %s could NOT be created\n", fname.c_str());
+		#if NDEBUG || _DEBUG
+			printf("Sound %s could NOT be created\n", fname.c_str());
+		#endif
+
 		return std::make_shared<sf::Sound>();
 	}
 

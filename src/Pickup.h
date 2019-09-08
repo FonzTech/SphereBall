@@ -13,9 +13,6 @@ protected:
 	// Plane model
 	std::shared_ptr<Model> planeModel;
 
-	// Sparkle shader
-	s32 customShader;
-
 public:
 
 	// Specialized variables

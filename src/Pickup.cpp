@@ -8,14 +8,6 @@ Pickup::Pickup() : GameObject()
 	notPicked = true;
 	soundIndex = "";
 
-	// Create sparkle shader
-	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
-
-	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
-	customShader = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/coin.fs", ssc);
-
-	ssc->drop();
-
 	// Load mesh and texture
 	IAnimatedMesh* mesh = smgr->getMesh("models/plane.obj");
 	ITexture* texture = driver->getTexture("textures/coin_glare.png");

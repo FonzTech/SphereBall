@@ -33,6 +33,13 @@ namespace utility
 			// Get file name
 			const auto name = std::filesystem::path(path).stem();
 
+			// Get temporary directory path
+			std::string dir = "./";
+			{
+				const std::wstring tmpDir = getTempDirectory();
+				dir = std::string(tmpDir.cbegin(), tmpDir.cend());
+			}
+
 			// Check for 3D model file
 			zipper::Unzipper unzipper(path);
 			std::vector<zipper::ZipEntry> entries = unzipper.entries();
@@ -44,19 +51,26 @@ namespace utility
 				// If requested model is found
 				if (entryName == name)
 				{
-					// Unzip file
-					std::string dir = "./";
-					{
-						const std::wstring tmpDir = getTempDirectory();
-						dir = std::string(tmpDir.cbegin(), tmpDir.cend());
-					}
-					unzipper.extractEntry(entry.name, dir);
+					// Get full path for file
+					const std::string file = dir + fpath.filename().string();
 
-					// Close zip
-					unzipper.close();
+					// Check if file has been already extracted
+					if (std::filesystem::exists(std::filesystem::path(file)))
+					{
+						#if NDEBUG || _DEBUG
+							printf("ZIP Model - No need to extract %s\n", fpath.filename().string().c_str());
+						#endif
+					}
+					else
+					{
+						// Unzip file
+						unzipper.extractEntry(entry.name, dir);
+
+						// Close zip
+						unzipper.close();
+					}
 
 					// Return extracted mesh
-					const std::string file = dir + fpath.filename().string();
 					return smgr->getMesh(file.c_str());
 				}
 			}

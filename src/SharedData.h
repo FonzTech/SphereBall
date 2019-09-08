@@ -134,6 +134,9 @@ protected:
 	// Subtract current level points to global game score
 	void subtractLevelPointsOnLose();
 
+	// Reset state on room leave / change
+	void resetState();
+
 public:
 
 	// Key for room loader

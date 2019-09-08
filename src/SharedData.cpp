@@ -568,8 +568,8 @@ void SharedData::jumpToNextLevel()
 	s32 points = getGameScoreValue(KEY_SCORE_POINTS);
 	updateGameScoreValue(KEY_SCORE_POINTS_TOTAL, points);
 
-	// Turn off game over scren
-	gameOverAlpha = 0.0f;
+	// Reset state
+	resetState();
 
 	// Restart current room
 	RoomManager::singleton->jumpToNextLevel();
@@ -580,8 +580,8 @@ void SharedData::restartRoom()
 	// Update game score
 	subtractLevelPointsOnLose();
 
-	// Turn off game over scren
-	gameOverAlpha = 0.0f;
+	// Reset state
+	resetState();
 
 	// Restart current room
 	RoomManager::singleton->restartRoom();
@@ -593,7 +593,7 @@ void SharedData::jumpToMenuRoom()
 	subtractLevelPointsOnLose();
 
 	// Turn off game over scren
-	gameOverAlpha = 0.0f;
+	resetState();
 
 	// Jump to main menu room
 	RoomManager::singleton->loadRoom(RoomManager::ROOM_MAIN_MENU);
@@ -605,6 +605,15 @@ void SharedData::subtractLevelPointsOnLose()
 	{
 		updateGameScoreValue(KEY_SCORE_POINTS_TOTAL, -getGameScoreValue(KEY_SCORE_POINTS, 0));
 	}
+}
+
+void SharedData::resetState()
+{
+	// Turn off game over scren
+	gameOverAlpha = 0.0f;
+
+	// Level not passed by default
+	isLevelPassed = false;
 }
 
 void SharedData::buildFadeTransition()

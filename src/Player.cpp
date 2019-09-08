@@ -112,7 +112,7 @@ void Player::update()
 		walk();
 
 		// Check for time out
-		if (SharedData::singleton->getGameScoreValue(KEY_SCORE_TIME, -2) == -1)
+		if (SharedData::singleton->isLevelTimedOut())
 		{
 			// Load noise texture
 			ITexture* texture = driver->getTexture("textures/noise_128.png");

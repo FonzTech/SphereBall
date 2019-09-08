@@ -194,6 +194,9 @@ public:
 
 	// Invert time
 	void invertTime();
+
+	// Check for level timeout
+	bool isLevelTimedOut();
 };
 
 #endif // SHAREDDATA_H

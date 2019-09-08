@@ -68,6 +68,7 @@ void SharedData::update(f32 deltaTime)
 		timeAlarm->stepDecrement(deltaTime);
 		if (timeAlarm->isTriggered())
 		{
+
 			// Check for time out
 			s32 time = gameScores[KEY_SCORE_TIME].value;
 			if (time <= 0)
@@ -80,9 +81,6 @@ void SharedData::update(f32 deltaTime)
 			}
 			else
 			{
-				// Decrease time
-				updateGameScoreValue(KEY_SCORE_TIME, -1);
-
 				// Play clock sound
 				if (time <= 20)
 				{
@@ -92,6 +90,9 @@ void SharedData::update(f32 deltaTime)
 
 				// Reset alarm
 				timeAlarm->setTime(1000.0f);
+
+				// Decrease time
+				updateGameScoreValue(KEY_SCORE_TIME, -1);
 			}
 		}
 	}
@@ -779,4 +780,9 @@ void SharedData::invertTime()
 
 	// Setup animation
 	hourglassRotation = 1;
+}
+
+bool SharedData::isLevelTimedOut()
+{
+	return getGameScoreValue(KEY_SCORE_TIME) <= 0 && timeAlarm == nullptr;
 }

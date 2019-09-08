@@ -4,6 +4,7 @@
 #define STATE_WALKING	0
 #define STATE_DEAD		1
 #define STATE_EXITED	2
+#define STATE_TIME_OUT	3
 
 #include "GameObject.h"
 #include "Alarm.h"
@@ -18,11 +19,14 @@ protected:
 
 	// State
 	s8 state;
+	f32 noiseFactor;
 
 	void walk();
 	void die();
 	void dead();
 	void exited();
+
+	void resetBreathing();
 
 	// Shader variables
 	s32 customMaterial;

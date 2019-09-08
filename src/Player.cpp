@@ -28,7 +28,7 @@ Player::Player() : GameObject()
 	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
 
 	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
-	customMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/player.fs", ssc);
+	customMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/player.fs", ssc, EMT_TRANSPARENT_ALPHA_CHANNEL);
 
 	ssc->drop();
 
@@ -43,6 +43,7 @@ Player::Player() : GameObject()
 
 	// Initialize variables
 	state = STATE_WALKING;
+	noiseFactor = 0.0f;
 
 	direction = 1;
 	moving = 0;
@@ -109,6 +110,17 @@ void Player::update()
 
 		// Walk code
 		walk();
+
+		// Check for time out
+		if (SharedData::singleton->getGameScoreValue(KEY_SCORE_TIME, -2) == -1)
+		{
+			// Load noise texture
+			ITexture* texture = driver->getTexture("textures/noise_128.png");
+			models.at(0)->addTexture(1, texture);
+
+			// Switch state
+			state = STATE_TIME_OUT;
+		}
 	}
 	else if (state == STATE_DEAD)
 	{
@@ -117,10 +129,18 @@ void Player::update()
 	else if (state == STATE_EXITED)
 	{
 		// Reset breathing
-		breathing += ((f32)std::cos(-1) - breathing) * 0.005f * deltaTime;
+		resetBreathing();
 
 		// Execute behaviour
 		exited();
+	}
+	else if (state == STATE_TIME_OUT)
+	{
+		// Reset breathing
+		resetBreathing();
+
+		// Increment noise factor
+		noiseFactor += 0.00075f * deltaTime;
 	}
 
 	// Update listener position
@@ -535,6 +555,11 @@ void Player::exited()
 	position.Z = 0.5f;
 }
 
+void Player::resetBreathing()
+{
+	breathing += ((f32)std::cos(-1) - breathing) * 0.005f * deltaTime;
+}
+
 Player::SpecializedShaderCallback::SpecializedShaderCallback(Player* player)
 {
 	this->player = player;
@@ -550,4 +575,13 @@ void Player::SpecializedShaderCallback::OnSetConstants(IMaterialRendererServices
 
 	// Restore world matrix
 	driver->setTransform(ETS_WORLD, IdentityMatrix);
+
+	// Set texture for time out effect
+	services->setPixelShaderConstant("noiseFactor", (f32*)&this->player->noiseFactor, 1);
+
+	if (this->player->state == STATE_TIME_OUT)
+	{
+		const s32 layer1 = 1;
+		services->setPixelShaderConstant("noiseTexture", (s32*)&layer1, 1);
+	}
 }

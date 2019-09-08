@@ -19,7 +19,7 @@ Exit::Exit() : GameObject()
 	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
 
 	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
-	customMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/exit.fs", ssc);
+	customMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/exit.fs", ssc, EMT_TRANSPARENT_ALPHA_CHANNEL);
 
 	ssc->drop();
 

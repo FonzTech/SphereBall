@@ -126,10 +126,14 @@ void Player::update()
 
 			// Switch state
 			state = STATE_TIME_OUT;
+
+			// Trigger die alarm
+			dieAlarm = std::make_unique<Alarm>(2000.0f);
 		}
 	}
 	else if (state == STATE_DEAD)
 	{
+		// Play behaviour
 		dead();
 	}
 	else if (state == STATE_EXITED)
@@ -147,6 +151,9 @@ void Player::update()
 
 		// Increment noise factor
 		noiseFactor += 0.00075f * deltaTime;
+
+		// Play behaviour
+		dead();
 	}
 
 	// Update listener position

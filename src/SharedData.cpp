@@ -806,7 +806,7 @@ void SharedData::invertTime()
 	hourglassRotation = 1;
 }
 
-bool SharedData::isLevelTimedOut()
+bool SharedData::hasLevelTimedOut()
 {
 	return getGameScoreValue(KEY_SCORE_TIME) <= 0 && timeAlarm == nullptr;
 }

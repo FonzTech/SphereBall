@@ -199,7 +199,7 @@ public:
 	void invertTime();
 
 	// Check for level timeout
-	bool isLevelTimedOut();
+	bool hasLevelTimedOut();
 };
 
 #endif // SHAREDDATA_H

@@ -118,7 +118,7 @@ void Player::update()
 		walk();
 
 		// Check for time out
-		if (SharedData::singleton->isLevelTimedOut())
+		if (SharedData::singleton->hasLevelTimedOut())
 		{
 			// Load noise texture
 			ITexture* texture = driver->getTexture("textures/noise_128.png");

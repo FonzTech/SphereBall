@@ -8,7 +8,7 @@ const f32 Solid::BREAKING_THRESHOLD = 8.0f;
 
 std::shared_ptr<Solid> Solid::createInstance(const json &jsonData)
 {
-	f32 breakState = -1.0F;
+	f32 breakState = -1.0f;
 	try
 	{
 		// Check if block is breakable
@@ -38,11 +38,18 @@ Solid::Solid(const f32 breakState) : GameObject()
 
 		sounds[KEY_SOUND_BREAK] = SoundManager::singleton->getSound(KEY_SOUND_BREAK);
 		sounds[KEY_SOUND_BREAK]->setAttenuation(0.005f);
+
+		// Load mesh for bounding box
+		IMesh* bboxMesh = smgr->getMesh("models/cube.obj");
+		bboxMesh->grab();
+		boundingBox = bboxMesh->getBoundingBox();
+		bboxMesh->drop();
 	}
 	else
 	{
 		// Load mesh
 		mesh = smgr->getMesh("models/cube.obj");
+		boundingBox = mesh->getBoundingBox();
 	}
 
 	// Load texture
@@ -133,6 +140,11 @@ void Solid::draw()
 		std::shared_ptr<Model> model = models.at(0);
 		model->position = position;
 	}
+}
+
+aabbox3df Solid::getBoundingBox()
+{
+	return boundingBox;
 }
 
 bool Solid::isSolid()

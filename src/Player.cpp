@@ -74,6 +74,12 @@ Player::Player() : GameObject()
 		return ((Solid*)go)->isSolid();
 	};
 
+	collisionChecks["solidTop"] = [this](GameObject* go)
+	{
+		Solid* solid = (Solid*)go;
+		return solid->position.Y + 1.0f < position.Y && solid->isSolid();
+	};
+
 	collisionChecks["pickup"] = [](GameObject* go)
 	{
 		return ((Pickup*)go)->notPicked;
@@ -318,10 +324,10 @@ void Player::walk()
 
 		// Get shifted BB
 		aabbox3df rect(bbox);
-		utility::getVerticalAABBox(bbox, rect, (1.0f + (0.25f * abs(speed.Y))) * j, 0.35f - abs(speed.X * 2));
+		utility::getVerticalAABBox(bbox, rect, (1.0f + (0.25f * abs(speed.Y))) * j, 0.35f - std::abs(speed.X * 2));
 
 		// Check for collision
-		Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect, collisionChecks["solid"]);
+		Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect, collisionChecks[i ? "solidTop" : "solid"]);
 		if (collision.engineObject != nullptr)
 		{
 			// Cast to game object
@@ -373,7 +379,7 @@ void Player::walk()
 
 		// Get shifted BB
 		aabbox3df rect(bbox);
-		utility::getHorizontalAABBox(bbox, rect, (0.75f + (0.25f * abs(speed.X))) * j, 0.9f);
+		utility::getHorizontalAABBox(bbox, rect, (0.9f + (0.1f * abs(speed.X))) * j, 0.95f);
 
 		// Check for collision
 		Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect, collisionChecks["solid"]);

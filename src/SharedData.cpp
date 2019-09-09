@@ -209,7 +209,11 @@ void SharedData::loadAssets()
 
 void SharedData::buildGameScore()
 {
-	vector2di windowSize = utility::getWindowSize<s32>(driver);
+	// Get window size
+	const vector2di windowSize = utility::getWindowSize<s32>(driver);
+
+	// Get alpha value for Level HUD
+	const s32 alpha = (s32)(255.0f - gameOverAlpha * 255.0f);
 
 	// Draw coin amount
 	{
@@ -217,14 +221,18 @@ void SharedData::buildGameScore()
 		s32 amount = getGameScoreValue(KEY_SCORE_COIN);
 		if (amount >= 0)
 		{
+			// Common color
+			const SColor color(alpha, 255, 255, 255);
+
 			// Draw coin
 			IGUIImage* image = guienv->addImage(guiTextures[KEY_GUI_COIN], vector2di(32, 32));
 			image->setMaxSize(dimension2du(128, 128));
+			image->setColor(color);
 
 			// Draw counter
 			IGUIStaticText* text = guienv->addStaticText(std::to_wstring(amount).c_str(), recti(192, 32, 512, 160));
 			text->setOverrideFont(font);
-			text->setOverrideColor(SColor(255, 255, 255, 255));
+			text->setOverrideColor(color);
 			text->setTextAlignment(EGUIA_UPPERLEFT, EGUIA_CENTER);
 		}
 	}
@@ -250,10 +258,8 @@ void SharedData::buildGameScore()
 				image->setMaxSize(dimension2du(128, 128));
 
 				// Darken the image only if it hasn't been picked yet
-				if (i >= pickedAmount)
-				{
-					image->setColor(SColor(255, 0, 0, 0));
-				}
+				const u32 cc = i >= pickedAmount ? 0 : 255;
+				image->setColor(SColor(alpha, cc, cc, cc));
 			}
 		}
 	}
@@ -339,8 +345,8 @@ void SharedData::buildGameScore()
 						hourglassAlpha = 1;
 					}
 
-					const u32 alpha = (u32)(hourglassAlpha * 255.0f);
-					const SColor color(alpha, 255, 255, 255);
+					const u32 hgAlpha = (u32)(hourglassAlpha * 255.0f);
+					const SColor color(hgAlpha, 255, 255, 255);
 					const SColor colors[] = { color, color, color, color };
 
 					driver->draw2DImage(guiTextures[KEY_GUI_HOURGLASS_GLOW], destRect, sourceRect, 0, colors, true);
@@ -392,17 +398,19 @@ void SharedData::buildGameScore()
 			const vector2di position(windowSize.X - size.Width, windowSize.Y - size.Height);
 
 			// Draw full hourglass
-			guienv->addImage(frameResources[KEY_GUI_HOURGLASS_SAND_TOP], position);
+			IGUIImage* image = guienv->addImage(frameResources[KEY_GUI_HOURGLASS_SAND_TOP], position);
+			image->setColor(SColor(alpha, 255, 255, 255));
+			
 
 			// Draw remaining time
 			if (amount <= 20)
 			{
 				f32 coeff = 1.0f - (f32)amount / 20.0f;
-				s32 alpha = std::min((s32)(coeff * 510.0f), 255);
+				u32 timeAlpha = std::min(std::max((s32)(coeff * 510.0f) - (255 - alpha), 0), 255);
 
 				IGUIStaticText* text = guienv->addStaticText(std::to_wstring(amount).c_str(), recti(position, size));
 				text->setOverrideFont(font);
-				text->setOverrideColor(SColor(alpha, 255, 255, 255));
+				text->setOverrideColor(SColor(timeAlpha, 255, 255, 255));
 				text->setTextAlignment(EGUIA_CENTER, EGUIA_CENTER);
 			}
 		}
@@ -422,7 +430,6 @@ void SharedData::buildGameScore()
 
 		// Compute vertical position
 		s32 y = i ? 192 : 112;
-		s32 alpha = (s32)(255.0f - gameOverAlpha * 255.0f);
 		SColor color = i ? SColor(alpha, 255, 255, 255) : SColor(alpha, 192, 192, 192);
 
 		// Draw counter
@@ -437,7 +444,6 @@ void SharedData::buildGameScore()
 		u8 fruitKeys[] = {
 			KEY_GUI_APPLE, KEY_GUI_BANANA, KEY_GUI_STRAWBERRY, KEY_GUI_WATERMELON, KEY_GUI_PINEAPPLE
 		};
-		s32 alpha = (s32)(255.0f - gameOverAlpha * 255.0f);
 
 		for (int i = 0; i < 5; ++i)
 		{

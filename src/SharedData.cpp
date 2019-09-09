@@ -401,12 +401,11 @@ void SharedData::buildGameScore()
 			IGUIImage* image = guienv->addImage(frameResources[KEY_GUI_HOURGLASS_SAND_TOP], position);
 			image->setColor(SColor(alpha, 255, 255, 255));
 			
-
 			// Draw remaining time
 			if (amount <= 20)
 			{
 				f32 coeff = 1.0f - (f32)amount / 20.0f;
-				u32 timeAlpha = std::min(std::max((s32)(coeff * 510.0f) - (255 - alpha), 0), 255);
+				u32 timeAlpha = std::min(std::max((s32)((coeff * 510.0f) * (1.0f - gameOverAlpha)), 0), 255);
 
 				IGUIStaticText* text = guienv->addStaticText(std::to_wstring(amount).c_str(), recti(position, size));
 				text->setOverrideFont(font);

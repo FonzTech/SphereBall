@@ -2,8 +2,9 @@
 
 Model::Model(IAnimatedMesh* mesh)
 {
-	// Assign mesh
+	// Assign mesh and bounding box
 	this->mesh = mesh;
+	boundingBox = mesh->getBoundingBox();
 
 	// Initialize members
 	textures = std::unordered_map<u32, ITexture*>();

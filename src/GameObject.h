@@ -47,7 +47,7 @@ protected:
 			}
 
 			// Get bounding box of mesh
-			aabbox3df otherBox(gameObject->models.at(0)->mesh->getBoundingBox());
+			aabbox3df otherBox(gameObject->getBoundingBox());
 			utility::transformAABBox(otherBox, gameObject->position);
 
 			// Check for intersection
@@ -93,6 +93,9 @@ public:
 
 	// Make commits on drawable resources
 	virtual void draw() = 0;
+
+	// Bounding box getter
+	virtual aabbox3df getBoundingBox();
 };
 
 #endif // GAMEOBJECT_H

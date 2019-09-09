@@ -49,3 +49,8 @@ GameObject::GameObject()
 	// Initialize variables
 	destroy = false;
 }
+
+aabbox3df GameObject::getBoundingBox()
+{
+	return models.at(0)->mesh->getBoundingBox();
+}

@@ -15,6 +15,8 @@ class Model
 public:
 	std::unordered_map<u32, ITexture*> textures;
 	IAnimatedMesh* mesh;
+	aabbox3df boundingBox;
+
 	vector3df position;
 	vector3df rotation;
 	vector3df scale;

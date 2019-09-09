@@ -622,6 +622,13 @@ void SharedData::resetState()
 
 	// Level not passed by default
 	isLevelPassed = false;
+
+	// Reset post-processing effects
+	json data = {
+		{ "speed", 0.0f },
+		{ "strength", 0.0f }
+	};
+	triggerPostProcessingCallback(KEY_PP_WAVE, data);
 }
 
 void SharedData::buildFadeTransition()

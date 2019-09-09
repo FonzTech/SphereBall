@@ -59,6 +59,14 @@ SharedData::SharedData()
 
 void SharedData::update(f32 deltaTime)
 {
+	// Restart room on key press (only for debug builds)
+	#if NDEBUG || _DEBUG
+	if (EventManager::singleton->keyStates[KEY_KEY_R] == KEY_PRESSED)
+	{
+		restartRoom();
+	}
+	#endif
+
 	// Assign delta time
 	this->deltaTime = deltaTime;
 

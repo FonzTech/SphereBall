@@ -55,12 +55,6 @@ MainMenu::MainMenu() : GameObject()
 
 void MainMenu::update()
 {
-	// Check if transition in active
-	if (roomToLoad.length() > 0)
-	{
-		return;
-	}
-
 	// Get window size
 	windowSize = utility::getWindowSize<s32>(driver);
 
@@ -148,7 +142,7 @@ void MainMenu::update()
 	}
 
 	// Check for left mouse click
-	if (currentIndex >= 0 && EventManager::singleton->keyStates[KEY_LBUTTON] == KEY_RELEASED)
+	if (roomToLoad.length() <= 0 && currentIndex >= 0 && EventManager::singleton->keyStates[KEY_LBUTTON] == KEY_RELEASED)
 	{
 		if (currentSection == 0)
 		{

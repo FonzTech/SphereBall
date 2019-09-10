@@ -285,8 +285,7 @@ void Player::walk()
 		speed += vector3df(0, 0.2f, 0);
 
 		// Set fall line above player
-		vector3df fl(position + vector3df(0, bbox.getExtent().Y, 0));
-		fallLine = std::unique_ptr<vector3df>(new vector3df(fl));
+		fallLine = std::make_unique<vector3df>(position + vector3df(0, bbox.getExtent().Y, 0));
 
 		// Turn on falling
 		falling = 1;

@@ -188,6 +188,34 @@ void Player::draw()
 	Camera::singleton->lookAt = position;
 }
 
+s32 Player::getJumpingState()
+{
+	if (fallLine != nullptr)
+	{
+		if (speed.Y > 0.0f)
+		{
+			return 1;
+		}
+	}
+	else if (speed.Y < 0.0f)
+	{
+		return 2;
+	}
+	return 0;
+}
+
+void Player::addSpeed(const vector3df & motion, const vector3df & fallLine)
+{
+	// Apply speed
+	speed += motion;
+
+	// Set fall line above player
+	this->fallLine = std::make_unique<vector3df>(fallLine);
+
+	// Turn on falling
+	falling = 1;
+}
+
 void Player::updateTransformMatrix()
 {
 	// Get required values

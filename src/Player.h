@@ -71,6 +71,27 @@ public:
 	void update();
 	void draw();
 
+	/*
+		Check if the player is walking / standing on a solid platform, if it's jumping or
+		if it's falling. Jumping and falling state are almost the same, so if you have to
+		check whether the player is not touching the solid ground, just check the return
+		value for any value different from zero.
+
+		@return 32-bit signed integer.
+			- 0: not falling.
+			- 1: player hasn't reeached the fall line and is jumping upwards.
+			- 2: player has reached the fall line or is falling downwards.
+	*/
+	s32 getJumpingState();
+
+	/*
+		Add speed vector to the player.
+		
+		@param motion the motion vector to add to the current player's one.
+		@param fallLine the point describing the threshold at which the player begin to fall.
+	*/
+	void addSpeed(const vector3df & motion, const vector3df & fallLine);
+
 	// Create specialized instance
 	static std::shared_ptr<Player> createInstance(const json &jsonData);
 };

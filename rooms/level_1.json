@@ -12,11 +12,11 @@
 			},
 			{
 				"key": 3,
-				"value": 40
+				"value": 80
 			},
 			{
 				"key": 4,
-				"value": 50
+				"value": 100
 			}
 		]
 	},
@@ -42,6 +42,39 @@
 			"position": {
 				"x": 0.0,
 				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -60.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"springTension": 0.0
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -140.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 20.0,
+				"y": -20.0,
 				"z": 0.0
 			}
 		}

@@ -50,6 +50,29 @@
 		"name": "Solid",
 		"required": {
 			"position": {
+				"x": -100.0,
+				"y": 100.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -120.0,
+				"y": 100.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"springTension": 1.0
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
 				"x": -60.0,
 				"y": 20.0,
 				"z": 0.0

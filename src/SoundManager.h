@@ -20,6 +20,7 @@
 #define KEY_SOUND_FRUIT			"fruit"
 #define KEY_SOUND_BREAKING		"breaking"
 #define KEY_SOUND_BREAK			"break"
+#define KEY_SOUND_SPRING		"spring"
 
 #define KEY_SETTING_MUSIC	1
 #define KEY_SETTING_SOUND	2

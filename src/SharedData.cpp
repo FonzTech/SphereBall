@@ -685,7 +685,7 @@ void SharedData::clearGameScore()
 s32 SharedData::getGameScoreValue(const s32 key, const s32 defaultValue)
 {
 	// Search for the requested key
-	auto search = gameScores.find(key);
+	const auto& search = gameScores.find(key);
 	if (search == gameScores.end())
 	{
 		// Return the default value
@@ -699,7 +699,7 @@ s32 SharedData::getGameScoreValue(const s32 key, const s32 defaultValue)
 void SharedData::updateGameScoreValue(const s32 key, const s32 stepValue)
 {
 	// Search for the requested key
-	auto search = gameScores.find(key);
+	const auto& search = gameScores.find(key);
 	if (search == gameScores.end())
 	{
 		// Initialize value

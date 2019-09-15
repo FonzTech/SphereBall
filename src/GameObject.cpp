@@ -12,15 +12,16 @@ void GameObject::assignGameObjectCommonData(const json& commonData)
 		std::string key = i == 0 ? "position" : i == 1 ? "rotation" : "scale";
 		vector3df v;
 
-		if (commonData.find(key) == commonData.end())
+		const auto& iterator = commonData.find(key);
+		if (iterator == commonData.end())
 		{
 			v = i == 2 ? vector3df(1, 1, 1) : vector3df(0, 0, 0);
 		}
 		else
 		{
-			v.X = (float)commonData[key]["x"];
-			v.Y = (float)commonData[key]["y"];
-			v.Z = (float)commonData[key]["z"];
+			iterator->at("x").get_to(v.X);
+			iterator->at("y").get_to(v.Y);
+			iterator->at("z").get_to(v.Z);
 		}
 
 		if (i == 0)

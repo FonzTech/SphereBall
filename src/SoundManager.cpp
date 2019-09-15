@@ -11,13 +11,14 @@ SoundManager::SoundManager()
 std::shared_ptr<sf::SoundBuffer> SoundManager::getSoundBuffer(const std::string& fname)
 {
 	// Check if sound buffer has been already loaded
-	if (soundBuffers.find(fname) != soundBuffers.end())
+	const auto& iterator = soundBuffers.find(fname);
+	if (iterator != soundBuffers.end())
 	{
 		#if NDEBUG || _DEBUG
 		printf("SoundBuffer %s has been reused\n", fname.c_str());
 		#endif
 
-		return soundBuffers[fname];
+		return iterator->second;
 	}
 
 	// Otherwise load the sound buffer into memory

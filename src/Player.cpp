@@ -358,7 +358,7 @@ void Player::walk()
 
 		// Get shifted BB
 		aabbox3df rect(bbox);
-		utility::getVerticalAABBox(bbox, rect, (1.0f + (0.25f * abs(speed.Y))) * j, 0.35f - std::abs(speed.X * 2));
+		utility::getVerticalAABBox(bbox, rect, (1.0f + (0.25f * std::abs(speed.Y))) * j, 0.75f - std::abs(speed.X * 2));
 
 		// Check for collision
 		Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect, collisionChecks[i ? "solidTop" : "solid"]);
@@ -413,7 +413,7 @@ void Player::walk()
 
 		// Get shifted BB
 		aabbox3df rect(bbox);
-		utility::getHorizontalAABBox(bbox, rect, (0.9f + (0.1f * abs(speed.X))) * j, 0.95f);
+		utility::getHorizontalAABBox(bbox, rect, (0.85f + (0.1f * std::abs(speed.X))) * j, 0.9f);
 
 		// Check for collision
 		Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect, collisionChecks["solid"]);
@@ -423,7 +423,7 @@ void Player::walk()
 			std::shared_ptr<GameObject> go = collision.getGameObject<GameObject>();
 
 			// Play sound
-			if ((!i && speed.X < -0.1) || (i && speed.X > 0.1))
+			if ((!i && speed.X < -0.05) || (i && speed.X > 0.05))
 			{
 				playAudio(KEY_SOUND_BOUNCE);
 			}

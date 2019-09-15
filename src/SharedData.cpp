@@ -199,7 +199,6 @@ void SharedData::loadAssets()
 	guiTextures[KEY_GUI_HOURGLASS] = driver->getTexture("textures/gui_hourglass.png");
 	guiTextures[KEY_GUI_HOURGLASS_SAND_TOP] = driver->getTexture("textures/gui_hourglass_sand_top.png");
 	guiTextures[KEY_GUI_HOURGLASS_SAND_BOTTOM] = driver->getTexture("textures/gui_hourglass_sand_bottom.png");
-	guiTextures[KEY_GUI_HOURGLASS_GLOW] = driver->getTexture("textures/gui_hourglass_glow.png");
 	guiTextures[KEY_GUI_APPLE] = driver->getTexture("textures/gui_apple.png");
 	guiTextures[KEY_GUI_BANANA] = driver->getTexture("textures/gui_banana.png");
 	guiTextures[KEY_GUI_STRAWBERRY] = driver->getTexture("textures/gui_strawberry.png");
@@ -328,28 +327,6 @@ void SharedData::buildGameScore()
 				{
 					const recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS]);
 					driver->draw2DImage(guiTextures[KEY_GUI_HOURGLASS], destRect, sourceRect, 0, 0, true);
-				}
-
-				// Draw glow
-				{
-					const recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_GLOW]);
-					destRect = recti(0, size.Height / 2 - size.Width / 2, size.Width, size.Height / 2 + size.Width / 2);
-
-					f32 hourglassAlpha;
-					if (hourglassRotation < 0.5f)
-					{
-						hourglassAlpha = utility::getCubicBezierAt(vector2df(0.0f, 1.0f), vector2df(0.0f, 1.0f), hourglassRotation * 2.0f).Y;
-					}
-					else
-					{
-						hourglassAlpha = 1;
-					}
-
-					const u32 hgAlpha = (u32)(hourglassAlpha * 255.0f);
-					const SColor color(hgAlpha, 255, 255, 255);
-					const SColor colors[] = { color, color, color, color };
-
-					driver->draw2DImage(guiTextures[KEY_GUI_HOURGLASS_GLOW], destRect, sourceRect, 0, colors, true);
 				}
 
 				// Restore old render target
@@ -809,6 +786,17 @@ void SharedData::invertTime()
 
 	// Setup animation
 	hourglassRotation = 1;
+
+	// Trigger ripple effectx
+	const vector2df windowSize = utility::getWindowSize<f32>(driver);
+	const vector2df position(windowSize.X - 128, windowSize.Y - 128);
+
+	json data = {
+		{ "x", position.X / windowSize.X },
+		{ "y", position.Y / windowSize.Y },
+		{ "z", std::acos(-1) }
+	};
+	triggerPostProcessingCallback(KEY_PP_RIPPLE, data);
 }
 
 bool SharedData::hasLevelTimedOut()

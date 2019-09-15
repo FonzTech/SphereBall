@@ -26,12 +26,13 @@ protected:
 	protected:
 		Engine* engine;
 
-		f32 waveTime;
+		f32 ppTime;
 
 	public:
 
 		f32 waveSpeed;
 		f32 waveStrength;
+		vector3df ripplePoint;
 
 		PostProcessing(Engine* engine);
 

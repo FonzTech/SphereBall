@@ -76,7 +76,11 @@ bool Engine::setupComponents()
 
 	// Bind post processing functions
 	{
-		std::function<void(const json&)> callback = [this](const json& data)
+		// Declare function
+		std::function<void(const json&)> callback;
+
+		// Wave		
+		callback = [this](const json& data)
 		{
 			f32 params[2];
 
@@ -87,6 +91,19 @@ bool Engine::setupComponents()
 			postProcessing->waveStrength = params[1];
 		};
 		SharedData::singleton->setPostProcessingCallback(KEY_PP_WAVE, callback);
+
+		// Ripple
+		callback = [this](const json& data)
+		{
+			f32 params[3];
+
+			data.at("x").get_to(params[0]);
+			data.at("y").get_to(params[1]);
+			data.at("z").get_to(params[2]);
+
+			postProcessing->ripplePoint = vector3df(params[0], params[1], params[2]);
+		};
+		SharedData::singleton->setPostProcessingCallback(KEY_PP_RIPPLE, callback);
 	}
 
 	// Check for render to target support
@@ -260,9 +277,10 @@ Engine::PostProcessing::PostProcessing(Engine* engine)
 	this->engine = engine;
 
 	// Initialize variables
-	waveTime = 0.0f;
+	ppTime = 0.0f;
 	waveSpeed = 0.0f;
 	waveStrength = 0.0f;
+	ripplePoint = vector3df(0.0f);
 }
 
 void Engine::PostProcessing::OnSetConstants(IMaterialRendererServices* services, s32 userData)
@@ -270,19 +288,27 @@ void Engine::PostProcessing::OnSetConstants(IMaterialRendererServices* services,
 	// Set shader values
 	s32 layer0 = 0;
 	services->setPixelShaderConstant("tex", (s32*)&layer0, 1);
-	services->setPixelShaderConstant("time", &waveTime, 1);
-	services->setPixelShaderConstant("strength", &waveStrength, 1);
+	services->setPixelShaderConstant("time", &ppTime, 1);
+	services->setPixelShaderConstant("waveStrength", &waveStrength, 1);
+	services->setPixelShaderConstant("ripplePoint", &ripplePoint.X, 3);
 }
 
 void Engine::PostProcessing::update(f32 deltaTime)
 {
 	// Increase time for wave effect
-	waveTime += deltaTime;
+	ppTime += deltaTime;
 
 	// Decrease wave strength effect
 	waveStrength -= waveSpeed * deltaTime;
 	if (waveStrength < 0.0f)
 	{
 		waveStrength = 0.0f;
+	}
+
+	// Decrease ripple strength effect
+	ripplePoint.Z -= 0.002f * deltaTime;
+	if (ripplePoint.Z < 0.0f)
+	{
+		ripplePoint.Z = 0.0f;
 	}
 }

@@ -20,7 +20,6 @@
 #define KEY_GUI_HOURGLASS				5
 #define KEY_GUI_HOURGLASS_SAND_TOP		6
 #define KEY_GUI_HOURGLASS_SAND_BOTTOM	7
-#define KEY_GUI_HOURGLASS_GLOW			8
 #define KEY_GUI_APPLE					9
 #define KEY_GUI_BANANA					10
 #define KEY_GUI_STRAWBERRY				11
@@ -30,7 +29,8 @@
 #define KEY_TEXT_GAME_OVER		0
 #define KEY_TEXT_LEVEL_PASSED	1
 
-#define KEY_PP_WAVE	0
+#define KEY_PP_WAVE		0
+#define KEY_PP_RIPPLE	1
 
 #include <nlohmann/json.hpp>
 

@@ -86,10 +86,62 @@
 		"name": "Solid",
 		"required": {
 			"position": {
+				"x": -80.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"invisibleToggle": 1
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -100.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"invisibleToggle": 1
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
 				"x": -140.0,
 				"y": 20.0,
 				"z": 0.0
 			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -160.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"invisibleToggle": 0
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -180.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"invisibleToggle": 0
 		}
 	},
 	{

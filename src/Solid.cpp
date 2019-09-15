@@ -3,6 +3,7 @@
 #include "SoundManager.h"
 #include "RoomManager.h"
 #include "Player.h"
+#include "Camera.h"
 
 const f32 Solid::BREAKING_THRESHOLD = 8.0f;
 
@@ -10,6 +11,7 @@ std::shared_ptr<Solid> Solid::createInstance(const json &jsonData)
 {
 	f32 breakState = -1.0f;
 	f32 springTension = -1.0f;
+	s8 invisibleToggle = -1;
 
 	try
 	{
@@ -24,18 +26,23 @@ std::shared_ptr<Solid> Solid::createInstance(const json &jsonData)
 		{
 			optional.at("springTension").get_to(springTension);
 		}
+		else if (optional.find("invisibleToggle") != optional.end())
+		{
+			optional.at("invisibleToggle").get_to(invisibleToggle);
+		}
 	}
 	catch (json::exception e)
 	{
 	}
-	return std::make_shared<Solid>(breakState, springTension);
+	return std::make_shared<Solid>(breakState, springTension, invisibleToggle);
 }
 
-Solid::Solid(const f32 breakState, const f32 springTension) : GameObject()
+Solid::Solid(const f32 breakState, const f32 springTension, const s8 invisibleToggle) : GameObject()
 {
 	// Declare asset variables
 	IAnimatedMesh* mesh;
 	ITexture* texture;
+	s32 material = EMT_SOLID;
 
 	// Load assets
 	if (springTension >= 0.0f)
@@ -83,17 +90,34 @@ Solid::Solid(const f32 breakState, const f32 springTension) : GameObject()
 		boundingBox = mesh->getBoundingBox();
 
 		// Load texture
-		texture = driver->getTexture("textures/block.png");
+		if (invisibleToggle >= 0)
+		{
+			texture = driver->getTexture("textures/block_glass.png");
+
+			// Create shader
+			SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
+
+			IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+			material = gpu->addHighLevelShaderMaterialFromFiles("shaders/glass.vs", "shaders/glass.fs", ssc, EMT_TRANSPARENT_VERTEX_ALPHA);
+
+			ssc->drop();
+		}
+		else
+		{
+			texture = driver->getTexture("textures/block.png");
+		}
 	}
 
 	// Create model for block
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
+	model->material = material;
 	models.push_back(model);
 
 	// Assign members
 	this->breakState = breakState;
 	this->springTension = springTension;
+	this->invisibleToggle = invisibleToggle;
 	springAngle = 0.0f;
 
 	// Check if block is a spring
@@ -258,4 +282,27 @@ aabbox3df Solid::getBoundingBox()
 bool Solid::isSolid()
 {
 	return breakState < BREAKING_THRESHOLD;
+}
+
+Solid::SpecializedShaderCallback::SpecializedShaderCallback(Solid* solid)
+{
+	this->solid = solid;
+}
+
+void Solid::SpecializedShaderCallback::OnSetConstants(IMaterialRendererServices* services, s32 userData)
+{
+	// Execute parent method
+	ShaderCallback::OnSetConstants(services, userData);
+
+	// Set shader values
+	s32 layer0 = 0;
+	services->setPixelShaderConstant("tex", (s32*)&layer0, 1);
+
+	services->setVertexShaderConstant("lookAt", &Camera::singleton->lookAt.X, 3);
+
+	f32 fadeWhenFar = solid->invisibleToggle == 1 ? 1.0f : 0.0f;
+	services->setVertexShaderConstant("fadeWhenFar", &fadeWhenFar, 1);
+
+	s32 time = (s32) device->getTimer()->getTime();
+	services->setPixelShaderConstant("time", &time, 1);
 }

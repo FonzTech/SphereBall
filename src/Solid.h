@@ -2,6 +2,7 @@
 #define SOLID_H
 
 #include "GameObject.h"
+#include "ShaderCallback.h"
 
 class Solid : public GameObject
 {
@@ -14,6 +15,8 @@ protected:
 
 	f32 springTension;
 	f32 springAngle;
+
+	s8 invisibleToggle;
 
 public:
 	/*
@@ -29,8 +32,10 @@ public:
 		@param springTension a multiplier describing how tall the jump given to the player must be.
 								Values smaller than zero aren't taken into account. Greater values
 								than 1 will give an overpowered jump, but it's still legal.
+		@param invisibleToggle give 0 to make block invisible when near to the player. Give 1 to
+								make the block invisible when far from the player.
 	*/
-	Solid(const f32 breakState = -1.0f, const f32 springTension = -1.0f);
+	Solid(const f32 breakState = -1.0f, const f32 springTension = -1.0f, const s8 invisibleToggle = -1);
 
 	// Mandatory methods
 	void update();
@@ -42,6 +47,17 @@ public:
 	
 	// Behaviour
 	bool isSolid();
+
+	// ShaderCallBack
+	class SpecializedShaderCallback : public ShaderCallback
+	{
+	protected:
+		Solid* solid;
+
+	public:
+		SpecializedShaderCallback(Solid* solid);
+		virtual void OnSetConstants(IMaterialRendererServices* services, s32 userData);
+	};
 };
 
 #endif // SOLID_H

@@ -1,5 +1,3 @@
-varying vec2 texCoord;
-
 uniform sampler2D tex;
 uniform float time;
 uniform float strength;

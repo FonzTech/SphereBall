@@ -12,6 +12,7 @@ std::shared_ptr<Solid> Solid::createInstance(const json &jsonData)
 	f32 breakState = -1.0f;
 	f32 springTension = -1.0f;
 	s8 invisibleToggle = -1;
+	std::optional<std::array<f32, 4>> delayedParams = std::nullopt;
 
 	try
 	{
@@ -30,19 +31,34 @@ std::shared_ptr<Solid> Solid::createInstance(const json &jsonData)
 		{
 			optional.at("invisibleToggle").get_to(invisibleToggle);
 		}
+		else if (optional.find("invisibleToggle") != optional.end())
+		{
+			optional.at("invisibleToggle").get_to(invisibleToggle);
+		}
+		else if (optional.find("delayedState") != optional.end())
+		{
+			f32 values[4] = { 0.0f };
+			optional.at("delayedState").get_to(values[0]);
+			optional.at("delayedOn").get_to(values[1]);
+			optional.at("delayedOff").get_to(values[2]);
+
+			delayedParams = std::array<f32, 4>{values[0], values[1], values[2], values[3]};
+		}
 	}
 	catch (json::exception e)
 	{
 	}
-	return std::make_shared<Solid>(breakState, springTension, invisibleToggle);
+	return std::make_shared<Solid>(delayedParams, breakState, springTension, invisibleToggle);
 }
 
-Solid::Solid(const f32 breakState, const f32 springTension, const s8 invisibleToggle) : GameObject()
+Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakState, const f32 springTension, const s8 invisibleToggle) : GameObject()
 {
 	// Declare asset variables
 	IAnimatedMesh* mesh;
 	ITexture* texture;
 	s32 material = EMT_SOLID;
+
+	delayedAlphaMap = nullptr;
 
 	// Load assets
 	if (springTension >= 0.0f)
@@ -94,7 +110,7 @@ Solid::Solid(const f32 breakState, const f32 springTension, const s8 invisibleTo
 		{
 			texture = driver->getTexture("textures/block_glass.png");
 
-			// Create shader
+			// Create shader for glass
 			SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
 
 			IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
@@ -105,6 +121,23 @@ Solid::Solid(const f32 breakState, const f32 springTension, const s8 invisibleTo
 		else
 		{
 			texture = driver->getTexture("textures/block.png");
+
+			// Create shader for delayed block
+			if (delayedParams != std::nullopt)
+			{
+				SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
+
+				IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+				material = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/delayed.fs", ssc, EMT_TRANSPARENT_VERTEX_ALPHA);
+
+				ssc->drop();
+			}
+		}
+
+		// Check if block is delayed
+		if (delayedParams != std::nullopt)
+		{
+			delayedAlphaMap = driver->getTexture("textures/block_alpha_map.png");
 		}
 	}
 
@@ -114,11 +147,18 @@ Solid::Solid(const f32 breakState, const f32 springTension, const s8 invisibleTo
 	model->material = material;
 	models.push_back(model);
 
+	if (delayedAlphaMap != nullptr)
+	{
+		model->addTexture(1, delayedAlphaMap);
+	}
+
 	// Assign members
 	this->breakState = breakState;
 	this->springTension = springTension;
 	this->invisibleToggle = invisibleToggle;
-	springAngle = 0.0f;
+	this->delayedParams = delayedParams;
+	this->springAngle = 0.0f;
+	this->delayedAlarm = nullptr;
 
 	// Check if block is a spring
 	if (springTension >= 0.0f)
@@ -272,6 +312,66 @@ void Solid::draw()
 		model->position = position + vector3df(0, -9.5f, 0);
 		model->scale = vector3df(1, 1.0f + factor * 0.2f, 1);
 	}
+
+	// Check if block is delayed
+	if (delayedParams != std::nullopt)
+	{
+		// Get array
+		std::array<f32, 4>& item = delayedParams.value();
+
+		// Block is currently on
+		if (std::get<0>(item) == 0)
+		{
+			// Increment for animation
+			std::get<3>(item) += 0.001f * deltaTime;
+			if (std::get<3>(item) > 1.0f)
+			{
+				std::get<3>(item) = 1.0f;
+			}
+
+			// Create timer to switch off
+			if (delayedAlarm == nullptr)
+			{
+				delayedAlarm = std::make_unique<Alarm>(std::get<1>(item));
+			}
+
+			// Switch off
+			delayedAlarm->stepDecrement(deltaTime);
+			if (delayedAlarm->isTriggered())
+			{
+				std::get<0>(item) = 1;
+				delayedAlarm = nullptr;
+			}
+		}
+		// Block is currently off
+		else if (std::get<0>(item) == 1)
+		{
+			// Increment for animation
+			std::get<3>(item) -= 0.001f * deltaTime;
+			if (std::get<3>(item) < 0.0f)
+			{
+				std::get<3>(item) = 0.0f;
+			}
+
+			// Create timer to switch on
+			if (delayedAlarm == nullptr)
+			{
+				delayedAlarm = std::make_unique<Alarm>(std::get<2>(item));
+			}
+
+			// Switch on
+			delayedAlarm->stepDecrement(deltaTime);
+			if (delayedAlarm->isTriggered())
+			{
+				std::get<0>(item) = 0;
+				delayedAlarm = nullptr;
+			}
+		}
+	}
+	else
+	{
+		delayedAlarm = nullptr;
+	}
 }
 
 aabbox3df Solid::getBoundingBox()
@@ -281,6 +381,10 @@ aabbox3df Solid::getBoundingBox()
 
 bool Solid::isSolid()
 {
+	if (delayedParams != std::nullopt)
+	{
+		return std::get<3>(delayedParams.value()) > 0.5f;
+	}
 	return breakState < BREAKING_THRESHOLD;
 }
 
@@ -298,11 +402,24 @@ void Solid::SpecializedShaderCallback::OnSetConstants(IMaterialRendererServices*
 	s32 layer0 = 0;
 	services->setPixelShaderConstant("tex", (s32*)&layer0, 1);
 
-	services->setVertexShaderConstant("lookAt", &Camera::singleton->lookAt.X, 3);
+	// Block is delayed
+	if (solid->delayedParams != std::nullopt)
+	{
+		s32 layer1 = 1;
+		services->setPixelShaderConstant("alphaMap", (s32*)&layer1, 1);
 
-	f32 fadeWhenFar = solid->invisibleToggle == 1 ? 1.0f : 0.0f;
-	services->setVertexShaderConstant("fadeWhenFar", &fadeWhenFar, 1);
+		std::array<f32, 4>& item = solid->delayedParams.value();
+		services->setPixelShaderConstant("time", &std::get<3>(item), 1);
+	}
+	// Block is invisible
+	else
+	{
+		services->setVertexShaderConstant("lookAt", &Camera::singleton->lookAt.X, 3);
 
-	s32 time = (s32) device->getTimer()->getTime();
-	services->setPixelShaderConstant("time", &time, 1);
+		f32 fadeWhenFar = solid->invisibleToggle == 1 ? 1.0f : 0.0f;
+		services->setVertexShaderConstant("fadeWhenFar", &fadeWhenFar, 1);
+
+		s32 time = (s32)device->getTimer()->getTime();
+		services->setPixelShaderConstant("time", &time, 1);
+	}
 }

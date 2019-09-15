@@ -1,8 +1,13 @@
 #ifndef SOLID_H
 #define SOLID_H
 
+#include <memory>
+#include <array>
+#include <optional>
+
 #include "GameObject.h"
 #include "ShaderCallback.h"
+#include "Alarm.h"
 
 class Solid : public GameObject
 {
@@ -17,6 +22,10 @@ protected:
 	f32 springAngle;
 
 	s8 invisibleToggle;
+
+	ITexture* delayedAlphaMap;
+	std::optional<std::array<f32, 4>> delayedParams;
+	std::unique_ptr<Alarm> delayedAlarm;
 
 public:
 	/*
@@ -34,8 +43,12 @@ public:
 								than 1 will give an overpowered jump, but it's still legal.
 		@param invisibleToggle give 0 to make block invisible when near to the player. Give 1 to
 								make the block invisible when far from the player.
+		@param delayedStart array of two elements which represents the initial start delay, the
+							interval between appear and disappear and the duration of the visible
+							block. Time for animations are contained within these specified times.
+
 	*/
-	Solid(const f32 breakState = -1.0f, const f32 springTension = -1.0f, const s8 invisibleToggle = -1);
+	Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakState = -1.0f, const f32 springTension = -1.0f, const s8 invisibleToggle = -1);
 
 	// Mandatory methods
 	void update();

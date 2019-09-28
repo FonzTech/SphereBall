@@ -13,6 +13,7 @@ class RoomManager
 {
 protected:
 
+	// Prefix to recognize level loading
 	static const std::string LEVEL_PREFIX;
 
 	// Array to hold pickupable item keys

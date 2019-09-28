@@ -5,6 +5,7 @@
 #include <nlohmann/json.hpp>
 
 #include "EngineObject.h"
+#include "ShaderCallback.h"
 #include "Collision.h"
 #include "Model.h"
 #include "Utility.h"
@@ -70,6 +71,20 @@ protected:
 	}
 
 public:
+
+	// Common material for game objects which does not need advanced shading
+	static s32 COMMON_BASIC_MATERIAL_SOLID;
+	static s32 COMMON_BASIC_MATERIAL_VERTEX_ALPHA;
+
+	/*
+		Create a basic common material to apply transformation matrix in vertex shader and
+		basic texture mapping in fragment shader. "standard.vs" and "standard.fs" are used.
+
+		@param basicMaterial the basic material to create the shader from.
+
+		@return material index to be used on mesh nodes.
+	*/
+	static const s32 getCommonBasicMaterial(E_MATERIAL_TYPE basicMaterial = EMT_SOLID);
 
 	// Get instance of game object with parameters
 	static std::shared_ptr<GameObject> createInstance(const json &jsonData);

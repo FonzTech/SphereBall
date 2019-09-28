@@ -42,6 +42,7 @@ Exit::Exit() : GameObject()
 	model->addTexture(0, texture);
 	model->rotation = vector3df(90, 0, 0);
 	model->scale = vector3df(1, 1, 1);
+	model->material = COMMON_BASIC_MATERIAL_SOLID;
 	models.push_back(model);
 }
 

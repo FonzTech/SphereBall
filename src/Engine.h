@@ -48,7 +48,7 @@ protected:
 	u32 deltaTime;
 
 	// Global render target
-	ITexture* sceneRtt;
+	irr::core::array<IRenderTarget> sceneRtts;
 
 	// Post-Processing system
 	std::unique_ptr<PostProcessing> postProcessing;

@@ -11,5 +11,6 @@ void main()
 	
 	color.a = step(noiseFactor, noiseColor.r);
 	
-    gl_FragColor = color;
+    gl_FragData[0] = color;
+    gl_FragData[1] = vec4(0);
 }

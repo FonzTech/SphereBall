@@ -32,6 +32,7 @@ SkyBox::SkyBox(const std::string &textureName) : GameObject()
 		std::shared_ptr<Model> model = std::make_shared<Model>(smgr->getMesh("models/plane.obj"));
 		model->scale = vector3df(FACE_DISTANCE * 0.1f);
 		model->addTexture(0, texture);
+		model->material = COMMON_BASIC_MATERIAL_SOLID;
 		models.push_back(model);
 	}
 

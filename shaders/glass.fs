@@ -14,6 +14,9 @@ void main()
 	float c = distance(gl_TexCoord[0].x + b, gl_TexCoord[0].y) * 2.0;
 	float d = 1.0 - clamp(c, 0, 1);
 	
-	gl_FragColor.rgb = mix(color.rgb, vec3(1.0), d);
-	gl_FragColor.a = dalpha + d * dalpha * 2.0;
+	color.rgb = mix(color.rgb, vec3(1.0), d);
+	color.a = dalpha + d * dalpha * 2.0;
+	
+    gl_FragData[0] = color;
+    gl_FragData[1] = vec4(0);
 }

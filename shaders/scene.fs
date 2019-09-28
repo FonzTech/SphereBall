@@ -1,4 +1,6 @@
-uniform sampler2D tex;
+uniform sampler2D colorRtt;
+uniform sampler2D bloomRtt;
+
 uniform float time;
 uniform float waveStrength;
 uniform vec3 ripplePoint;
@@ -52,8 +54,8 @@ void main()
 	coord = ripple(coord);
 
 	// Apply texture for the fragment
-	vec4 color = texture2D(tex, coord);
+	vec4 color = texture2D(colorRtt, coord);
 	
-	// Set fragment color
+	// Set fragment colorx
     gl_FragColor = color;
 }

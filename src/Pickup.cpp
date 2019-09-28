@@ -15,7 +15,7 @@ Pickup::Pickup() : GameObject()
 	// Load plane model
 	planeModel = std::make_shared<Model>(mesh);
 	planeModel->addTexture(0, texture);
-	planeModel->material = EMT_TRANSPARENT_ALPHA_CHANNEL;
+	planeModel->material = COMMON_BASIC_MATERIAL_VERTEX_ALPHA;
 	planeModel->scale = vector3df(2, 2, 0);
 }
 

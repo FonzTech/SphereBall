@@ -18,9 +18,6 @@ Engine::Engine()
 	SoundManager::singleton = std::make_shared<SoundManager>();
 	SharedData::singleton = std::make_shared<SharedData>();
 	Camera::singleton = std::make_shared<Camera>();
-
-	// Initialize variables and pointers
-	sceneRtt = nullptr;
 }
 
 void Engine::createPostProcessingMaterial()
@@ -64,6 +61,8 @@ bool Engine::setupComponents()
 
 	// Set engine instances
 	EngineObject::setEngineInstances(device, smgr, guienv);
+	GameObject::COMMON_BASIC_MATERIAL_SOLID = GameObject::getCommonBasicMaterial();
+	GameObject::COMMON_BASIC_MATERIAL_VERTEX_ALPHA = GameObject::getCommonBasicMaterial(EMT_TRANSPARENT_VERTEX_ALPHA);
 
 	// Load assets for SharedData
 	SharedData::singleton->loadAssets();
@@ -116,26 +115,28 @@ void Engine::loop()
 	Camera::singleton->position = vector3df(0, 40, -100);
 	Camera::singleton->lookAt = vector3df(0);
 
+	// Get window size
+	dimension2du windowSize = utility::getWindowSize<u32>(driver);
+
 	// Loop while game is still running
 	while (device->run() && RoomManager::singleton->isProgramRunning)
 	{
-		// Add new render target for window
+		// Setup MRT
 		{
-			if (sceneRtt != nullptr)
+			// Remove all textures and clear array
+			for (s32 i = sceneRtts.size() - 1; i >= 0; --i)
 			{
-				driver->removeTexture(sceneRtt);
-				sceneRtt = nullptr;
+				driver->removeTexture(sceneRtts[i].RenderTexture);
 			}
+			sceneRtts.clear();
 
-			// Get window size
-			dimension2du windowSize = utility::getWindowSize<u32>(driver);
-
-			// Create new render target
-			sceneRtt = driver->addRenderTargetTexture(windowSize);
-
-			// Make RT curren
-			driver->setRenderTarget(sceneRtt);
+			// Create new textures for render targets
+			sceneRtts.push_back(driver->addRenderTargetTexture(windowSize, "colorRtt", ECF_A8R8G8B8));
+			sceneRtts.push_back(driver->addRenderTargetTexture(windowSize, "bloomRtt", ECF_A8R8G8B8));
 		}
+
+		// Make G-Buffer current
+		driver->setRenderTarget(sceneRtts);
 
 		// Now delta time
 		u32 now = device->getTimer()->getTime();
@@ -145,7 +146,7 @@ void Engine::loop()
 		postProcessing->update((f32)deltaTime);
 
 		// Double buffered scene with clear color
-		driver->beginScene(true, true, SColor(255, 100, 101, 140));
+		driver->beginScene(true, true, SColor(0, 0, 0, 0));
 
 		// Cycle through all available game objects
 		for (size_t i = 0; i != RoomManager::singleton->gameObjects.size(); ++i)
@@ -221,8 +222,9 @@ void Engine::loop()
 
 			// Display game surface
 			ScreenQuadSceneNode screenQuad(smgr->getRootSceneNode(), smgr, -1);
-			screenQuad.ChangeMaterialType((E_MATERIAL_TYPE) postProcessingMaterial);
-			screenQuad.getMaterial(0).setTexture(0, sceneRtt);
+			screenQuad.ChangeMaterialType((E_MATERIAL_TYPE)postProcessingMaterial);
+			screenQuad.getMaterial(0).setTexture(0, sceneRtts[0].RenderTexture);
+			screenQuad.getMaterial(0).setTexture(1, sceneRtts[1].RenderTexture);
 
 			// Draw scene RTT quad
 			screenQuad.render();
@@ -287,7 +289,11 @@ void Engine::PostProcessing::OnSetConstants(IMaterialRendererServices* services,
 {
 	// Set shader values
 	s32 layer0 = 0;
-	services->setPixelShaderConstant("tex", (s32*)&layer0, 1);
+	services->setPixelShaderConstant("colorRtt", &layer0, 1);
+
+	s32 layer1 = 1;
+	services->setPixelShaderConstant("bloomRtt", &layer1, 1);
+
 	services->setPixelShaderConstant("time", &ppTime, 1);
 	services->setPixelShaderConstant("waveStrength", &waveStrength, 1);
 	services->setPixelShaderConstant("ripplePoint", &ripplePoint.X, 3);

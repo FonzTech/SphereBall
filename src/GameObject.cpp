@@ -1,5 +1,21 @@
 #include "GameObject.h"
 
+s32 GameObject::COMMON_BASIC_MATERIAL_SOLID = EMT_SOLID;
+s32 GameObject::COMMON_BASIC_MATERIAL_VERTEX_ALPHA = EMT_TRANSPARENT_VERTEX_ALPHA;
+
+const s32 GameObject::getCommonBasicMaterial(E_MATERIAL_TYPE basicMaterial)
+{
+	// Create basic shader
+	ShaderCallback* bsc = new ShaderCallback();
+
+	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+	s32 material = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/standard.fs", bsc, basicMaterial);
+
+	bsc->drop();
+
+	return material;
+}
+
 std::shared_ptr<GameObject> GameObject::createInstance(const json &jsonData)
 {
 	return nullptr;

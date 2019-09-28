@@ -30,7 +30,7 @@ Pill::Pill(u8 type) : Pickup()
 	IAnimatedMesh* mesh = smgr->getMesh("models/pill.obj");
 	ITexture* texture = driver->getTexture("textures/lethargy_pill.png");
 
-	// Create sparkle shader
+	// Create fake lighting from shader
 	PillShaderCallback* ssc = new PillShaderCallback(this);
 
 	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();

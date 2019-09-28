@@ -149,30 +149,27 @@ void Engine::loop()
 		driver->beginScene(true, true, SColor(0, 0, 0, 0));
 
 		// Cycle through all available game objects
-		for (size_t i = 0; i != RoomManager::singleton->gameObjects.size(); ++i)
+		std::vector<std::shared_ptr<GameObject>>::iterator it = RoomManager::singleton->gameObjects.begin();
+		while (it != RoomManager::singleton->gameObjects.end())
 		{
 			// Set delta time for the current object
-			RoomManager::singleton->gameObjects[i]->deltaTime = (f32) deltaTime;
+			(*it)->deltaTime = (f32) deltaTime;
 
 			// Update current game object
-			RoomManager::singleton->gameObjects[i]->update();
+			(*it)->update();
 
 			// Check if game object has been destroyed
-			if (RoomManager::singleton->gameObjects[i]->destroy)
+			if ((*it)->destroy)
 			{
-				RoomManager::singleton->gameObjects.erase(RoomManager::singleton->gameObjects.begin() + i);
-				--i;
+				it = RoomManager::singleton->gameObjects.erase(it);
 				continue;
 			}
 
-			// Get static reference to object
-			std::shared_ptr<GameObject> &gameObject = RoomManager::singleton->gameObjects[i];
-
 			// Affect drawing of game object
-			gameObject->draw();
+			(*it)->draw();
 
 			// Add all game object's models to the scene
-			for (std::shared_ptr<Model> &model : gameObject->models)
+			for (std::shared_ptr<Model> &model : (*it)->models)
 			{
 				// Create scene node from this mesh
 				IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode(model->mesh, nullptr, -1, model->position, model->rotation, model->scale);
@@ -198,6 +195,9 @@ void Engine::loop()
 					}
 				}
 			}
+
+			// Advance iterator
+			++it;
 		}
 
 		// Add camera scene node

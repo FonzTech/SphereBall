@@ -1,6 +1,8 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
+#define KEY_GOI_SKYBOX 1
+
 #include <vector>
 #include <nlohmann/json.hpp>
 
@@ -96,6 +98,7 @@ public:
 	std::vector<std::shared_ptr<Model>> models;
 
 	// Object properties
+	u8 gameObjectIndex;
 	bool destroy;
 	vector3df position;
 	vector3df speed;

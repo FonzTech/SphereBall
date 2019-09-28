@@ -64,6 +64,7 @@ GameObject::GameObject()
 	models = std::vector<std::shared_ptr<Model>>();
 
 	// Initialize variables
+	gameObjectIndex = 0;
 	destroy = false;
 }
 

@@ -1,16 +1,17 @@
 #include "Model.h"
 
-Model::Model(IAnimatedMesh* mesh)
+Model::Model()
+{
+	textures = std::unordered_map<u32, ITexture*>();
+	material = -1;
+	currentFrame = 0.0f;
+}
+
+Model::Model(IAnimatedMesh* mesh) : Model()
 {
 	// Assign mesh and bounding box
 	this->mesh = mesh;
 	boundingBox = mesh->getBoundingBox();
-
-	// Initialize members
-	textures = std::unordered_map<u32, ITexture*>();
-	material = -1;
-
-	currentFrame = 0.0f;
 }
 
 Model::Model(Model* model)

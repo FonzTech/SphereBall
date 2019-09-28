@@ -24,6 +24,7 @@ public:
 	f32 currentFrame;
 
 	// Constructor
+	Model();
 	Model(Model* model);
 	Model(IAnimatedMesh* mesh);
 

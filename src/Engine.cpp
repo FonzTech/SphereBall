@@ -167,31 +167,48 @@ void Engine::loop()
 
 			// Affect drawing of game object
 			(*it)->draw();
-
-			// Add all game object's models to the scene
-			for (std::shared_ptr<Model> &model : (*it)->models)
+			
+			// Game Object is a SkyBox
+			if ((*it)->gameObjectIndex == KEY_GOI_SKYBOX)
 			{
-				// Create scene node from this mesh
-				IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode(model->mesh, nullptr, -1, model->position, model->rotation, model->scale);
+				auto& model = (*it)->models.at(0);
+				auto& textures = model->textures;
 
-				// Add all texture layer for this mesh (obtained from model)
-				if (node != nullptr)
+				ISceneNode* node = smgr->addSkyBoxSceneNode(textures[0], textures[1], textures[2], textures[3], textures[4], textures[5]);
+				node->setRotation(model->rotation);
+
+				node->setMaterialType((E_MATERIAL_TYPE)model->material);
+				node->setMaterialFlag(EMF_BLEND_OPERATION, true);
+				node->setMaterialFlag(EMF_LIGHTING, false);
+			}
+			// Ordinary game object
+			else
+			{
+				// Add all game object's models to the scene
+				for (std::shared_ptr<Model> &model : (*it)->models)
 				{
-					// Set current frame position
-					node->setCurrentFrame(model->currentFrame);
+					// Create scene node from this mesh
+					IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode(model->mesh, nullptr, -1, model->position, model->rotation, model->scale);
 
-					// Apply texture to all layers
-					for (auto &entry : model->textures)
+					// Add all texture layer for this mesh (obtained from model)
+					if (node != nullptr)
 					{
-						node->setMaterialTexture(entry.first, entry.second);
-						node->setMaterialFlag(EMF_LIGHTING, false);
-					}
+						// Set current frame position
+						node->setCurrentFrame(model->currentFrame);
 
-					// Set material type, if available
-					if (model->material != -1)
-					{
-						node->setMaterialType((E_MATERIAL_TYPE) model->material);
-						node->setMaterialFlag(EMF_BLEND_OPERATION, true);
+						// Apply texture to all layers
+						for (auto &entry : model->textures)
+						{
+							node->setMaterialTexture(entry.first, entry.second);
+							node->setMaterialFlag(EMF_LIGHTING, false);
+						}
+
+						// Set material type, if available
+						if (model->material != -1)
+						{
+							node->setMaterialType((E_MATERIAL_TYPE)model->material);
+							node->setMaterialFlag(EMF_BLEND_OPERATION, true);
+						}
 					}
 				}
 			}

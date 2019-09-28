@@ -10,9 +10,6 @@ class SkyBox : public GameObject
 {
 protected:
 	static const std::string FRAMES[];
-	static const f32 DEFAULT_MODEL_ANGLE;
-	static const f32 FACE_DISTANCE;
-	static const f32 FACE_BIAS;
 
 	float angle;
 

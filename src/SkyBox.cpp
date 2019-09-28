@@ -2,11 +2,8 @@
 #include "Camera.h"
 
 const std::string SkyBox::FRAMES[] = {
-	"right", "back", "left", "front", "down", "up"
+	"top", "bottom", "left", "right", "front", "back"
 };
-const f32 SkyBox::DEFAULT_MODEL_ANGLE = 90.0f;
-const f32 SkyBox::FACE_DISTANCE = 1000.0f;
-const f32 SkyBox::FACE_BIAS = 11.3f;
 
 std::shared_ptr<SkyBox> SkyBox::createInstance(const json &jsonData)
 {
@@ -18,8 +15,13 @@ std::shared_ptr<SkyBox> SkyBox::createInstance(const json &jsonData)
 
 SkyBox::SkyBox(const std::string &textureName) : GameObject()
 {
-	// Load mesh
-	IAnimatedMesh* mesh = smgr->getMesh("models/plane.obj");
+	// Set game object index
+	gameObjectIndex = KEY_GOI_SKYBOX;
+
+	// Create dummy model
+	std::shared_ptr<Model> model = std::make_shared<Model>();
+	model->material = COMMON_BASIC_MATERIAL_SOLID;
+	models.push_back(model);
 
 	// Create all the six sides
 	for (int i = 0; i < 6; ++i)
@@ -27,13 +29,7 @@ SkyBox::SkyBox(const std::string &textureName) : GameObject()
 		// Load texture
 		const std::string texturePath = "textures/skybox_" + textureName + "_" + FRAMES[i] + ".jpg";
 		ITexture* texture = driver->getTexture(texturePath.c_str());
-
-		// Duplicate model and textures for sides
-		std::shared_ptr<Model> model = std::make_shared<Model>(smgr->getMesh("models/plane.obj"));
-		model->scale = vector3df(FACE_DISTANCE * 0.1f);
-		model->addTexture(0, texture);
-		model->material = COMMON_BASIC_MATERIAL_SOLID;
-		models.push_back(model);
+		model->addTexture(i, texture);
 	}
 
 	// Initialize variable
@@ -43,37 +39,12 @@ SkyBox::SkyBox(const std::string &textureName) : GameObject()
 void SkyBox::update()
 {
 	// Move skybox along camera
-	position.X = Camera::singleton->position.X;
+	// position.X = Camera::singleton->position.X;
 
 	// Make skybox rotate
-	angle += 0.0005f * deltaTime;
+	models.at(0)->rotation.Y += 0.0005f * deltaTime;
 }
 
 void SkyBox::draw()
 {
-	// Adjust all the six faces
-	for (int i = 0; i < models.size(); ++i)
-	{
-		// Get model
-		std::shared_ptr<Model> model = models.at(i);
-
-		// Faces perpendicular to the horizontal plane
-		if (i < 4)
-		{
-			f32 procAngle = angle + i * 90;
-			f32 angleInRadians = degToRad(procAngle);
-
-			f32 x = (f32)(std::cos(angleInRadians) * (FACE_DISTANCE - FACE_BIAS));
-			f32 z = (f32)(std::sin(angleInRadians) * (FACE_DISTANCE - FACE_BIAS));
-
-			model->position = position + vector3df(x, 0, z);
-			model->rotation = vector3df(0, -procAngle + DEFAULT_MODEL_ANGLE, 0);
-		}
-		// Faces parallel to the horizontal plane
-		else
-		{
-			model->position = position + vector3df(0, (FACE_DISTANCE - FACE_BIAS) * (i == 4 ? -1 : 1), 0);
-			model->rotation = vector3df(i == 4 ? 90.0f : -90.0f, -angle + DEFAULT_MODEL_ANGLE, 0);
-		}
-	}
 }

@@ -108,6 +108,9 @@
     <ClCompile Include="src\Pickup.cpp">
       <Filter>Sources\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Fire.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src/Engine.h">
@@ -189,6 +192,9 @@
       <Filter>Headers\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Pickup.h">
+      <Filter>Headers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fire.h">
       <Filter>Headers\Game</Filter>
     </ClInclude>
   </ItemGroup>

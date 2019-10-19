@@ -13,6 +13,7 @@
 #include "Pill.h"
 #include "Hourglass.h"
 #include "Fruit.h"
+#include "Fire.h"
 
 std::shared_ptr<RoomManager> RoomManager::singleton = nullptr;
 
@@ -42,6 +43,7 @@ RoomManager::RoomManager()
 	gameObjectFactory["Pill"] = &Pill::createInstance;
 	gameObjectFactory["Hourglass"] = &Hourglass::createInstance;
 	gameObjectFactory["Fruit"] = &Fruit::createInstance;
+	gameObjectFactory["Fire"] = &Fire::createInstance;
 
 	// Initialize variables
 	isProgramRunning = true;

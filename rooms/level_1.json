@@ -175,6 +175,16 @@
 		}
 	},
 	{
+		"name": "Fire",
+		"required": {
+			"position": {
+				"x": 0.0,
+				"y": 10.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
 		"name": "Solid",
 		"required": {
 			"position": {

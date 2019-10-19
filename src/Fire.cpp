@@ -70,7 +70,7 @@ void Fire::createFileParticle()
 	paf->drop();
 
 	// Setup particle system
-	particleSystem->setPosition(position);
+	particleSystem->setPosition(position + vector3df(0, 15, 0));
 	particleSystem->setMaterialFlag(EMF_LIGHTING, false);
 	particleSystem->setMaterialFlag(EMF_ZWRITE_ENABLE, false);
 	particleSystem->setMaterialTexture(0, driver->getTexture("textures/particle_fire.png"));

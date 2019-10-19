@@ -77,6 +77,7 @@ public:
 	// Common material for game objects which does not need advanced shading
 	static s32 COMMON_BASIC_MATERIAL_SOLID;
 	static s32 COMMON_BASIC_MATERIAL_VERTEX_ALPHA;
+	static s32 COMMON_EMT_TRANSPARENT_ADD_COLOR;
 
 	/*
 		Create a basic common material to apply transformation matrix in vertex shader and

@@ -56,7 +56,7 @@ Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakS
 	// Declare asset variables
 	IAnimatedMesh* mesh;
 	ITexture* texture;
-	s32 material = COMMON_BASIC_MATERIAL_SOLID;
+	s32 material = COMMON_EMT_MATERIAL_SOLID;
 
 	delayedAlphaMap = nullptr;
 
@@ -176,7 +176,7 @@ Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakS
 			model = std::make_shared<Model>(mesh);
 			model->addTexture(0, texture);
 			model->scale = vector3df(1);
-			model->material = COMMON_BASIC_MATERIAL_SOLID;
+			model->material = COMMON_EMT_MATERIAL_SOLID;
 			models.push_back(model);
 		}
 	}

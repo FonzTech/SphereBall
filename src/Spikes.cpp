@@ -64,7 +64,7 @@ Spikes::Spikes(s8 initialMode, f32 delay) : GameObject()
 		// Create model for base
 		std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 		model->addTexture(0, texture);
-		model->material = COMMON_BASIC_MATERIAL_SOLID;
+		model->material = COMMON_EMT_MATERIAL_SOLID;
 		models.push_back(model);
 	}
 	else
@@ -79,14 +79,14 @@ Spikes::Spikes(s8 initialMode, f32 delay) : GameObject()
 		// Create model for base
 		std::shared_ptr<Model> model = std::make_shared<Model>(meshA);
 		model->addTexture(0, texture);
-		model->material = COMMON_BASIC_MATERIAL_SOLID;
+		model->material = COMMON_EMT_MATERIAL_SOLID;
 		models.push_back(model);
 
 		// Create model for tip
 		model = std::make_shared<Model>(meshB);
 		model->addTexture(0, texture);
 		model->scale = vector3df(1, 1, 1);
-		model->material = COMMON_BASIC_MATERIAL_SOLID;
+		model->material = COMMON_EMT_MATERIAL_SOLID;
 		models.push_back(model);
 
 		// Load sounds

@@ -61,8 +61,8 @@ bool Engine::setupComponents()
 
 	// Set engine instances
 	EngineObject::setEngineInstances(device, smgr, guienv);
-	GameObject::COMMON_BASIC_MATERIAL_SOLID = GameObject::getCommonBasicMaterial();
-	GameObject::COMMON_BASIC_MATERIAL_VERTEX_ALPHA = GameObject::getCommonBasicMaterial(EMT_TRANSPARENT_VERTEX_ALPHA);
+	GameObject::COMMON_EMT_MATERIAL_SOLID = GameObject::getCommonBasicMaterial();
+	GameObject::COMMON_EMT_MATERIAL_VERTEX_ALPHA = GameObject::getCommonBasicMaterial(EMT_TRANSPARENT_VERTEX_ALPHA);
 
 	// Load assets for SharedData
 	SharedData::singleton->loadAssets();

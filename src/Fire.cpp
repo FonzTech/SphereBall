@@ -18,12 +18,12 @@ Fire::Fire() : GameObject()
 	models.push_back(model);
 
 	// Create fire particle
-	this->createFileParticle();
+	createFileParticle();
 }
 
 Fire::~Fire()
 {
-	// Drop the pointer, so resources can be releasedx
+	// Drop the pointer, so resources can be released
 	particleSystem->drop();
 	particleSystem = nullptr;
 }

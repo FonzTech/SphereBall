@@ -290,7 +290,7 @@ void MainMenu::draw()
 		std::wstring str = optionTitles[i];
 		if (i == 5 || i == 6)
 		{
-			f32 value = SoundManager::singleton->volumeLevels[i == 5 ? KEY_SETTING_MUSIC : KEY_SETTING_SOUND];
+			f32 value = SoundManager::singleton->volumeLevels[i == 5 ? KEY_SETTING_SOUND : KEY_SETTING_MUSIC];
 			str += L": " + std::to_wstring((s32)(value * 0.1f));
 		}
 

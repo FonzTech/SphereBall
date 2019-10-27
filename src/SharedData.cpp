@@ -169,7 +169,7 @@ void SharedData::update(f32 deltaTime)
 		for (u8 i = 0; i < 2; ++i)
 		{
 			// Get window size
-			const vector2di windowSize = utility::getWindowSize<s32>(driver);
+			const vector2di windowSize = Utility::getWindowSize<s32>(driver);
 
 			// Compute text rectangle
 			s32 y = (s32)(windowSize.Y * 0.6f + 128.0f * (f32)i);
@@ -209,7 +209,7 @@ void SharedData::loadAssets()
 void SharedData::buildGameScore()
 {
 	// Get window size
-	const vector2di windowSize = utility::getWindowSize<s32>(driver);
+	const vector2di windowSize = Utility::getWindowSize<s32>(driver);
 
 	// Get alpha value for Level HUD
 	const s32 alpha = (s32)(255.0f - gameOverAlpha * 255.0f);
@@ -293,7 +293,7 @@ void SharedData::buildGameScore()
 				// Top part
 				{
 					// Compute source rect
-					const recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND_TOP]);
+					const recti sourceRect = Utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND_TOP]);
 
 					// Compute common width
 					hudSize.Y = 192.0f;
@@ -313,7 +313,7 @@ void SharedData::buildGameScore()
 				// Bottom part
 				{
 					// Compute source rect
-					const recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND_BOTTOM]);
+					const recti sourceRect = Utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS_SAND_BOTTOM]);
 
 					// Compute common destination rect
 					f32 height = (f32)destRect.getHeight() * 0.5f;
@@ -325,7 +325,7 @@ void SharedData::buildGameScore()
 
 				// Front part
 				{
-					const recti sourceRect = utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS]);
+					const recti sourceRect = Utility::getSourceRect(guiTextures[KEY_GUI_HOURGLASS]);
 					driver->draw2DImage(guiTextures[KEY_GUI_HOURGLASS], destRect, sourceRect, 0, 0, true);
 				}
 
@@ -355,7 +355,7 @@ void SharedData::buildGameScore()
 				// Rotation animation
 				f32 rotationValue;
 				{
-					rotationValue = utility::getCubicBezierAt(vector2df(0.25f, 0.1f), vector2df(0.25f, 1.0f), hourglassRotation).Y;
+					rotationValue = Utility::getCubicBezierAt(vector2df(0.25f, 0.1f), vector2df(0.25f, 1.0f), hourglassRotation).Y;
 					rotationValue = degToRad(rotationValue * 180.0f);
 				}
 
@@ -395,7 +395,7 @@ void SharedData::buildGameScore()
 	// Animate score points value
 	{
 		f32 points = (f32)getGameScoreValue(KEY_SCORE_POINTS);
-		utility::animateFloatValue(deltaTime, &levelPointsValue, points);
+		Utility::animateFloatValue(deltaTime, &levelPointsValue, points);
 	}
 
 	// Draw score points
@@ -444,11 +444,11 @@ void SharedData::buildGameOver()
 	if (gameOverAlpha >= 1.0f)
 	{
 		f32 points = (f32)(getGameScoreValue(KEY_SCORE_POINTS_TOTAL) + getGameScoreValue(KEY_SCORE_POINTS) * (isLevelPassed ? 1 : -1));
-		utility::animateFloatValue(deltaTime, &globalPointsValue, points);
+		Utility::animateFloatValue(deltaTime, &globalPointsValue, points);
 	}
 
 	// Get window size
-	vector2df windowSize = utility::getWindowSize<f32>(driver);
+	vector2df windowSize = Utility::getWindowSize<f32>(driver);
 
 	// Compute alpha value in unsigned integer form
 	u32 alpha[] = {
@@ -458,7 +458,7 @@ void SharedData::buildGameOver()
 
 	// Draw background image
 	IGUIImage* image = guienv->addImage(guiTextures[KEY_GUI_RECTANGLE], vector2di(0, 0));
-	image->setMinSize(utility::getWindowSize<u32>(driver));
+	image->setMinSize(Utility::getWindowSize<u32>(driver));
 	image->setScaleImage(true);
 	image->setColor(SColor(alpha[0], 0, 0, 0));
 
@@ -547,7 +547,7 @@ void SharedData::buildGameOver()
 
 	// Draw mouse pointer
 	ITexture* mouse = guiTextures[KEY_GUI_MOUSE];
-	const recti r = utility::getSourceRect(mouse) + EventManager::singleton->mousePosition;
+	const recti r = Utility::getSourceRect(mouse) + EventManager::singleton->mousePosition;
 	image = guienv->addImage(r);
 	image->setImage(mouse);
 }
@@ -616,7 +616,7 @@ void SharedData::resetState()
 void SharedData::buildFadeTransition()
 {
 	// Get window size
-	recti windowRect(vector2di(0), utility::getWindowSize<s32>(driver));
+	recti windowRect(vector2di(0), Utility::getWindowSize<s32>(driver));
 
 	// Cover the rectangle for entire window
 	IGUIImage* image = guienv->addImage(windowRect);
@@ -788,7 +788,7 @@ void SharedData::invertTime()
 	hourglassRotation = 1;
 
 	// Trigger ripple effectx
-	const vector2df windowSize = utility::getWindowSize<f32>(driver);
+	const vector2df windowSize = Utility::getWindowSize<f32>(driver);
 	const vector2df position(windowSize.X - 128, windowSize.Y - 128);
 
 	json data = {

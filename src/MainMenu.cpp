@@ -56,7 +56,7 @@ MainMenu::MainMenu() : GameObject()
 void MainMenu::update()
 {
 	// Get window size
-	windowSize = utility::getWindowSize<s32>(driver);
+	windowSize = Utility::getWindowSize<s32>(driver);
 
 	// Temporary current index
 	s8 tmpIndex = -1;
@@ -252,7 +252,7 @@ void MainMenu::draw()
 	Camera::singleton->lookAt = position;
 
 	// Get animated value
-	f32 animatedValue = utility::getCubicBezierAt(*(&vector2df(0, 1)), *(&vector2df(1, 0)), abs(animation)).X;
+	f32 animatedValue = Utility::getCubicBezierAt(*(&vector2df(0, 1)), *(&vector2df(1, 0)), abs(animation)).X;
 
 	// Draw title
 	{
@@ -345,7 +345,7 @@ void MainMenu::draw()
 
 	// Draw mouse pointer
 	{
-		recti r = utility::getSourceRect(mouse) + EventManager::singleton->mousePosition;
+		recti r = Utility::getSourceRect(mouse) + EventManager::singleton->mousePosition;
 		IGUIImage* image = guienv->addImage(r);
 		image->setImage(mouse);
 	}

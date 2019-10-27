@@ -53,7 +53,7 @@ RoomManager::RoomManager()
 void RoomManager::loadRoom(const std::string roomToLoad)
 {
 	// Check if requested room is a level
-	if (utility::startsWith(roomToLoad, LEVEL_PREFIX))
+	if (Utility::startsWith(roomToLoad, LEVEL_PREFIX))
 	{
 		const std::string suffix = roomToLoad.substr(LEVEL_PREFIX.length());
 		levelIndex = std::atoi(suffix.c_str());

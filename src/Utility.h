@@ -18,8 +18,10 @@ using namespace gui;
 
 using nlohmann::json;
 
-namespace utility
+class Utility
 {
+public:
+
 	/**
 		Check whether a string begins with a certain prefix (a token, to say) or not.
 
@@ -28,7 +30,7 @@ namespace utility
 
 		@return "true" if "s" starts with "prefix", otherwise "false".
 	*/
-	const bool startsWith(const std::string& s, const std::string& prefix);
+	static const bool startsWith(const std::string& s, const std::string& prefix);
 
 	/**
 		Check whether a string ends with a certain suffix (a token, to say) or not.
@@ -38,7 +40,7 @@ namespace utility
 
 		@return "true" if "s" ends with "suffix", otherwise "false".
 	*/
-	const bool endsWith(const std::string& s, const std::string& suffix);
+	static const bool endsWith(const std::string& s, const std::string& suffix);
 
 	/**
 		Provide a proxy pattern for mesh loading. By default, Irrlicht supports certain type of file formats.
@@ -50,7 +52,7 @@ namespace utility
 
 		@return pointer to the requested IAnimatedMesh on success, otherwise "nullptr" is returned.
 	*/
-	IAnimatedMesh* getMesh(ISceneManager* smgr, const std::string& path);
+	static IAnimatedMesh* getMesh(ISceneManager* smgr, const std::string& path);
 
 	/**
 		Get the system temporary directory. This is useful when working with temporary files which you don't need
@@ -59,7 +61,7 @@ namespace utility
 
 		@return the string representing the temporary directory if available, otherwise "./" is returned.
 	*/
-	const std::wstring getTempDirectory();
+	static const std::wstring getTempDirectory();
 
 	/**
 		Transform axis-aligned bounding box by point. This function does not return anything.
@@ -69,7 +71,7 @@ namespace utility
 		@param rotation the rotation, described by a vector, to perform on the bounding. box Default is a 0-vector.
 		@param sclae the scale, described by a vector, to perform on the bounding box. Default is a unit-vector.
 	*/
-	const void transformAABBox(aabbox3d<f32> &dest, const vector3df &translate = vector3df(0, 0, 0), const vector3df &rotation = vector3df(0, 0, 0), const vector3df &scale = vector3df(1, 1, 1));
+	static const void transformAABBox(aabbox3d<f32> &dest, const vector3df &translate = vector3df(0, 0, 0), const vector3df &rotation = vector3df(0, 0, 0), const vector3df &scale = vector3df(1, 1, 1));
 
 	/**
 		Get horizontal bounding box. This is merely an utility function to ease the work of getting
@@ -80,7 +82,7 @@ namespace utility
 		@param align the alignment coefficient, where 0 is the center, -1 is the left side, 1 is the right side.
 		@param verScale the vertical scaling for the bounding box, to prevent wrong collisions on rapid movements. Default is 1.
 	*/
-	const void getHorizontalAABBox(const aabbox3df &source, aabbox3df &dest, const f32 align, const f32 verScale = 1);
+	static const void getHorizontalAABBox(const aabbox3df &source, aabbox3df &dest, const f32 align, const f32 verScale = 1);
 
 	/**
 		Get vertical bounding box. This is merely an utility function to ease the work of getting
@@ -91,7 +93,7 @@ namespace utility
 		@param align the alignment coefficient, where 0 is the center, -1 is the upper side, 1 is the lower side.
 		@param horScale the horizontal scaling for the bounding box, to prevent wrong collisions on rapid movements. Default is 1.
 	*/
-	const void getVerticalAABBox(const aabbox3df &source, aabbox3df &dest, const f32 align, const f32 horScale = 1);
+	static const void getVerticalAABBox(const aabbox3df &source, aabbox3df &dest, const f32 align, const f32 horScale = 1);
 
 	/**
 		Get size of the window where the application is currently running. This is a template function, because
@@ -105,7 +107,7 @@ namespace utility
 		@return vector2d<T> filled with the current window size. If implementation is not found, then a 0-vector is returned.
 	*/
 	template <typename T>
-	const vector2d<T> getWindowSize(IVideoDriver* driver)
+	static const vector2d<T> getWindowSize(IVideoDriver* driver)
 	{
 		// Get exposed video data
 		const SExposedVideoData evd = driver->getExposedVideoData();
@@ -146,7 +148,7 @@ namespace utility
 
 		Currently
 	*/
-	const rect<s32> getPositionInScreenSpace(const IVideoDriver* driver, const f32 x, const f32 y, const s32 width = 1024, const s32 height = 1024, IGUIFont* font = nullptr, const wchar_t* text = nullptr, const f32 alignX = 0.0f, const f32 alignY = 0.0f);
+	static const rect<s32> getPositionInScreenSpace(IVideoDriver* driver, const f32 x, const f32 y, const s32 width = 1024, const s32 height = 1024, IGUIFont* font = nullptr, const wchar_t* text = nullptr, const f32 alignX = 0.0f, const f32 alignY = 0.0f);
 
 	/**
 		Convert Irrlicht 3D vector to SFML 3D vector. This is useful when working with spatial audio.
@@ -155,7 +157,7 @@ namespace utility
 
 		@return vector of type sf::Vector3f, ready for use in SFML framework.
 	*/
-	const sf::Vector3f irrVectorToSf(const vector3df& v);
+	static const sf::Vector3f irrVectorToSf(const vector3df& v);
 
 	/**
 		Get full source rect from texture. This function builds a <recti> data structure, ready for
@@ -165,7 +167,7 @@ namespace utility
 
 		@return a <recti> (signed integer rectangle) data structure filled with (0, 0, texture width, texture height).
 	*/
-	const recti getSourceRect(const ITexture* texture);
+	static const recti getSourceRect(const ITexture* texture);
 
 	/**
 		Compute the Cubic Bezier Curve, from specified points at a certain time. This is useful when animating
@@ -177,7 +179,7 @@ namespace utility
 
 		@return floating point 2D vector filled with (x,y) values for the curve at "t" time.
 	*/
-	const vector2df getCubicBezierAt(const vector2df& a, const vector2df& b, const f32 t);
+	static const vector2df getCubicBezierAt(const vector2df& a, const vector2df& b, const f32 t);
 
 	/**
 		 Rotate a vector around a pivot by a certain angles.
@@ -187,7 +189,7 @@ namespace utility
 		 @param pivot the pivot point where to rotate the input around.
 		 @param angles the rotation to be performed for desired axes.
 	*/
-	void rotateVectorAroundPivot(const vector3df & input, vector3df & out, const vector3df & pivot, const vector3df & angles);
+	static void rotateVectorAroundPivot(const vector3df & input, vector3df & out, const vector3df & pivot, const vector3df & angles);
 
 	/**
 		Animate a floating point value to a target one. This function uses a fixed non-linear interpolation, more
@@ -197,7 +199,7 @@ namespace utility
 		@param variableToAnimate the variable to animate, passed by pointer.
 		@param targetValue the value to reach for the entire animation.
 	*/
-	void animateFloatValue(const f32 deltaTime, f32* variableToAnimate, const f32 targetValue);
-}
+	static void animateFloatValue(const f32 deltaTime, f32* variableToAnimate, const f32 targetValue);
+};
 
 #endif // UTILITY_H

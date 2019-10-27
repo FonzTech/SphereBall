@@ -19,7 +19,7 @@ std::shared_ptr<sf::Sound> EngineObject::playAudio(const std::string& key, const
 	else
 	{
 		sound->setRelativeToListener(false);
-		sound->setPosition(utility::irrVectorToSf(*position));
+		sound->setPosition(Utility::irrVectorToSf(*position));
 	}
 
 	sound->setVolume(SoundManager::singleton->volumeLevels[isMusic ? KEY_SETTING_MUSIC : KEY_SETTING_SOUND]);

@@ -7,7 +7,7 @@ GUIImageSceneNode::GUIImageSceneNode(scene::ISceneNode* parent, scene::ISceneMan
 		Here we initialize the vertices of the screen Aligned quad
 	*/
 
-	core::dimension2df currentResolution = utility::getWindowSize<f32>(smgr->getVideoDriver());
+	core::dimension2df currentResolution = Utility::getWindowSize<f32>(smgr->getVideoDriver());
 
 	aabb.reset(0, 0, 0);
 
@@ -108,10 +108,10 @@ void GUIImageSceneNode::setVertices(const core::vector3df & containerSize, core:
 	matrix4 rotation;
 	if (rotationCenter != nullptr)
 	{
-		utility::rotateVectorAroundPivot(upperLeft, upperLeft, *rotationCenter, *rotationDegrees);
-		utility::rotateVectorAroundPivot(upperRight, upperRight, *rotationCenter, *rotationDegrees);
-		utility::rotateVectorAroundPivot(lowerLeft, lowerLeft, *rotationCenter, *rotationDegrees);
-		utility::rotateVectorAroundPivot(lowerRight, lowerRight, *rotationCenter, *rotationDegrees);
+		Utility::rotateVectorAroundPivot(upperLeft, upperLeft, *rotationCenter, *rotationDegrees);
+		Utility::rotateVectorAroundPivot(upperRight, upperRight, *rotationCenter, *rotationDegrees);
+		Utility::rotateVectorAroundPivot(lowerLeft, lowerLeft, *rotationCenter, *rotationDegrees);
+		Utility::rotateVectorAroundPivot(lowerRight, lowerRight, *rotationCenter, *rotationDegrees);
 	}
 
 	upperLeft = (upperLeft / containerSize * 2.0f - 1.0f) * vector3df(1, -1, 1);

@@ -116,7 +116,7 @@ void Engine::loop()
 	Camera::singleton->lookAt = vector3df(0);
 
 	// Get window size
-	dimension2du windowSize = utility::getWindowSize<u32>(driver);
+	dimension2du windowSize = Utility::getWindowSize<u32>(driver);
 
 	// Loop while game is still running
 	while (device->run() && RoomManager::singleton->isProgramRunning)

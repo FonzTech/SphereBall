@@ -7,7 +7,7 @@ ScreenQuadSceneNode::ScreenQuadSceneNode(scene::ISceneNode* parent, scene::IScen
 		Here we initialize the vertices of the screen Aligned quad
 	*/
 
-	core::dimension2df currentResolution = utility::getWindowSize<f32>(smgr->getVideoDriver());
+	core::dimension2df currentResolution = Utility::getWindowSize<f32>(smgr->getVideoDriver());
 
 	aabb.reset(0, 0, 0);
 

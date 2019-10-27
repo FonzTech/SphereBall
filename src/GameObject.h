@@ -26,7 +26,7 @@ protected:
 		Collision collision;
 
 		// Get translated bounding box;
-		utility::transformAABBox(rect, position);
+		Utility::transformAABBox(rect, position);
 
 		// Check for all of the other game objects
 		for (const std::shared_ptr<GameObject> &gameObject : gameObjects)
@@ -51,7 +51,7 @@ protected:
 
 			// Get bounding box of mesh
 			aabbox3df otherBox(gameObject->getBoundingBox());
-			utility::transformAABBox(otherBox, gameObject->position);
+			Utility::transformAABBox(otherBox, gameObject->position);
 
 			// Check for intersection
 			if (rect.intersectsWithBox(otherBox))

@@ -158,7 +158,7 @@ void Player::update()
 
 	// Update listener position
 	sf::Listener::setDirection(sf::Vector3f(0, 0, -1));
-	sf::Listener::setPosition(utility::irrVectorToSf(position));
+	sf::Listener::setPosition(Utility::irrVectorToSf(position));
 }
 
 void Player::draw()
@@ -358,7 +358,7 @@ void Player::walk()
 
 		// Get shifted BB
 		aabbox3df rect(bbox);
-		utility::getVerticalAABBox(bbox, rect, (1.0f + (0.25f * std::abs(speed.Y))) * j, 0.75f - std::abs(speed.X * 2));
+		Utility::getVerticalAABBox(bbox, rect, (1.0f + (0.25f * std::abs(speed.Y))) * j, 0.75f - std::abs(speed.X * 2));
 
 		// Check for collision
 		Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect, collisionChecks[i ? "solidTop" : "solid"]);
@@ -413,7 +413,7 @@ void Player::walk()
 
 		// Get shifted BB
 		aabbox3df rect(bbox);
-		utility::getHorizontalAABBox(bbox, rect, (0.85f + (0.1f * std::abs(speed.X))) * j, 0.9f);
+		Utility::getHorizontalAABBox(bbox, rect, (0.85f + (0.1f * std::abs(speed.X))) * j, 0.9f);
 
 		// Check for collision
 		Collision collision = checkBoundingBoxCollision<Solid>(RoomManager::singleton->gameObjects, rect, collisionChecks["solid"]);
@@ -455,7 +455,7 @@ void Player::walk()
 	if (state == STATE_WALKING)
 	{
 		aabbox3df rect(bbox);
-		utility::transformAABBox(rect, vector3df(0), vector3df(0), vector3df(0.75f, 0.85f, 1.0f));
+		Utility::transformAABBox(rect, vector3df(0), vector3df(0), vector3df(0.75f, 0.85f, 1.0f));
 
 		Collision collision = checkBoundingBoxCollision<Spikes>(RoomManager::singleton->gameObjects, rect, collisionChecks["spikes"]);
 		if (collision.engineObject != nullptr)
@@ -472,7 +472,7 @@ void Player::walk()
 		if (SharedData::singleton->getGameScoreValue(KEY_SCORE_KEY_PICKED) == SharedData::singleton->getGameScoreValue(KEY_SCORE_KEY_TOTAL))
 		{
 			aabbox3df rect(bbox);
-			utility::transformAABBox(rect, vector3df(0), vector3df(0), vector3df(0.9f, 0.8f, 0.8f));
+			Utility::transformAABBox(rect, vector3df(0), vector3df(0), vector3df(0.9f, 0.8f, 0.8f));
 
 			Collision collision = checkBoundingBoxCollision<Exit>(RoomManager::singleton->gameObjects, rect);
 			if (collision.engineObject != nullptr)

@@ -81,7 +81,7 @@ Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakS
 	else if (breakState >= 0.0f)
 	{
 		// Load zipped mesh
-		mesh = utility::getMesh(smgr, "models/broken_block.zip");
+		mesh = Utility::getMesh(smgr, "models/broken_block.zip");
 
 		// Load sounds
 		sounds[KEY_SOUND_BREAKING] = SoundManager::singleton->getSound(KEY_SOUND_BREAKING);
@@ -209,7 +209,7 @@ void Solid::update()
 				// Check collision on top against player
 				const aabbox3df bbox = models.at(0)->mesh->getBoundingBox();
 				aabbox3df rect(bbox);
-				utility::getVerticalAABBox(bbox, rect, 1.0f, 0.05f);
+				Utility::getVerticalAABBox(bbox, rect, 1.0f, 0.05f);
 
 				Collision collision = checkBoundingBoxCollision<Player>(RoomManager::singleton->gameObjects, rect);
 				if (collision.engineObject != nullptr)
@@ -258,7 +258,7 @@ void Solid::update()
 		// Compute collision bbox
 		const aabbox3df bbox = getBoundingBox();
 		aabbox3df rect(bbox);
-		utility::getVerticalAABBox(bbox, rect, 1.1f);
+		Utility::getVerticalAABBox(bbox, rect, 1.1f);
 
 		// Check collision against player
 		Collision collision = checkBoundingBoxCollision<Player>(RoomManager::singleton->gameObjects, rect);

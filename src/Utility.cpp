@@ -13,6 +13,9 @@
 
 #endif
 
+s32 Utility::videoModeCount = -1;
+s32 Utility::videoModeCurrent = -1;
+
 const bool Utility::startsWith(const std::string& s, const std::string& prefix)
 {
 	return s.size() >= prefix.size() && s.compare(0, prefix.size(), prefix) == 0;
@@ -21,6 +24,11 @@ const bool Utility::startsWith(const std::string& s, const std::string& prefix)
 const bool Utility::endsWith(const std::string& s, const std::string& suffix)
 {
 	return s.rfind(suffix) == (s.size() - suffix.size());
+}
+
+const s32 Utility::mod(const s32 x, const s32 y)
+{
+	return (x % y + y) % y;
 }
 
 IAnimatedMesh* Utility::getMesh(ISceneManager* smgr, const std::string& path)

@@ -20,6 +20,10 @@ using nlohmann::json;
 
 class Utility
 {
+protected:
+	static s32 videoModeCount;
+	static s32 videoModeCurrent;
+
 public:
 
 	/**
@@ -41,6 +45,18 @@ public:
 		@return "true" if "s" ends with "suffix", otherwise "false".
 	*/
 	static const bool endsWith(const std::string& s, const std::string& suffix);
+
+	/**
+		Compute the modulus for the given numbers. This method is added because
+		the standard modulo operator (%) does not work as expected for negative
+		values.
+
+		@param x the dividend number.
+		@param y the divisor number.
+
+		@return the remainder for the division between x and y.
+	*/
+	static const s32 mod(const s32 x, const s32 y);
 
 	/**
 		Provide a proxy pattern for mesh loading. By default, Irrlicht supports certain type of file formats.

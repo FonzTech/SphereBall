@@ -115,12 +115,16 @@ void Engine::loop()
 	Camera::singleton->position = vector3df(0, 40, -100);
 	Camera::singleton->lookAt = vector3df(0);
 
-	// Get window size
-	dimension2du windowSize = Utility::getWindowSize<u32>(driver);
-
 	// Loop while game is still running
 	while (device->run() && RoomManager::singleton->isProgramRunning)
 	{
+		// Get window size
+		dimension2du windowSize;
+		{
+			s32 videoMode = Utility::getVideoMode(device);
+			windowSize = videoMode == -1 ? dimension2du(Utility::getWindowSize<u32>(driver)) : device->getVideoModeList()->getVideoModeResolution(videoMode);
+		}
+
 		// Setup MRT
 		{
 			// Remove all textures and clear array

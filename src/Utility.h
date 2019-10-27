@@ -59,6 +59,27 @@ public:
 	static const s32 mod(const s32 x, const s32 y);
 
 	/**
+		Get currently set video mode. If the current mode is invalid, it will
+		be automatically set to -1, which means the size of the app's window.
+
+		@param device the Irrlicht's device obtained during the engine setup.
+
+		@return signed integer representing the current video mode index.
+	*/
+	static const s32 getVideoMode(IrrlichtDevice* device);
+
+	/**
+		Step the video mode index N times, defined as argument. Video mode change
+		works this way, by wrapping values around the maximum video mode count,
+		to prevent setting invalid video modes.
+
+		@param value the step value.
+
+		@return the currently set mode after the execution of this method.
+	*/
+	static const s32 stepVideoMode(const s32 value);
+
+	/**
 		Provide a proxy pattern for mesh loading. By default, Irrlicht supports certain type of file formats.
 		Animated meshes, like x (DirectX), are huge compared to other static meshes. This problem is resolved
 		by zipping these large files, then unzipping when requested. Irrlicht's resource management is preserved.

@@ -31,6 +31,27 @@ const s32 Utility::mod(const s32 x, const s32 y)
 	return (x % y + y) % y;
 }
 
+const s32 Utility::getVideoMode(IrrlichtDevice* device)
+{
+	// Cache the value
+	if (videoModeCount == -1)
+	{
+		videoModeCount = device->getVideoModeList()->getVideoModeCount();
+	}
+
+	// Check for validity
+	if (videoModeCurrent < -1 || videoModeCurrent > videoModeCount)
+	{
+		videoModeCurrent = -1;
+	}
+	return videoModeCurrent;
+}
+
+const s32 Utility::stepVideoMode(const s32 value)
+{
+	return videoModeCurrent = mod(videoModeCurrent + value + 1, videoModeCount + 1) - 1;
+}
+
 IAnimatedMesh* Utility::getMesh(ISceneManager* smgr, const std::string& path)
 {
 	// Unzip if necessary

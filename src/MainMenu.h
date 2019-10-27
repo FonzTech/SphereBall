@@ -49,6 +49,9 @@ public:
 	void update();
 	void draw();
 
+	// Resolution adjuster
+	vector2di adjustResolutionAndGetMouse();
+
 	// Create specialized instance
 	static std::shared_ptr<MainMenu> createInstance(const json &jsonData);
 };

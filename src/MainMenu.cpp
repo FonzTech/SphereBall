@@ -11,8 +11,8 @@ std::shared_ptr<MainMenu> MainMenu::createInstance(const json &jsonData)
 
 MainMenu::MainMenu() : GameObject()
 {
-	// Load font for menu
-	font = guienv->getFont("fonts/titles.xml");
+	// Initialize font to null
+	font = nullptr;
 
 	// Load textures
 	mouse = driver->getTexture("textures/gui_mouse.png");
@@ -57,13 +57,7 @@ void MainMenu::update()
 {
 	// Get window size
 	windowSize = Utility::getWindowSize<f32>(driver);
-	{
-		s32 videoMode = Utility::getVideoMode(device);
-		hudSize = videoMode == -1 ? dimension2du((u32)windowSize.X, (u32)windowSize.Y) : device->getVideoModeList()->getVideoModeResolution(videoMode);
-
-		vector2df pos(vector2df((f32)EventManager::singleton->mousePosition.X, (f32)EventManager::singleton->mousePosition.Y) / windowSize * vector2df((f32)hudSize.Width, (f32)hudSize.Height));
-		mousePosition = vector2di((s32)pos.X, (s32)pos.Y);
-	}
+	mousePosition = adjustResolutionAndGetMouse();
 
 	// Temporary current index
 	s8 tmpIndex = -1;
@@ -82,8 +76,8 @@ void MainMenu::update()
 	for (s8 i = 0; i < 8; ++i)
 	{
 		// Calculate fixed horizonal sections for entries
-		s32 x1 = (s32)((f32)hudSize.Width * 0.25f) + (i >= 4 ? hudSize.Width : 0);
-		s32 x2 = (s32)((f32)hudSize.Width * 0.75f) + (i >= 4 ? hudSize.Width : 0);
+		s32 x1 = i >= 4 ? hudSize.Width : 0;
+		s32 x2 = i >= 4 ? hudSize.Width * 2 : hudSize.Width;
 
 		// Calculate vertical position for entries
 		s32 y1 = (s32)(hudSize.Height * (0.3f + 0.1f * (i % 4)));
@@ -175,7 +169,12 @@ void MainMenu::update()
 			}
 			else
 			{
+				// Change video mode
 				Utility::stepVideoMode(isOnTheLeft ? -1 : 1);
+				adjustResolutionAndGetMouse();
+
+				// Trigger font reloading
+				font = nullptr;
 			}
 		}
 		else if (currentIndex == 1)
@@ -260,6 +259,12 @@ void MainMenu::update()
 
 void MainMenu::draw()
 {
+	// Load font if required
+	if (font == nullptr)
+	{
+		font = guienv->getFont(hudSize.Width > 1024 ? "fonts/titles.xml" : "fonts/titles_small.xml");
+	}
+
 	// Reposition camera
 	Camera::singleton->position = position + vector3df(0, 40, -100);
 	Camera::singleton->lookAt = position;
@@ -377,4 +382,13 @@ void MainMenu::draw()
 void MainMenu::jumpToLevel()
 {
 	RoomManager::singleton->loadRoom(roomToLoad);
+}
+
+vector2di MainMenu::adjustResolutionAndGetMouse()
+{
+	s32 videoMode = Utility::getVideoMode(device);
+	hudSize = videoMode == -1 ? dimension2du((u32)windowSize.X, (u32)windowSize.Y) : device->getVideoModeList()->getVideoModeResolution(videoMode);
+
+	vector2df pos(vector2df((f32)EventManager::singleton->mousePosition.X, (f32)EventManager::singleton->mousePosition.Y) / windowSize * vector2df((f32)hudSize.Width, (f32)hudSize.Height));
+	return mousePosition = vector2di((s32)pos.X, (s32)pos.Y);
 }

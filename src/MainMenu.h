@@ -15,8 +15,10 @@ protected:
 	ITexture* mouse;
 	ITexture* rectangleTexture;
 
-	// Window size
-	dimension2di windowSize;
+	// HUD and Window size
+	vector2df windowSize;
+	dimension2di hudSize;
+	vector2di mousePosition;
 
 	// Strings for text strings
 	std::vector<std::wstring> optionTitles;

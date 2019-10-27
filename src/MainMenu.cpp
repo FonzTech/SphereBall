@@ -56,7 +56,14 @@ MainMenu::MainMenu() : GameObject()
 void MainMenu::update()
 {
 	// Get window size
-	windowSize = Utility::getWindowSize<s32>(driver);
+	windowSize = Utility::getWindowSize<f32>(driver);
+	{
+		s32 videoMode = Utility::getVideoMode(device);
+		hudSize = videoMode == -1 ? dimension2du((u32)windowSize.X, (u32)windowSize.Y) : device->getVideoModeList()->getVideoModeResolution(videoMode);
+
+		vector2df pos(vector2df((f32)EventManager::singleton->mousePosition.X, (f32)EventManager::singleton->mousePosition.Y) / windowSize * vector2df((f32)hudSize.Width, (f32)hudSize.Height));
+		mousePosition = vector2di((s32)pos.X, (s32)pos.Y);
+	}
 
 	// Temporary current index
 	s8 tmpIndex = -1;
@@ -67,24 +74,24 @@ void MainMenu::update()
 
 	// Compute area for title
 	{
-		s32 height = std::max(windowSize.Height / 5, 160);
-		titleArea = recti(0, 0, windowSize.Width, height);
+		s32 height = std::max(hudSize.Height / 5, 160);
+		titleArea = recti(0, 0, hudSize.Width, height);
 	}
 
 	// Compute vertical sections for menu
 	for (s8 i = 0; i < 8; ++i)
 	{
 		// Calculate fixed horizonal sections for entries
-		s32 x1 = (s32)((f32)windowSize.Width * 0.25f) + (i >= 4 ? windowSize.Width : 0);
-		s32 x2 = (s32)((f32)windowSize.Width * 0.75f) + (i >= 4 ? windowSize.Width : 0);
+		s32 x1 = (s32)((f32)hudSize.Width * 0.25f) + (i >= 4 ? hudSize.Width : 0);
+		s32 x2 = (s32)((f32)hudSize.Width * 0.75f) + (i >= 4 ? hudSize.Width : 0);
 
 		// Calculate vertical position for entries
-		s32 y1 = (s32)(windowSize.Height * (0.3f + 0.1f * (i % 4)));
-		s32 y2 = (s32)(windowSize.Height * (0.4f + 0.1f * (i % 4)));
+		s32 y1 = (s32)(hudSize.Height * (0.3f + 0.1f * (i % 4)));
+		s32 y2 = (s32)(hudSize.Height * (0.4f + 0.1f * (i % 4)));
 		optionsAreas.push_back(recti(x1, y1, x2, y2));
 
 		// Check mouse in area
-		if (currentSection != 0 && optionsAreas[i].isPointInside(EventManager::singleton->mousePosition))
+		if (currentSection != 0 && optionsAreas[i].isPointInside(mousePosition))
 		{
 			tmpIndex = i;
 		}
@@ -93,13 +100,13 @@ void MainMenu::update()
 	// Compute sections for levels
 	{
 		// Common top limit
-		const s32 height = std::max(windowSize.Height / 6, 96);
+		const s32 height = std::max(hudSize.Height / 6, 96);
 
 		// Description
-		levelAreas.push_back(recti(0, 0, (s32)(windowSize.Width * 0.6f), height));
+		levelAreas.push_back(recti(0, 0, (s32)(hudSize.Width * 0.6f), height));
 
 		// Back button
-		levelAreas.push_back(recti((s32)(windowSize.Width * 0.5f), 0, (s32)(windowSize.Width * 0.95f), height));
+		levelAreas.push_back(recti((s32)(hudSize.Width * 0.5f), 0, (s32)(hudSize.Width * 0.95f), height));
 
 		// Levels
 		for (s32 i = 0; i < 2; ++i)
@@ -108,11 +115,11 @@ void MainMenu::update()
 			{
 				const s32 row = (s32)(floor((f32)i / 5.0f));
 
-				const s32 x1 = windowSize.Width / 5 * j;
-				const s32 x2 = windowSize.Width / 5 * (j + 1);
+				const s32 x1 = hudSize.Width / 5 * j;
+				const s32 x2 = hudSize.Width / 5 * (j + 1);
 
-				const s32 y1 = windowSize.Height / 2 + (height * (i - 1));
-				const s32 y2 = windowSize.Height / 2 + (height * i);
+				const s32 y1 = hudSize.Height / 2 + (height * (i - 1));
+				const s32 y2 = hudSize.Height / 2 + (height * i);
 
 				levelAreas.push_back(recti(x1, y1, x2, y2));
 			}
@@ -123,7 +130,7 @@ void MainMenu::update()
 		{
 			for (u8 i = 1; i != levelAreas.size(); ++i)
 			{
-				if (levelAreas[i].isPointInside(EventManager::singleton->mousePosition))
+				if (levelAreas[i].isPointInside(mousePosition))
 				{
 					tmpIndex = i;
 				}
@@ -142,6 +149,8 @@ void MainMenu::update()
 	}
 
 	// Check for left mouse click
+	const bool isOnTheLeft = mousePosition.X < hudSize.Width / 2;
+
 	if (roomToLoad.length() <= 0 && currentIndex >= 0 && EventManager::singleton->keyStates[KEY_LBUTTON] == KEY_RELEASED)
 	{
 		if (currentSection == 0)
@@ -164,6 +173,10 @@ void MainMenu::update()
 			{
 				currentSection = 0;
 			}
+			else
+			{
+				Utility::stepVideoMode(isOnTheLeft ? -1 : 1);
+			}
 		}
 		else if (currentIndex == 1)
 		{
@@ -174,7 +187,7 @@ void MainMenu::update()
 			else
 			{
 				// Increment or decrement value
-				const f32 value = EventManager::singleton->mousePosition.X < windowSize.Width / 2 ? -10.0f : 10.0f;
+				const f32 value = isOnTheLeft ? -10.0f : 10.0f;
 				SoundManager::singleton->updateVolumeLevel(false, value);
 
 				// Play sound effect
@@ -190,7 +203,7 @@ void MainMenu::update()
 			else
 			{
 				// Increment or decrement value
-				const f32 value = EventManager::singleton->mousePosition.X < windowSize.Width / 2 ? -10.0f : 10.0f;
+				const f32 value = isOnTheLeft ? -10.0f : 10.0f;
 				SoundManager::singleton->updateVolumeLevel(true, value);
 
 				// Play sound effect
@@ -259,7 +272,7 @@ void MainMenu::draw()
 		// Compute right animated position
 		if (animation < 0)
 		{
-			s32 x = (s32)(animatedValue * (f32)windowSize.Width * (animation < 0 ? 1.0f : -1.0f));
+			s32 x = (s32)(animatedValue * (f32)hudSize.Width * (animation < 0 ? 1.0f : -1.0f));
 			titleArea.UpperLeftCorner.X += x;
 			titleArea.LowerRightCorner.X += x;
 		}
@@ -282,13 +295,23 @@ void MainMenu::draw()
 		SColor color = entryIndex == currentIndex ? SColor(255, 255, 255, 0) : SColor(255, 255, 255, 255);
 
 		// Compute right animated position
-		s32 x = (s32)(animatedValue * (f32)windowSize.Width * (animation < 0 ? 1.0f : -1.0f));
+		s32 x = (s32)(animatedValue * (f32)hudSize.Width * (animation < 0 ? 1.0f : -1.0f));
 		optionsAreas[i].UpperLeftCorner.X += x;
 		optionsAreas[i].LowerRightCorner.X += x;
 
 		// Get right string for text
 		std::wstring str = optionTitles[i];
-		if (i == 5 || i == 6)
+
+		if (i == 4)
+		{
+			dimension2du* windowSize;
+			{
+				const s32 videoMode = Utility::getVideoMode(device);
+				windowSize = videoMode >= 0 ? &device->getVideoModeList()->getVideoModeResolution(videoMode) : nullptr;
+			}
+			str += windowSize != nullptr ? L" " + std::to_wstring(windowSize->Width) + L"x" + std::to_wstring(windowSize->Height) : L" Auto";
+		}
+		else if (i == 5 || i == 6)
 		{
 			f32 value = SoundManager::singleton->volumeLevels[i == 5 ? KEY_SETTING_SOUND : KEY_SETTING_MUSIC];
 			str += L": " + std::to_wstring((s32)(value * 0.1f));
@@ -307,7 +330,7 @@ void MainMenu::draw()
 		for (u8 i = 0; i != levelAreas.size(); ++i)
 		{
 			// Compute final animated coordinate offset
-			s32 x = (s32)((1 - animatedValue) * (f32)windowSize.Width * -1.0f);
+			s32 x = (s32)((1 - animatedValue) * (f32)hudSize.Width * -1.0f);
 
 			if (i >= 2)
 			{
@@ -316,7 +339,7 @@ void MainMenu::draw()
 
 				// Draw background rectangle
 				recti r = recti(levelAreas[i]);
-				vector2di diff = vector2di(windowSize.Height / 50, windowSize.Height / 75);
+				vector2di diff = vector2di(hudSize.Height / 50, hudSize.Height / 75);
 				vector2di offset(x, 0);
 
 				r.UpperLeftCorner += diff + offset;
@@ -345,7 +368,7 @@ void MainMenu::draw()
 
 	// Draw mouse pointer
 	{
-		recti r = Utility::getSourceRect(mouse) + EventManager::singleton->mousePosition;
+		recti r = Utility::getSourceRect(mouse) + mousePosition;
 		IGUIImage* image = guienv->addImage(r);
 		image->setImage(mouse);
 	}

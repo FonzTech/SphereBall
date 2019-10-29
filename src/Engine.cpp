@@ -136,7 +136,7 @@ void Engine::loop()
 
 			// Create new textures for render targets
 			sceneRtts.push_back(driver->addRenderTargetTexture(windowSize, "colorRtt", ECF_A8R8G8B8));
-			sceneRtts.push_back(driver->addRenderTargetTexture(windowSize, "bloomRtt", ECF_A8R8G8B8));
+			sceneRtts.push_back(driver->addRenderTargetTexture(windowSize, "ppRtt", ECF_A8R8G8B8));
 		}
 
 		// Make G-Buffer current
@@ -313,7 +313,7 @@ void Engine::PostProcessing::OnSetConstants(IMaterialRendererServices* services,
 	services->setPixelShaderConstant("colorRtt", &layer0, 1);
 
 	s32 layer1 = 1;
-	services->setPixelShaderConstant("bloomRtt", &layer1, 1);
+	services->setPixelShaderConstant("ppRtt", &layer1, 1);
 
 	services->setPixelShaderConstant("time", &ppTime, 1);
 	services->setPixelShaderConstant("waveStrength", &waveStrength, 1);

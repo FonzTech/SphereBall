@@ -1,5 +1,5 @@
 uniform sampler2D colorRtt;
-uniform sampler2D bloomRtt;
+uniform sampler2D ppRtt;
 
 uniform float time;
 uniform float waveStrength;

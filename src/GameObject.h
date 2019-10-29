@@ -75,8 +75,8 @@ protected:
 public:
 
 	// Common material for game objects which does not need advanced shading
-	static s32 COMMON_EMT_MATERIAL_SOLID;
-	static s32 COMMON_EMT_MATERIAL_VERTEX_ALPHA;
+	static s32 COMMON_EMT_SOLID;
+	static s32 COMMON_EMT_VERTEX_ALPHA;
 	static s32 COMMON_EMT_TRANSPARENT_ADD_COLOR;
 
 	/*

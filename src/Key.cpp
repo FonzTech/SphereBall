@@ -17,7 +17,7 @@ Key::Key() : Pickup()
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
 	model->scale = vector3df(1, 1, 1);
-	model->material = COMMON_EMT_MATERIAL_SOLID;
+	model->material = COMMON_EMT_SOLID;
 	models.push_back(model);
 
 	// Load sounds

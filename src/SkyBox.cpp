@@ -20,7 +20,7 @@ SkyBox::SkyBox(const std::string &textureName) : GameObject()
 
 	// Create dummy model
 	std::shared_ptr<Model> model = std::make_shared<Model>();
-	model->material = COMMON_EMT_MATERIAL_SOLID;
+	model->material = COMMON_EMT_SOLID;
 	models.push_back(model);
 
 	// Create all the six sides

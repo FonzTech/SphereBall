@@ -14,4 +14,8 @@ void ShaderCallback::OnSetConstants(video::IMaterialRendererServices* services, 
 	services->setVertexShaderConstant("mWorld", mWorld.pointer(), 16);
 	services->setVertexShaderConstant("mView", mView.pointer(), 16);
 	services->setVertexShaderConstant("mProj", mProj.pointer(), 16);
+
+	// Set fragment shader constants
+	s32 layer0 = 0;
+	services->setPixelShaderConstant("tex", &layer0, 1);
 }

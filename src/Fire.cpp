@@ -73,6 +73,7 @@ void Fire::createFileParticle()
 	particleSystem->setPosition(position + vector3df(0, 15, 0));
 	particleSystem->setMaterialFlag(EMF_LIGHTING, false);
 	particleSystem->setMaterialFlag(EMF_ZWRITE_ENABLE, false);
+	particleSystem->setMaterialFlag(EMF_BLEND_OPERATION, true);
 	particleSystem->setMaterialTexture(0, driver->getTexture("textures/particle_fire.png"));
 	particleSystem->setMaterialType((E_MATERIAL_TYPE)COMMON_EMT_TRANSPARENT_ADD_COLOR);
 }

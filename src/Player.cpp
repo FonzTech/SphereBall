@@ -14,6 +14,7 @@
 #include "Pill.h"
 #include "Hourglass.h"
 #include "Exit.h"
+#include "Fire.h"
 
 const f32 Player::breathingDelta = 0.125f;
 
@@ -50,6 +51,8 @@ Player::Player() : GameObject()
 	falling = 0;
 	breathing = 0.0f;
 	breathingSpeed = 0.001f;
+
+	fireFactor = 0.0f;
 
 	fallLine = nullptr;
 	dieAlarm = nullptr;
@@ -154,6 +157,11 @@ void Player::update()
 
 		// Play behaviour
 		dead();
+	}
+	else if (state == STATE_BURNED)
+	{
+		// Reset breathing
+		resetBreathing();
 	}
 
 	// Update listener position
@@ -492,6 +500,40 @@ void Player::walk()
 			}
 		}
 	}
+
+	// Check collision with fire
+	if (state == STATE_WALKING)
+	{
+		// Affect player only when not jumping
+		if (!falling && speed.Y == 0.0f)
+		{
+			Collision collision = checkBoundingBoxCollision<Fire>(RoomManager::singleton->gameObjects, bbox);
+			if (collision.engineObject != nullptr)
+			{
+				// Raise fire effect
+				fireFactor += 0.001f * deltaTime;
+
+				// Check for threshold
+				if (fireFactor >= 1.0f)
+				{
+					// Cap value
+					fireFactor = 1.0f;
+
+					// Change player state
+					state = STATE_BURNED;
+				}
+			}
+		}
+		// Lower fire effect
+		else if (fireFactor > 0)
+		{
+			fireFactor -= 0.001f * deltaTime;
+			if (fireFactor < 0)
+			{
+				fireFactor = 0;
+			}
+		}
+	}
 }
 
 void Player::die()
@@ -616,7 +658,10 @@ void Player::SpecializedShaderCallback::OnSetConstants(IMaterialRendererServices
 	// Restore world matrix
 	driver->setTransform(ETS_WORLD, IdentityMatrix);
 
-	// Set texture for time out effect
+	// Setup fire effect
+	services->setPixelShaderConstant("fireFactor", (f32*)&this->player->fireFactor, 1);
+
+	// Setup timeout effect
 	services->setPixelShaderConstant("noiseFactor", (f32*)&this->player->noiseFactor, 1);
 
 	if (this->player->state == STATE_TIME_OUT)

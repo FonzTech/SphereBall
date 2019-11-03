@@ -5,6 +5,7 @@
 #define STATE_DEAD		1
 #define STATE_EXITED	2
 #define STATE_TIME_OUT	3
+#define STATE_BURNED	4
 
 #include "GameObject.h"
 #include "Alarm.h"
@@ -40,6 +41,9 @@ protected:
 	f32 breathingSpeed;
 	std::unique_ptr<vector3df> fallLine;
 	vector3df exitedPosition;
+
+	// Behaviour
+	f32 fireFactor;
 
 	// Alarms
 	std::unique_ptr<Alarm> dieAlarm;

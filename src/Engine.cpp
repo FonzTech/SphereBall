@@ -316,6 +316,10 @@ void Engine::PostProcessing::OnSetConstants(IMaterialRendererServices* services,
 	s32 layer1 = 1;
 	services->setPixelShaderConstant("ppRtt", &layer1, 1);
 
+	dimension2du rttSize = engine->sceneRtts[0].RenderTexture->getOriginalSize();
+	vector2df resolution((f32)rttSize.Width, (f32)rttSize.Height);
+	services->setPixelShaderConstant("resolution", &resolution.X, 2);
+
 	services->setPixelShaderConstant("time", &ppTime, 1);
 	services->setPixelShaderConstant("waveStrength", &waveStrength, 1);
 	services->setPixelShaderConstant("ripplePoint", &ripplePoint.X, 3);

@@ -19,10 +19,14 @@ Fire::Fire() : GameObject()
 	IAnimatedMesh* mesh = smgr->getMesh("models/bonfire.obj");
 	ITexture* texture = driver->getTexture("textures/bonfire.png");
 
+	// Load mesh for bounding box
+	aabbox3df boundingBox = smgr->getMesh("models/cube.obj")->getBoundingBox();
+
 	// Create model for player
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
 	model->material = material;
+	model->boundingBox = boundingBox;
 	models.push_back(model);
 
 	// Create fire particle

@@ -6,6 +6,23 @@ uniform float time;
 uniform float waveStrength;
 uniform vec3 ripplePoint;
 
+// Here goes the basic functions
+
+// "glsl-bezier-curve" by "yiwenl"
+vec3 cubicBezier(vec3 A, vec3 B, vec3 C, vec3 D, float t)
+{
+	vec3 E = mix(A, B, t);
+	vec3 F = mix(B, C, t);
+	vec3 G = mix(C, D, t);
+
+	vec3 H = mix(E, F, t);
+	vec3 I = mix(F, G, t);
+	
+	vec3 P = mix(H, I, t);
+
+	return P;
+}
+
 vec2 sineWave(vec2 tc, float factor, float strength, float amplify)
 {
     // Wave distortion
@@ -16,7 +33,7 @@ vec2 sineWave(vec2 tc, float factor, float strength, float amplify)
     return vec2(clamp(tc.x + x * amplify, 0.001, 0.999), clamp(tc.y + y * amplify, 0.001, 0.999));
 }
 
-vec2 ripple(vec2 tc, vec3 point)
+vec2 ripple(vec2 tc, vec3 point, float factor)
 {
 	// Get texture coordinates to a [-1, 1] range
 	vec2 p = tc * 2.0 - 1.0;
@@ -32,7 +49,7 @@ vec2 ripple(vec2 tc, vec3 point)
 	float len = length(fp);
 	
 	// Normalize coordinates vector and apply phase shift
-	vec2 x = tc + (fp / len) * sin(len * 12.0 - time * 0.005) * sin(point.z) * 0.1;
+	vec2 x = tc + (fp / len) * sin(len * 12.0 - time * 0.005) * factor;
 	
 	// Clamp to avoid bad effects on edges
 	return clamp(x, 0.001, 0.999);
@@ -65,6 +82,24 @@ vec4 blur13(sampler2D image, vec2 uv, vec2 direction)
 	return color;
 }
 
+// Here goes game-specific functions
+
+float getTimeRippleFactor(float t)
+{
+	float tr;
+	if (t > 0.8)
+	{
+		tr = 1.0 - (t - 0.8) * 5.0;
+	}
+	else
+	{
+		tr = t * 1.25;
+	}
+	return cubicBezier(vec3(0), vec3(1, 0.03, 0), vec3(0.38, 0.04, 0), vec3(1), tr).y;
+}
+
+// Here goes the main method
+
 void main()
 {
 	// Apply wave effect
@@ -79,7 +114,10 @@ void main()
 	}
 	
 	// Apply ripple
-	coord = ripple(coord, ripplePoint);
+	{
+		float factor = getTimeRippleFactor(ripplePoint.z);
+		coord = ripple(coord, ripplePoint, factor);
+	}
 	
 	// Get post processing mask for the fragment
 	vec4 pp = texture2D(ppRtt, coord);
@@ -87,7 +125,6 @@ void main()
 	// Pre-scene processing
 	{
 		float factor = getHeatWaveFactor(ppRtt, coord, 0.005) * 0.25;
-		
 		coord = sineWave(coord, 2.0, 0.01, factor);
 	}
 

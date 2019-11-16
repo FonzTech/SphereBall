@@ -794,7 +794,7 @@ void SharedData::invertTime()
 	json data = {
 		{ "x", position.X / windowSize.X },
 		{ "y", position.Y / windowSize.Y },
-		{ "z", std::acos(-1) }
+		{ "z", 1.0f }
 	};
 	triggerPostProcessingCallback(KEY_PP_RIPPLE, data);
 }

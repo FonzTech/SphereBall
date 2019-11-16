@@ -350,7 +350,7 @@ void Engine::PostProcessing::update(f32 deltaTime)
 	}
 
 	// Decrease ripple strength effect
-	ripplePoint.Z -= 0.002f * deltaTime;
+	ripplePoint.Z -= 0.001f * deltaTime;
 	if (ripplePoint.Z < 0.0f)
 	{
 		ripplePoint.Z = 0.0f;

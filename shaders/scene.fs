@@ -1,3 +1,4 @@
+uniform sampler2D guiRtt;
 uniform sampler2D colorRtt;
 uniform sampler2D ppRtt;
 
@@ -130,7 +131,10 @@ void main()
 
 	// Apply texture for the fragment
 	vec4 color = texture2D(colorRtt, coord);
+	vec4 gui = texture2D(guiRtt, coord);
+	
+	vec4 finalColor = mix(color, gui, gui.a);
 	
 	// Set fragment colorx
-    gl_FragColor = color;
+    gl_FragColor = finalColor;
 }

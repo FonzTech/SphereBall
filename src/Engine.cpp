@@ -126,22 +126,34 @@ void Engine::loop()
 			windowSize = videoMode == -1 ? dimension2du(Utility::getWindowSize<u32>(driver)) : device->getVideoModeList()->getVideoModeResolution(videoMode);
 		}
 
-		// Setup MRT
+		// Setup GUI RTT
+		{
+			if (SharedData::singleton->guiRtt != nullptr)
+			{
+				driver->removeTexture(SharedData::singleton->guiRtt);
+			}
+
+			SharedData::singleton->guiRtt = driver->addRenderTargetTexture(windowSize, "guiRtt", ECF_A8R8G8B8);
+		}
+
+		// Setup and MRT
+		irr::core::array<IRenderTarget>* sceneRtts = &SharedData::singleton->sceneRtts;
+
 		{
 			// Remove all textures and clear array
-			for (s32 i = sceneRtts.size() - 1; i >= 0; --i)
+			for (s32 i = sceneRtts->size() - 1; i >= 0; --i)
 			{
-				driver->removeTexture(sceneRtts[i].RenderTexture);
+				driver->removeTexture((*sceneRtts)[i].RenderTexture);
 			}
-			sceneRtts.clear();
+			sceneRtts->clear();
 
 			// Create new textures for render targets
-			sceneRtts.push_back(driver->addRenderTargetTexture(windowSize, "colorRtt", ECF_A8R8G8B8));
-			sceneRtts.push_back(driver->addRenderTargetTexture(windowSize, "ppRtt", ECF_A8R8G8B8));
+			sceneRtts->push_back(driver->addRenderTargetTexture(windowSize, "colorRtt", ECF_A8R8G8B8));
+			sceneRtts->push_back(driver->addRenderTargetTexture(windowSize, "ppRtt", ECF_A8R8G8B8));
 		}
 
 		// Make G-Buffer current
-		driver->setRenderTarget(sceneRtts);
+		driver->setRenderTarget(*sceneRtts);
 
 		// Now delta time
 		u32 now = device->getTimer()->getTime();
@@ -245,8 +257,9 @@ void Engine::loop()
 			// Display game surface
 			ScreenQuadSceneNode screenQuad(smgr->getRootSceneNode(), smgr, -1);
 			screenQuad.ChangeMaterialType((E_MATERIAL_TYPE)postProcessingMaterial);
-			screenQuad.getMaterial(0).setTexture(0, sceneRtts[0].RenderTexture);
-			screenQuad.getMaterial(0).setTexture(1, sceneRtts[1].RenderTexture);
+			screenQuad.getMaterial(0).setTexture(0, SharedData::singleton->guiRtt);
+			screenQuad.getMaterial(0).setTexture(1, (*sceneRtts)[0].RenderTexture);
+			screenQuad.getMaterial(0).setTexture(2, (*sceneRtts)[1].RenderTexture);
 
 			// Draw scene RTT quad
 			screenQuad.render();
@@ -310,13 +323,12 @@ Engine::PostProcessing::PostProcessing(Engine* engine)
 void Engine::PostProcessing::OnSetConstants(IMaterialRendererServices* services, s32 userData)
 {
 	// Set shader values
-	s32 layer0 = 0;
-	services->setPixelShaderConstant("colorRtt", &layer0, 1);
+	s32 layers[] = { 0, 1, 2 };
+	services->setPixelShaderConstant("guiRtt", &layers[0], 1);
+	services->setPixelShaderConstant("colorRtt", &layers[1], 1);
+	services->setPixelShaderConstant("ppRtt", &layers[2], 1);
 
-	s32 layer1 = 1;
-	services->setPixelShaderConstant("ppRtt", &layer1, 1);
-
-	dimension2du rttSize = engine->sceneRtts[0].RenderTexture->getOriginalSize();
+	dimension2du rttSize = SharedData::singleton->sceneRtts[0].RenderTexture->getOriginalSize();
 	vector2df resolution((f32)rttSize.Width, (f32)rttSize.Height);
 	services->setPixelShaderConstant("resolution", &resolution.X, 2);
 

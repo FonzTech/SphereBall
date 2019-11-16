@@ -259,6 +259,9 @@ void MainMenu::update()
 
 void MainMenu::draw()
 {
+	// Render on GUI RTT
+	driver->setRenderTarget(SharedData::singleton->guiRtt);
+
 	// Load font if required
 	if (font == nullptr)
 	{
@@ -377,6 +380,12 @@ void MainMenu::draw()
 		IGUIImage* image = guienv->addImage(r);
 		image->setImage(mouse);
 	}
+
+	// Draw GUI and Reset RTT
+	guienv->drawAll();
+	guienv->clear();
+
+	driver->setRenderTarget(SharedData::singleton->sceneRtts, false, false);
 }
 
 void MainMenu::jumpToLevel()

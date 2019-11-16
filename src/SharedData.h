@@ -142,6 +142,21 @@ public:
 	// Key for room loader
 	static const std::string ROOM_OBJECT_KEY;
 
+	/*
+		Shared GUI Render Target Texture.
+		All the GUI created by all of the GameObject's subclasses are rendered in this
+		render target, which is passed to the shader in the Engine class implementation.
+	*/
+	ITexture* guiRtt;
+
+	/*
+		Global render target.
+		In before, this memeber was in the Engine class. Then it has been moved here because
+		doing setRenderTarget(0, false, false) didn't work as expected, as the egine binds to
+		an undefined RTT, resulting in a black screen.
+	*/
+	irr::core::array<IRenderTarget> sceneRtts;
+
 	// Constructor
 	SharedData();
 

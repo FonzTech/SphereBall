@@ -31,6 +31,8 @@ SharedData::SharedData()
 	levelPointsValue = 0.0f;
 	globalPointsValue = 0.0f;
 
+	guiRtt = nullptr;
+
 	// Initialize texts for game over
 	{
 		std::vector<std::wstring> textGameOver;
@@ -166,10 +168,11 @@ void SharedData::update(f32 deltaTime)
 		// Menu selection
 		gameOverRects.clear();
 
+		// Get window size
+		const vector2di windowSize = Utility::getWindowSize<s32>(driver);
+
 		for (u8 i = 0; i < 2; ++i)
 		{
-			// Get window size
-			const vector2di windowSize = Utility::getWindowSize<s32>(driver);
 
 			// Compute text rectangle
 			s32 y = (s32)(windowSize.Y * 0.6f + 128.0f * (f32)i);

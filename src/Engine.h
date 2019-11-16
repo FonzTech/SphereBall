@@ -47,9 +47,6 @@ protected:
 	// Delta time
 	u32 deltaTime;
 
-	// Global render target
-	irr::core::array<IRenderTarget> sceneRtts;
-
 	// Post-Processing system
 	std::unique_ptr<PostProcessing> postProcessing;
 	s32 postProcessingMaterial;

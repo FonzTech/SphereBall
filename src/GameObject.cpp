@@ -10,7 +10,7 @@ const s32 GameObject::getCommonBasicMaterial(E_MATERIAL_TYPE basicMaterial)
 	ShaderCallback* bsc = new ShaderCallback();
 
 	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
-	s32 material = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", basicMaterial == COMMON_EMT_TRANSPARENT_ADD_COLOR ? "shaders/standard_add_color.fs" : "shaders/standard.fs", bsc, basicMaterial);
+	s32 material = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/standard.fs", bsc, basicMaterial);
 
 	bsc->drop();
 

@@ -504,28 +504,25 @@ void Player::walk()
 	// Check collision with fire
 	if (state == STATE_WALKING)
 	{
-		// Affect player only when not jumping
-		if (!falling && speed.Y == 0.0f)
+		// Affect player
+		Collision collision = checkBoundingBoxCollision<Fire>(RoomManager::singleton->gameObjects, bbox);
+		if (collision.engineObject != nullptr)
 		{
-			Collision collision = checkBoundingBoxCollision<Fire>(RoomManager::singleton->gameObjects, bbox);
-			if (collision.engineObject != nullptr)
+			// Raise fire effect
+			fireFactor += 0.001f * deltaTime;
+
+			// Check for threshold
+			if (fireFactor >= 1.0f)
 			{
-				// Raise fire effect
-				fireFactor += 0.001f * deltaTime;
+				// Cap value
+				fireFactor = 1.0f;
 
-				// Check for threshold
-				if (fireFactor >= 1.0f)
-				{
-					// Cap value
-					fireFactor = 1.0f;
-
-					// Change player state
-					state = STATE_BURNED;
-				}
+				// Change player state
+				state = STATE_BURNED;
 			}
 		}
 		// Lower fire effect
-		else if (fireFactor > 0)
+		else if (fireFactor > 0.0f && !falling && speed.Y == 0.0f)
 		{
 			fireFactor -= 0.001f * deltaTime;
 			if (fireFactor < 0)

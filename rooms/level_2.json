@@ -8,7 +8,7 @@
 			},
 			{
 				"key": 2,
-				"value": 2
+				"value": 3
 			},
 			{
 				"key": 3,
@@ -24,8 +24,8 @@
 		"name": "Player",
 		"required": {
 			"position": {
-				"x": 0.0,
-				"y": 20.0,
+				"x": -40.0,
+				"y": 40.0,
 				"z": 0.0
 			}
 		}
@@ -47,6 +47,194 @@
 		}
 	},
 	{
+		"name": "Teleporter",
+		"required": {
+			"position": {
+				"x": -100.0,
+				"y": 30.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"color": {
+				"r": 1
+			},
+			"warp": {
+				"x": -120,
+				"y": 30,
+				"z": 0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -100.0,
+				"y": 100.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -120.0,
+				"y": 100.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"springTension": 1.0
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -60.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"springTension": 0.0
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -80.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"invisibleToggle": 1
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -100.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"invisibleToggle": 1
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -140.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -160.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"invisibleToggle": 0
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -180.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"invisibleToggle": 0
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -20.0,
+				"y": -80.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"delayedState": 1,
+			"delayedOn": 3000,
+			"delayedOff": 3000
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 0.0,
+				"y": -80.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"delayedState": 0,
+			"delayedOn": 3000,
+			"delayedOff": 3000
+		}
+	},
+	{
+		"name": "Fire",
+		"required": {
+			"position": {
+				"x": 0.0,
+				"y": 10.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 20.0,
+				"y": -80.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 40.0,
+				"y": -60.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 60.0,
+				"y": -40.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
 		"name": "Solid",
 		"required": {
 			"position": {
@@ -54,6 +242,22 @@
 				"y": 0.0,
 				"z": 0.0
 			}
+		},
+		"optional": {
+			"breakState": 0.0
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -20.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"breakState": 0.0
 		}
 	},
 	{
@@ -80,273 +284,51 @@
 		"name": "Solid",
 		"required": {
 			"position": {
+				"x": 60.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": -40.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Spikes",
+		"required": {
+			"position": {
+				"x": 60.0,
+				"y": 30.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Spikes",
+		"required": {
+			"position": {
 				"x": 80.0,
-				"y": 0.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 140.0,
-				"y": 0.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 200.0,
-				"y": 0.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 260.0,
-				"y": 0.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 280.0,
-				"y": 0.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 300.0,
-				"y": 0.0,
+				"y": 30.0,
 				"z": 0.0
 			}
 		},
 		"optional": {
-			"springTension": 0.0
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 340.0,
-				"y": 80.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 360.0,
-				"y": 80.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 380.0,
-				"y": 80.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Key",
-		"required": {
-			"position": {
-				"x": 380.0,
-				"y": 100.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 400.0,
-				"y": 80.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 420.0,
-				"y": 80.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 440.0,
-				"y": 80.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 460.0,
-				"y": 80.0,
-				"z": 0.0
-			}
-		},
-		"optional": {
-			"breakState": 0.0
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 480.0,
-				"y": 80.0,
-				"z": 0.0
-			}
-		},
-		"optional": {
-			"breakState": 0.0
-		}
-	},
-	{
-		"name": "Coin",
-		"required": {
-			"position": {
-				"x": 440.0,
-				"y": 100.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Coin",
-		"required": {
-			"position": {
-				"x": 480.0,
-				"y": 100.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Coin",
-		"required": {
-			"position": {
-				"x": 560.0,
-				"y": 100.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Coin",
-		"required": {
-			"position": {
-				"x": 520.0,
-				"y": 100.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 520.0,
-				"y": 80.0,
-				"z": 0.0
-			}
-		},
-		"optional": {
-			"breakState": 0.0
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 560.0,
-				"y": 80.0,
-				"z": 0.0
-			}
-		},
-		"optional": {
-			"breakState": 0.0
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 580.0,
-				"y": 80.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Key",
-		"required": {
-			"position": {
-				"x": 580.0,
-				"y": 100.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 600.0,
-				"y": 80.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 620.0,
-				"y": 0.0,
-				"z": 0.0
-			}
+			"mode": 0
 		}
 	},
 	{
 		"name": "Spikes",
 		"required": {
 			"position": {
-				"x": 640.0,
-				"y": 130.0,
+				"x": 40.0,
+				"y": 10.0,
 				"z": 0.0
 			}
 		},
@@ -355,113 +337,179 @@
 		}
 	},
 	{
-		"name": "Spikes",
+		"name": "Coin",
 		"required": {
 			"position": {
-				"x": 600.0,
-				"y": 90.0,
+				"x": -20.0,
+				"y": 40.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Coin",
+		"required": {
+			"position": {
+				"x": -20.0,
+				"y": 60.0,
 				"z": 0.0
 			}
 		},
 		"optional": {
-			"mode": -1
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 640.0,
-				"y": 120.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 640.0,
-				"y": 100.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 640.0,
-				"y": 80.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Coin",
-		"required": {
-			"position": {
-				"x": 140.0,
-				"y": 20.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Coin",
-		"required": {
-			"position": {
-				"x": 200.0,
-				"y": 20.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 680.0,
-				"y": 0.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 700.0,
-				"y": 0.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 720.0,
-				"y": 0.0,
-				"z": 0.0
-			}
-		}
-	},
-	{
-		"name": "Solid",
-		"required": {
-			"position": {
-				"x": 740.0,
-				"y": 0.0,
-				"z": 0.0
-			}
+			"type": 1
 		}
 	},
 	{
 		"name": "Exit",
 		"required": {
 			"position": {
-				"x": 740.0,
+				"x": 100.0,
+				"y": 40.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 100.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 120.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 140.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 180.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 160.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 200.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 220.0,
+				"y": 40.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Hourglass",
+		"required": {
+			"position": {
+				"x": 120.0,
+				"y": 40.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Key",
+		"required": {
+			"position": {
+				"x": 140.0,
+				"y": 40.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Key",
+		"required": {
+			"position": {
+				"x": 160.0,
+				"y": 40.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Key",
+		"required": {
+			"position": {
+				"x": 180.0,
+				"y": 40.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Pill",
+		"required": {
+			"position": {
+				"x": 200.0,
+				"y": 40.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"type": 0
+		}
+	},
+	{
+		"name": "Pill",
+		"required": {
+			"position": {
+				"x": 220.0,
+				"y": 60.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"type": 0
+		}
+	},
+	{
+		"name": "Fruit",
+		"required": {
+			"position": {
+				"x": 20.0,
 				"y": 20.0,
 				"z": 0.0
 			}

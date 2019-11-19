@@ -197,6 +197,7 @@
     <ClCompile Include="src/Utility.cpp" />
     <ClCompile Include="src\Key.cpp" />
     <ClCompile Include="src\Pill.cpp" />
+    <ClCompile Include="src\Teleporter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src/Engine.h" />
@@ -227,6 +228,7 @@
     <ClInclude Include="src/Utility.h" />
     <ClInclude Include="src\Key.h" />
     <ClInclude Include="src\Pill.h" />
+    <ClInclude Include="src\Teleporter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

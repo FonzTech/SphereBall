@@ -6,6 +6,7 @@
 #define STATE_EXITED	2
 #define STATE_TIME_OUT	3
 #define STATE_BURNED	4
+#define STATE_FELLOFF	5
 
 #include "GameObject.h"
 #include "Alarm.h"
@@ -21,6 +22,7 @@ protected:
 	// State
 	s8 state;
 	f32 noiseFactor;
+	vector3df cameraDistance;
 
 	void walk();
 	void die();

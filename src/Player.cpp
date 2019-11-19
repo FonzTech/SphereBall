@@ -45,6 +45,7 @@ Player::Player() : GameObject()
 	// Initialize variables
 	state = STATE_WALKING;
 	noiseFactor = 0.0f;
+	cameraDistance = vector3df(0, 40, -100);
 
 	direction = 1;
 	moving = 0;
@@ -133,6 +134,15 @@ void Player::update()
 			// Trigger die alarm
 			dieAlarm = std::make_unique<Alarm>(2000.0f);
 		}
+		// Check for fell off
+		else if (position.Y < RoomManager::singleton->lowerBound)
+		{
+			// Switch state
+			state = STATE_FELLOFF;
+
+			// Trigger die alarm
+			dieAlarm = std::make_unique<Alarm>(1500.0f);
+		}
 	}
 	else if (state == STATE_DEAD)
 	{
@@ -163,6 +173,12 @@ void Player::update()
 		// Reset breathing
 		resetBreathing();
 	}
+	else if (state == STATE_FELLOFF)
+	{
+		// Apply physics to player, but still play "dead" behaviour
+		walk();
+		dead();
+	}
 
 	// Update listener position
 	sf::Listener::setDirection(sf::Vector3f(0, 0, -1));
@@ -192,7 +208,10 @@ void Player::draw()
 	}
 
 	// Reposition camera
-	Camera::singleton->position = position + vector3df(0, 40, -100);
+	if (state != STATE_FELLOFF)
+	{
+		Camera::singleton->position = position + cameraDistance;
+	}
 	Camera::singleton->lookAt = position;
 }
 
@@ -256,19 +275,22 @@ void Player::walk()
 	aabbox3df bbox = models.at(0)->mesh->getBoundingBox();
 
 	// Make horizontal movements
-	if (EventManager::singleton->keyStates[KEY_LEFT] >= KEY_PRESSED)
+	if (state != STATE_FELLOFF)
 	{
-		speed += vector3df(-0.01f, 0, 0);
-		moving = 1;
-	}
-	else if (EventManager::singleton->keyStates[KEY_RIGHT] >= KEY_PRESSED)
-	{
-		speed += vector3df(0.01f, 0, 0);
-		moving = 1;
-	}
-	else
-	{
-		moving = 0;
+		if (EventManager::singleton->keyStates[KEY_LEFT] >= KEY_PRESSED)
+		{
+			speed += vector3df(-0.01f, 0, 0);
+			moving = 1;
+		}
+		else if (EventManager::singleton->keyStates[KEY_RIGHT] >= KEY_PRESSED)
+		{
+			speed += vector3df(0.01f, 0, 0);
+			moving = 1;
+		}
+		else
+		{
+			moving = 0;
+		}
 	}
 
 	// Check for direction
@@ -340,6 +362,12 @@ void Player::walk()
 		else
 		{
 			speed.Y -= 0.01f;
+
+			// Limit fall speed
+			if (speed.Y < -10.0f)
+			{
+				speed.Y = -10.0f;
+			}
 		}
 	}
 

@@ -86,6 +86,9 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 	// Clear game score values
 	SharedData::singleton->clearGameScore();
 
+	// Reset room's lower bound
+	lowerBound = 0.0f;
+
 	// Iterate through all available objects
 	for (u32 i = 0; i < jsonData.size(); ++i)
 	{
@@ -114,7 +117,7 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 			SharedData::singleton->initGameScoreValue(KEY_SCORE_ITEMS_MAX, 0);
 			SharedData::singleton->initGameScoreValue(KEY_SCORE_POINTS, 0);
 		}
-		// Regulary game object
+		// Ordinary game object
 		else
 		{
 			// std::unordered_map<std::string, std::function<shared_ptr<GameObject>(const json& jsonData)>>::const_iterator
@@ -150,9 +153,18 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 
 				// Insert into current room
 				gameObjects.push_back(instance);
+
+				// Check for solid game object to minimize room's lower bound
+				if (goIterator->first == "Solid")
+				{
+					lowerBound = std::min(lowerBound, instance->position.Y);
+				}
 			}
 		}
 	}
+
+	// Move lower bound a bit lower
+	lowerBound -= 40.0f;
 
 	// Store current loaded room
 	roomName = roomToLoad;

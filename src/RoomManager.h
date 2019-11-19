@@ -45,6 +45,9 @@ public:
 	// Vector to hold all active game objects
 	std::vector<std::shared_ptr<GameObject>> gameObjects;
 
+	// Current room's lower bound
+	f32 lowerBound;
+
 	// Method to load room
 	void loadRoom(const std::string roomToLoad);
 

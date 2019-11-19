@@ -24,6 +24,13 @@ protected:
 	static s32 videoModeCount;
 	static s32 videoModeCurrent;
 
+	/**
+		Check whether the requested mesh is loaded into the engine's mesh cache. If so, just load
+		it from the cache. If not, check if the mesh is skinned (*.x meshes) to automatically create
+		its tangent space. Other mesh types are not taken into account, for performance reasons.
+	*/
+	static IAnimatedMesh* getMeshWithTangents(ISceneManager* smgr, const std::string& path);
+
 public:
 
 	/**
@@ -83,6 +90,8 @@ public:
 		Provide a proxy pattern for mesh loading. By default, Irrlicht supports certain type of file formats.
 		Animated meshes, like x (DirectX), are huge compared to other static meshes. This problem is resolved
 		by zipping these large files, then unzipping when requested. Irrlicht's resource management is preserved.
+		Tangent space is created on DirectX meshes (*.x files), since they are skinned. Other types of meshes
+		does not have any tangent space related informations.
 
 		@param smgr the Irrlicht's Scene Manager obtained from EngineObject class and subclasses.
 		@param name the file name, which can be a zip file or any file supported by the Irrlicht engine.

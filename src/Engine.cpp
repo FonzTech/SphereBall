@@ -218,6 +218,7 @@ void Engine::loop()
 						{
 							node->setMaterialTexture(entry.first, entry.second);
 							node->setMaterialFlag(EMF_LIGHTING, false);
+							node->setMaterialFlag(EMF_NORMALIZE_NORMALS, true);
 						}
 
 						// Set material type, if available

@@ -102,7 +102,7 @@ Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakS
 	else
 	{
 		// Load mesh
-		mesh = smgr->getMesh("models/cube.obj");
+		mesh = Utility::getMesh(smgr, "models/cube.x");
 		boundingBox = mesh->getBoundingBox();
 
 		// Load texture

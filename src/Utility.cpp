@@ -92,13 +92,10 @@ IAnimatedMesh* Utility::getMesh(ISceneManager* smgr, const std::string& path)
 				{
 					// Unzip file
 					unzipper.extractEntry(entry.name, dir);
-
-					// Close zip
-					unzipper.close();
 				}
 
-				// Return extracted mesh
-				return smgr->getMesh(file.c_str());
+				// Set extracted mesh
+				return getMeshWithTangents(smgr, file);
 			}
 		}
 
@@ -107,7 +104,25 @@ IAnimatedMesh* Utility::getMesh(ISceneManager* smgr, const std::string& path)
 	}
 
 	// Load the mesh
-	return smgr->getMesh(path.c_str());
+	return getMeshWithTangents(smgr, path);
+}
+
+IAnimatedMesh* Utility::getMeshWithTangents(ISceneManager* smgr, const std::string& path)
+{
+	const char* name = path.c_str();
+
+	IAnimatedMesh* mesh;
+	if (endsWith(path, ".x"))
+	{
+		if (!smgr->getMeshCache()->isMeshLoaded(name))
+		{
+			mesh = smgr->getMesh(path.c_str());
+			((ISkinnedMesh*)mesh)->convertMeshToTangents();
+			return mesh;
+		}
+	}
+
+	return smgr->getMesh(name);
 }
 
 const std::wstring Utility::getTempDirectory()

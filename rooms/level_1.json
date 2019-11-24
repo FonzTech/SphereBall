@@ -332,6 +332,16 @@
 		}
 	},
 	{
+		"name": "Fruit",
+		"required": {
+			"position": {
+				"x": 620.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
 		"name": "Solid",
 		"required": {
 			"position": {

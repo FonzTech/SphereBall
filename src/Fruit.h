@@ -1,11 +1,15 @@
 #ifndef FRUIT_H
 #define FRUIT_H
 
+#include <unordered_map>
+
 #include "Pickup.h"
 
 class Fruit : public Pickup
 {
 protected:
+
+	static std::unordered_map<u32, bool> fruitRooms;
 
 	f32 floatEffect;
 

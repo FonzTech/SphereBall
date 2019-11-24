@@ -2,7 +2,10 @@
 
 #include "Fruit.h"
 #include "SharedData.h"
+#include "RoomManager.h"
 #include "SoundManager.h"
+
+std::unordered_map<u32, bool> Fruit::fruitRooms;
 
 std::shared_ptr<Fruit> Fruit::createInstance(const json &jsonData)
 {
@@ -11,6 +14,15 @@ std::shared_ptr<Fruit> Fruit::createInstance(const json &jsonData)
 
 Fruit::Fruit() : Pickup()
 {
+	// Check if this item should be destroyed
+	{
+		u32 levelIndex = RoomManager::singleton->getCurrentLevelIndex();
+		if (fruitRooms[levelIndex])
+		{
+			destroy = true;
+		}
+	}
+
 	// Load mesh and model
 	IAnimatedMesh* mesh;
 	ITexture* texture;
@@ -86,6 +98,10 @@ bool Fruit::pick()
 	{
 		return true;
 	}
+
+	// Mark this item as picked forever
+	u32 levelIndex = RoomManager::singleton->getCurrentLevelIndex();
+	fruitRooms[levelIndex] = true;
 
 	// Increment score
 	SharedData::singleton->updateGameScoreValue(KEY_SCORE_POINTS, 1000);

@@ -22,6 +22,8 @@ SharedData::SharedData()
 	gameOverAlpha = 0.0f;
 	gameOverSelection = -1;
 
+	appPaused = 0;
+
 	isLevelPassed = false;
 
 	fadeType = 0;
@@ -30,7 +32,6 @@ SharedData::SharedData()
 
 	levelPointsValue = 0.0f;
 	globalPointsValue = 0.0f;
-
 	guiRtt = nullptr;
 
 	// Initialize texts for game over
@@ -71,6 +72,37 @@ void SharedData::update(f32 deltaTime)
 
 	// Assign delta time
 	this->deltaTime = deltaTime;
+
+	// Pause screen control
+	if (appPaused == 1)
+	{
+		if (EventManager::singleton->keyStates[KEY_RETURN] == KEY_PRESSED)
+		{
+			// Trigger wave effect
+			json data;
+			data["mode"] = 0.0f;
+			data["factor"] = 1.0f;
+			SharedData::singleton->triggerPostProcessingCallback(KEY_PP_BLUR, data);
+
+			// Trigger alarm
+			pauseAlarm = std::make_unique<Alarm>(600.0f);
+
+			appPaused = 2;
+		}
+
+		return;
+	}
+	else if (appPaused == 2)
+	{
+		pauseAlarm->stepDecrement(deltaTime);
+		if (pauseAlarm->isTriggered())
+		{
+			pauseAlarm = nullptr;
+			appPaused = 0;
+		}
+
+		return;
+	}
 
 	// Step alarms
 	if (timeAlarm != nullptr)
@@ -179,6 +211,18 @@ void SharedData::update(f32 deltaTime)
 			recti r(0, y, windowSize.X, y + 128);
 			gameOverRects.push_back(r);
 		}
+	}
+	// Check if pause key is pressed
+	else if (EventManager::singleton->keyStates[KEY_RETURN] == KEY_PRESSED)
+	{
+		// Trigger wave effect
+		json data;
+		data["mode"] = 1.0f;
+		data["factor"] = 0.001f;
+		SharedData::singleton->triggerPostProcessingCallback(KEY_PP_BLUR, data);
+
+		// Set pause screen
+		appPaused = 1;
 	}
 
 	// Animate hourglass angle
@@ -805,4 +849,9 @@ void SharedData::invertTime()
 bool SharedData::hasLevelTimedOut()
 {
 	return getGameScoreValue(KEY_SCORE_TIME) <= 0 && timeAlarm == nullptr;
+}
+
+bool SharedData::isAppPaused()
+{
+	return appPaused > 0;
 }

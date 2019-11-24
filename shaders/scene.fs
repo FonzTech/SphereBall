@@ -6,6 +6,7 @@ uniform vec2 resolution;
 uniform float time;
 uniform float waveStrength;
 uniform vec3 ripplePoint;
+uniform float blurFactor;
 
 // Here goes the basic functions
 
@@ -131,8 +132,15 @@ void main()
 
 	// Apply texture for the fragment
 	vec4 color = texture2D(colorRtt, coord);
-	vec4 gui = texture2D(guiRtt, coord);
 	
+	// Apply pause-screen blur
+	if (blurFactor > 0.0001)
+	{
+		color = blur13(colorRtt, coord, vec2(blurFactor));
+	}
+	
+	// Overlap GUI
+	vec4 gui = texture2D(guiRtt, coord);
 	vec4 finalColor = mix(color, gui, gui.a);
 	
 	// Set fragment colorx

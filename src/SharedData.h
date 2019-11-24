@@ -31,6 +31,7 @@
 
 #define KEY_PP_WAVE		0
 #define KEY_PP_RIPPLE	1
+#define KEY_PP_BLUR		2
 
 #include <nlohmann/json.hpp>
 
@@ -70,6 +71,10 @@ protected:
 	f32 gameOverAlpha;
 	s8 gameOverSelection;
 	std::vector<recti> gameOverRects;
+	
+	// Pause screen
+	u8 appPaused;
+	std::unique_ptr<Alarm> pauseAlarm;
 
 	// Exit screen
 	std::unique_ptr<Alarm> exitTimer;
@@ -215,6 +220,9 @@ public:
 
 	// Check for level timeout
 	bool hasLevelTimedOut();
+
+	// Check if application is paused
+	bool isAppPaused();
 };
 
 #endif // SHAREDDATA_H

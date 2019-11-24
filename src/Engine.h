@@ -33,6 +33,8 @@ protected:
 		f32 waveSpeed;
 		f32 waveStrength;
 		vector3df ripplePoint;
+		f32 blurMode;
+		f32 blurFactor;
 
 		PostProcessing(Engine* engine);
 

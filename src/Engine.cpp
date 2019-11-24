@@ -104,6 +104,19 @@ bool Engine::setupComponents()
 			postProcessing->ripplePoint = vector3df(params[0], params[1], params[2]);
 		};
 		SharedData::singleton->setPostProcessingCallback(KEY_PP_RIPPLE, callback);
+
+		// Blur
+		callback = [this](const json& data)
+		{
+			f32 params[2];
+
+			data.at("mode").get_to(params[0]);
+			data.at("factor").get_to(params[1]);
+
+			postProcessing->blurMode = params[0];
+			postProcessing->blurFactor = params[1];
+		};
+		SharedData::singleton->setPostProcessingCallback(KEY_PP_BLUR, callback);
 	}
 
 	// Check for render to target support
@@ -173,7 +186,10 @@ void Engine::loop()
 			(*it)->deltaTime = (f32) deltaTime;
 
 			// Update current game object
-			(*it)->update();
+			if (!SharedData::singleton->isAppPaused())
+			{
+				(*it)->update();
+			}
 
 			// Check if game object has been destroyed
 			if ((*it)->destroy)
@@ -319,6 +335,8 @@ Engine::PostProcessing::PostProcessing(Engine* engine)
 	waveSpeed = 0.0f;
 	waveStrength = 0.0f;
 	ripplePoint = vector3df(0.0f);
+	blurMode = 0.0f;
+	blurFactor = 0.0f;
 }
 
 void Engine::PostProcessing::OnSetConstants(IMaterialRendererServices* services, s32 userData)
@@ -336,6 +354,8 @@ void Engine::PostProcessing::OnSetConstants(IMaterialRendererServices* services,
 	services->setPixelShaderConstant("time", &ppTime, 1);
 	services->setPixelShaderConstant("waveStrength", &waveStrength, 1);
 	services->setPixelShaderConstant("ripplePoint", &ripplePoint.X, 3);
+
+	services->setPixelShaderConstant("blurFactor", &blurFactor, 1);
 }
 
 void Engine::PostProcessing::update(f32 deltaTime)
@@ -355,5 +375,23 @@ void Engine::PostProcessing::update(f32 deltaTime)
 	if (ripplePoint.Z < 0.0f)
 	{
 		ripplePoint.Z = 0.0f;
+	}
+
+	// Manage blur effect
+	if (blurMode)
+	{
+		blurFactor += deltaTime * 0.003f;
+		if (blurFactor > 1.0f)
+		{
+			blurFactor = 1.0f;
+		}
+	}
+	else
+	{
+		blurFactor -= deltaTime * 0.003f;
+		if (blurFactor < 0.0f)
+		{
+			blurFactor = 0.0f;
+		}
 	}
 }

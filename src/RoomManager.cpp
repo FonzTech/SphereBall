@@ -52,6 +52,11 @@ RoomManager::RoomManager()
 	levelIndex = 0;
 }
 
+u32 RoomManager::getCurrentLevelIndex()
+{
+	return levelIndex;
+}
+
 void RoomManager::loadRoom(const std::string roomToLoad)
 {
 	// Check if requested room is a level

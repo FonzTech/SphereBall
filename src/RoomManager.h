@@ -48,6 +48,9 @@ public:
 	// Current room's lower bound
 	f32 lowerBound;
 
+	// Get current level index
+	u32 getCurrentLevelIndex();
+
 	// Method to load room
 	void loadRoom(const std::string roomToLoad);
 

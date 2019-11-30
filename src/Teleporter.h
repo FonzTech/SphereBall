@@ -15,7 +15,6 @@ protected:
 	s32 customMaterial;
 	f32 angle;
 	SColorf color;
-	vector3df warp;
 
 	// ShaderCallBack
 	class SpecializedShaderCallback : public ShaderCallback
@@ -32,6 +31,9 @@ public:
 
 	// Constructor
 	Teleporter(const vector3df & warp, const SColorf & color);
+
+	// Warp position
+	vector3df warp;
 
 	// Mandatory methods
 	void update();

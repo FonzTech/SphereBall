@@ -76,6 +76,7 @@ Teleporter::Teleporter(const vector3df & warp, const SColorf & color) : GameObje
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
 	model->material = customMaterial;
+	model->boundingBox = Utility::getMesh(smgr, "models/cube.x")->getBoundingBox();
 	models.push_back(model);
 	
 	// Initialize variables

@@ -7,6 +7,7 @@
 #define STATE_TIME_OUT	3
 #define STATE_BURNED	4
 #define STATE_FELLOFF	5
+#define STATE_TELEPORT	6
 
 #include "GameObject.h"
 #include "Alarm.h"
@@ -41,15 +42,21 @@ protected:
 	s8 falling;
 	f32 breathing;
 	f32 breathingSpeed;
+	f32 playerScale;
 	std::unique_ptr<vector3df> fallLine;
 	vector3df exitedPosition;
 
 	// Behaviour
 	f32 fireFactor;
 
-	// Alarms
+	// State change alarms
 	std::unique_ptr<Alarm> dieAlarm;
 	std::unique_ptr<Alarm> popAlarm;
+	std::unique_ptr<Alarm> teleportAlarm;
+
+	// Warping effect
+	vector3df warpingTeleporter;
+	vector3df warpingPosition;
 
 	// Custom collision check function
 	std::unordered_map<std::string, std::function<bool(GameObject* go)>> collisionChecks;

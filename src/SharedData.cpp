@@ -662,14 +662,17 @@ void SharedData::resetState()
 
 void SharedData::buildFadeTransition()
 {
-	// Get window size
-	recti windowRect(vector2di(0), Utility::getWindowSize<s32>(driver));
+	if (fadeValue > 0.0f)
+	{
+		// Get window size
+		recti windowRect(vector2di(0), Utility::getWindowSize<s32>(driver));
 
-	// Cover the rectangle for entire window
-	IGUIImage* image = guienv->addImage(windowRect);
-	image->setColor(SColor((s32)(fadeValue * 255.0f), 255, 255, 255));
-	image->setImage(guiTextures[KEY_GUI_RECTANGLE]);
-	image->setScaleImage(true);
+		// Cover the rectangle for entire window
+		IGUIImage* image = guienv->addImage(windowRect);
+		image->setColor(SColor((s32)(fadeValue * 255.0f), 255, 255, 255));
+		image->setImage(guiTextures[KEY_GUI_RECTANGLE]);
+		image->setScaleImage(true);
+	}
 }
 
 void SharedData::initGameScoreValue(s32 key, s32 value)

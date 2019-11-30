@@ -15,6 +15,7 @@
 #include "Hourglass.h"
 #include "Exit.h"
 #include "Fire.h"
+#include "Teleporter.h"
 
 const f32 Player::breathingDelta = 0.125f;
 
@@ -42,6 +43,17 @@ Player::Player() : GameObject()
 	model->material = customMaterial;
 	models.push_back(model);
 
+	// Load model for electric effect
+	{
+		texture = driver->getTexture("textures/player_electric.png");
+
+		std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
+		model->addTexture(0, texture);
+		model->material = COMMON_EMT_VERTEX_ALPHA;
+		model->scale = vector3df(1.0f);
+		models.push_back(model);
+	}
+
 	// Initialize variables
 	state = STATE_WALKING;
 	noiseFactor = 0.0f;
@@ -55,6 +67,8 @@ Player::Player() : GameObject()
 
 	fireFactor = 0.0f;
 
+	playerScale = 1.0f;
+
 	fallLine = nullptr;
 	dieAlarm = nullptr;
 
@@ -64,6 +78,7 @@ Player::Player() : GameObject()
 	sounds[KEY_SOUND_GAME_OVER] = SoundManager::singleton->getSound(KEY_SOUND_GAME_OVER);
 	sounds[KEY_SOUND_LEVEL_START] = SoundManager::singleton->getSound(KEY_SOUND_LEVEL_START);
 	sounds[KEY_SOUND_EXITED] = SoundManager::singleton->getSound(KEY_SOUND_EXITED);
+	sounds[KEY_SOUND_TELEPORT] = SoundManager::singleton->getSound(KEY_SOUND_TELEPORT);
 
 	sounds[KEY_SOUND_COIN] = SoundManager::singleton->getSound(KEY_SOUND_COIN);
 	sounds[KEY_SOUND_KEY] = SoundManager::singleton->getSound(KEY_SOUND_KEY);
@@ -179,6 +194,41 @@ void Player::update()
 		walk();
 		dead();
 	}
+	
+	if (state == STATE_TELEPORT)
+	{
+		// Snap to warper position
+		position += (warpingTeleporter - position) / 4;
+
+		// Warping effect
+		playerScale -= 0.002f * deltaTime;
+		if (playerScale < 0.0f)
+		{
+			playerScale = 0.0f;
+		}
+
+		// Control fade in 
+		SharedData::singleton->fadeValue = 1.0f - playerScale;
+
+		// Warping timer
+		teleportAlarm->stepDecrement(deltaTime);
+		if (teleportAlarm->isTriggered())
+		{
+			teleportAlarm = nullptr;
+			position = warpingPosition;
+			state = STATE_WALKING;
+			SharedData::singleton->startFade(false, nullptr);
+		}
+	}
+	else
+	{
+		// Reverse warping effect
+		playerScale += 0.005f * deltaTime;
+		if (playerScale > 1.0f)
+		{
+			playerScale = 1.0f;
+		}
+	}
 
 	// Update listener position
 	sf::Listener::setDirection(sf::Vector3f(0, 0, -1));
@@ -190,6 +240,9 @@ void Player::draw()
 	// Update model
 	if (models.size() > 0)
 	{
+		// Get main model
+		std::shared_ptr<Model> & model = models.at(0);
+
 		if (state == STATE_DEAD)
 		{
 			std::shared_ptr<Model> model = models.at(0);
@@ -197,13 +250,26 @@ void Player::draw()
 		}
 		else // if (state == STATE_WALKING)
 		{
-			// Update matrix for shader
-			updateTransformMatrix();
-
 			// Update model parameters
-			std::shared_ptr<Model> model = models.at(0);
 			model->position = vector3df(0);
 			model->rotation = vector3df(0);
+
+			// Update matrix for shader
+			updateTransformMatrix();
+		}
+
+		// Set other models parameters
+		std::shared_ptr<Model> & model2 = models.at(1);
+
+		if (state == STATE_TELEPORT)
+		{
+			f32 time = (f32)device->getTimer()->getTime();
+			model2->rotation = vector3df(0, 0, std::floorf(time / 40.0f) * 90.0f);
+			model2->position = position;
+		}
+		else
+		{
+			model2->position = vector3df(0, 0, -50000);
 		}
 	}
 
@@ -258,7 +324,7 @@ void Player::updateTransformMatrix()
 
 	// Scaling
 	matrix4 scaling;
-	scaling.setScale(vector3df(1.0f, scaleHeight, 1.0f));
+	scaling.setScale(vector3df(playerScale, scaleHeight * playerScale, playerScale));
 	scaling.setTranslation(vector3df(0.0f, translateHeight, 0.0f));
 
 	// Translation
@@ -533,7 +599,8 @@ void Player::walk()
 	if (state == STATE_WALKING)
 	{
 		// Affect player
-		Collision collision = checkBoundingBoxCollision<Fire>(RoomManager::singleton->gameObjects, bbox);
+		aabbox3df rect(bbox);
+		Collision collision = checkBoundingBoxCollision<Fire>(RoomManager::singleton->gameObjects, rect);
 		if (collision.engineObject != nullptr)
 		{
 			// Raise fire effect
@@ -557,6 +624,28 @@ void Player::walk()
 			{
 				fireFactor = 0;
 			}
+		}
+	}
+
+	// Check collision with teleporter
+	if (state == STATE_WALKING && !falling && speed == vector3df(0))
+	{
+		// Affect player
+		aabbox3df rect(bbox);
+		Collision collision = checkBoundingBoxCollision<Teleporter>(RoomManager::singleton->gameObjects, rect);
+		if (collision.engineObject != nullptr)
+		{
+			// Trigger alarm
+			teleportAlarm = std::make_unique<Alarm>(600.0f);
+
+			// Play sound
+			playAudio(KEY_SOUND_TELEPORT);
+
+			// Change player state
+			std::shared_ptr<Teleporter> teleporter = collision.getGameObject<Teleporter>();
+			warpingTeleporter = teleporter->position + vector3df(0, 10, 0);
+			warpingPosition = teleporter->warp;
+			state = STATE_TELEPORT;
 		}
 	}
 }
@@ -679,9 +768,6 @@ void Player::SpecializedShaderCallback::OnSetConstants(IMaterialRendererServices
 
 	// Execute parent method
 	ShaderCallback::OnSetConstants(services, userData);
-
-	// Restore world matrix
-	driver->setTransform(ETS_WORLD, IdentityMatrix);
 
 	// Setup fire effect
 	services->setPixelShaderConstant("fireFactor", (f32*)&this->player->fireFactor, 1);

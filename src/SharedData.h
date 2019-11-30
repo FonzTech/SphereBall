@@ -85,7 +85,6 @@ protected:
 
 	// Variables for fade transition
 	s8 fadeType;
-	f32 fadeValue;
 	std::function<void(void)> fadeCallback;
 
 	// Alarm for time counter
@@ -164,6 +163,9 @@ public:
 
 	// Constructor
 	SharedData();
+
+	// Fade transition alpha value
+	f32 fadeValue;
 
 	// Singleton pattern variable
 	static std::shared_ptr<SharedData> singleton;

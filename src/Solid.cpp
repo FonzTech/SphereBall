@@ -67,7 +67,7 @@ Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakS
 		mesh = smgr->getMesh("models/block_spring_a.obj");
 
 		// Load mesh for bounding box
-		IMesh* bboxMesh = smgr->getMesh("models/cube.obj");
+		IMesh* bboxMesh = smgr->getMesh("models/cube.x");
 		bboxMesh->grab();
 		boundingBox = bboxMesh->getBoundingBox();
 		bboxMesh->drop();
@@ -91,7 +91,7 @@ Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakS
 		sounds[KEY_SOUND_BREAK]->setAttenuation(0.005f);
 
 		// Load mesh for bounding box
-		IMesh* bboxMesh = smgr->getMesh("models/cube.obj");
+		IMesh* bboxMesh = smgr->getMesh("models/cube.x");
 		bboxMesh->grab();
 		boundingBox = bboxMesh->getBoundingBox();
 		bboxMesh->drop();

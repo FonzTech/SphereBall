@@ -20,7 +20,7 @@ Fire::Fire() : GameObject()
 	ITexture* texture = driver->getTexture("textures/bonfire.png");
 
 	// Load mesh for bounding box
-	aabbox3df boundingBox = smgr->getMesh("models/cube.obj")->getBoundingBox();
+	aabbox3df boundingBox = smgr->getMesh("models/cube.x")->getBoundingBox();
 
 	// Create model for player
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);

@@ -56,9 +56,11 @@ Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakS
 	// Declare asset variables
 	IAnimatedMesh* mesh;
 	ITexture* texture;
+	ITexture* normalMap;
 	s32 material = COMMON_EMT_SOLID;
 
 	delayedAlphaMap = nullptr;
+	normalMap = nullptr;
 
 	// Load assets
 	if (springTension >= 0.0f)
@@ -67,37 +69,16 @@ Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakS
 		mesh = smgr->getMesh("models/block_spring_a.obj");
 
 		// Load mesh for bounding box
-		IMesh* bboxMesh = smgr->getMesh("models/cube.x");
+		IMesh* bboxMesh = Utility::getMesh(smgr, "models/cube.x");
 		bboxMesh->grab();
 		boundingBox = bboxMesh->getBoundingBox();
 		bboxMesh->drop();
 
-		// Load texture
+		// Load textures
 		texture = driver->getTexture("textures/block_spring_a.png");
 
 		// Load sound
 		sounds[KEY_SOUND_SPRING] = SoundManager::singleton->getSound(KEY_SOUND_SPRING);
-	}
-	else if (breakState >= 0.0f)
-	{
-		// Load zipped mesh
-		mesh = Utility::getMesh(smgr, "models/broken_block.zip");
-
-		// Load sounds
-		sounds[KEY_SOUND_BREAKING] = SoundManager::singleton->getSound(KEY_SOUND_BREAKING);
-		sounds[KEY_SOUND_BREAKING]->setAttenuation(0.005f);
-
-		sounds[KEY_SOUND_BREAK] = SoundManager::singleton->getSound(KEY_SOUND_BREAK);
-		sounds[KEY_SOUND_BREAK]->setAttenuation(0.005f);
-
-		// Load mesh for bounding box
-		IMesh* bboxMesh = smgr->getMesh("models/cube.x");
-		bboxMesh->grab();
-		boundingBox = bboxMesh->getBoundingBox();
-		bboxMesh->drop();
-
-		// Load texture
-		texture = driver->getTexture("textures/block.png");
 	}
 	else
 	{
@@ -132,6 +113,38 @@ Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakS
 
 				ssc->drop();
 			}
+			else
+			{
+				if (breakState >= 0.0f)
+				{
+					// Load zipped mesh
+					mesh = Utility::getMesh(smgr, "models/broken_block.zip");
+
+					// Load mesh for bounding box
+					IMesh* bboxMesh = smgr->getMesh("models/cube.x");
+					bboxMesh->grab();
+					boundingBox = bboxMesh->getBoundingBox();
+					bboxMesh->drop();
+
+					// Load sounds
+					sounds[KEY_SOUND_BREAKING] = SoundManager::singleton->getSound(KEY_SOUND_BREAKING);
+					sounds[KEY_SOUND_BREAKING]->setAttenuation(0.005f);
+
+					sounds[KEY_SOUND_BREAK] = SoundManager::singleton->getSound(KEY_SOUND_BREAK);
+					sounds[KEY_SOUND_BREAK]->setAttenuation(0.005f);
+				}
+
+				// Load texture for normal mapping
+				normalMap = driver->getTexture("textures/block_nm.png");
+
+				// Create shader for normal mapping
+				SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
+
+				IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+				material = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/standard.fs", ssc);
+
+				ssc->drop();
+			}
 		}
 
 		// Check if block is delayed
@@ -147,7 +160,11 @@ Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakS
 	model->material = material;
 	models.push_back(model);
 
-	if (delayedAlphaMap != nullptr)
+	if (normalMap != nullptr)
+	{
+		model->addTexture(1, normalMap);
+	}
+	else if (delayedAlphaMap != nullptr)
 	{
 		model->addTexture(1, delayedAlphaMap);
 	}
@@ -415,6 +432,25 @@ void Solid::SpecializedShaderCallback::OnSetConstants(IMaterialRendererServices*
 	// Block is invisible
 	else
 	{
+		// Apply normal map if required
+		{
+			auto& textures = solid->models.at(0)->textures;
+			auto normalMap = textures.find(1);
+			if (normalMap != textures.end())
+			{
+				services->setVertexShaderConstant("eyePos", &Camera::singleton->position.X, 3);
+				
+				s32 layer1 = 1;
+				services->setPixelShaderConstant("normalMap", &layer1, 1);
+
+				bool useNormalMap = true;
+				services->setPixelShaderConstant("useNormalMap", &useNormalMap, 1);
+
+				vector3df lightDir(0, -1, 1);
+				services->setPixelShaderConstant("lightDir", &lightDir.X, 3);
+			}
+		}
+
 		services->setVertexShaderConstant("lookAt", &Camera::singleton->lookAt.X, 3);
 
 		f32 fadeWhenFar = solid->invisibleToggle == 1 ? 1.0f : 0.0f;

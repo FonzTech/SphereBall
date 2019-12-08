@@ -30,7 +30,7 @@ Player::Player() : GameObject()
 	SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
 
 	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
-	customMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/player.fs", ssc, EMT_TRANSPARENT_ALPHA_CHANNEL);
+	customMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/player.fs", ssc, EMT_TRANSPARENT_VERTEX_ALPHA);
 
 	ssc->drop();
 
@@ -47,10 +47,9 @@ Player::Player() : GameObject()
 	{
 		texture = driver->getTexture("textures/player_electric.png");
 
-		std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
+		model = std::make_shared<Model>(mesh);
 		model->addTexture(0, texture);
-		model->material = COMMON_EMT_VERTEX_ALPHA;
-		model->scale = vector3df(1.0f);
+		model->material = EMT_TRANSPARENT_ALPHA_CHANNEL_REF;
 		models.push_back(model);
 	}
 
@@ -214,10 +213,18 @@ void Player::update()
 		teleportAlarm->stepDecrement(deltaTime);
 		if (teleportAlarm->isTriggered())
 		{
-			teleportAlarm = nullptr;
+			// Make electric ball invisible
+			models.at(1)->scale = vector3df(0);
+
+			// Restore player
 			position = warpingPosition;
 			state = STATE_WALKING;
+
+			// Start fade out
 			SharedData::singleton->startFade(false, nullptr);
+
+			// Delete alarm
+			teleportAlarm = nullptr;
 		}
 	}
 	else
@@ -251,25 +258,21 @@ void Player::draw()
 		else // if (state == STATE_WALKING)
 		{
 			// Update model parameters
-			model->position = vector3df(0);
+			model->position = position;
 			model->rotation = vector3df(0);
 
 			// Update matrix for shader
 			updateTransformMatrix();
-		}
 
-		// Set other models parameters
-		std::shared_ptr<Model> & model2 = models.at(1);
+			// Set other models parameters
+			std::shared_ptr<Model> & model2 = models.at(1);
 
-		if (state == STATE_TELEPORT)
-		{
-			f32 time = (f32)device->getTimer()->getTime();
-			model2->rotation = vector3df(0, 0, std::floorf(time / 40.0f) * 90.0f);
-			model2->position = position;
-		}
-		else
-		{
-			model2->position = vector3df(0, 0, -50000);
+			if (state == STATE_TELEPORT)
+			{
+				f32 time = (f32)device->getTimer()->getTime();
+				model2->rotation = vector3df(0, 0, std::floorf(time / 40.0f) * 90.0f);
+				model2->position = position;
+			}
 		}
 	}
 
@@ -470,7 +473,7 @@ void Player::walk()
 			std::shared_ptr<GameObject> go = collision.getGameObject<Solid>();
 
 			// Motion effects
-			if ((!i && speed.Y > 0.1) || (i && speed.Y < -0.1))
+			if ((!i && speed.Y > 0.001) || (i && speed.Y < -0.001))
 			{
 				// Play sound
 				playAudio(KEY_SOUND_BOUNCE);
@@ -630,8 +633,11 @@ void Player::walk()
 	// Check collision with teleporter
 	if (state == STATE_WALKING && !falling && speed == vector3df(0))
 	{
-		// Affect player
+		// Get shifted BB
 		aabbox3df rect(bbox);
+		Utility::getHorizontalAABBox(bbox, rect, 0);
+
+		// Check collision
 		Collision collision = checkBoundingBoxCollision<Teleporter>(RoomManager::singleton->gameObjects, rect);
 		if (collision.engineObject != nullptr)
 		{
@@ -640,6 +646,9 @@ void Player::walk()
 
 			// Play sound
 			playAudio(KEY_SOUND_TELEPORT);
+
+			// Make electric ball visible
+			models.at(1)->scale = vector3df(1);
 
 			// Change player state
 			std::shared_ptr<Teleporter> teleporter = collision.getGameObject<Teleporter>();
@@ -659,7 +668,7 @@ void Player::die()
 	dieAlarm = std::make_unique<Alarm>(1500.0f);
 
 	// Erase sphere model
-	models.erase(models.begin());
+	models.clear();
 
 	// Load model for nailed state
 	IAnimatedMesh* mesh = smgr->getMesh("models/plane.obj");
@@ -763,11 +772,11 @@ Player::SpecializedShaderCallback::SpecializedShaderCallback(Player* player)
 
 void Player::SpecializedShaderCallback::OnSetConstants(IMaterialRendererServices* services, s32 userData)
 {
-	// Set custom world matrix
+	// Set custom world matrix. After restore the original one
+	matrix4 etsWorld = driver->getTransform(ETS_WORLD);
 	driver->setTransform(ETS_WORLD, player->transformMatrix);
-
-	// Execute parent method
 	ShaderCallback::OnSetConstants(services, userData);
+	driver->setTransform(ETS_WORLD, etsWorld);
 
 	// Setup fire effect
 	services->setPixelShaderConstant("fireFactor", (f32*)&this->player->fireFactor, 1);

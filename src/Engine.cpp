@@ -125,6 +125,9 @@ bool Engine::setupComponents()
 
 void Engine::loop()
 {
+	// Debug data
+	bool setBBoxVisible = false;
+
 	// Setup camera
 	Camera::singleton->position = vector3df(0, 40, -100);
 	Camera::singleton->lookAt = vector3df(0);
@@ -132,6 +135,19 @@ void Engine::loop()
 	// Loop while game is still running
 	while (device->run() && RoomManager::singleton->isProgramRunning)
 	{
+		// Set debug data visible
+		#if NDEBUG || _DEBUG
+		if (EventManager::singleton->keyStates[KEY_KEY_P] == KEY_PRESSED)
+		{
+			setBBoxVisible = !setBBoxVisible;
+		}
+		// Restart room on key press (only for debug builds)
+		if (EventManager::singleton->keyStates[KEY_KEY_R] == KEY_PRESSED)
+		{
+			RoomManager::singleton->restartRoom();
+		}
+		#endif
+
 		// Get window size
 		dimension2du windowSize;
 		{
@@ -222,6 +238,11 @@ void Engine::loop()
 				{
 					// Create scene node from this mesh
 					IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode(model->mesh, nullptr, -1, model->position, model->rotation, model->scale);
+
+					if (setBBoxVisible)
+					{
+						node->setDebugDataVisible(irr::scene::EDS_BBOX);
+					}
 
 					// Add all texture layer for this mesh (obtained from model)
 					if (node != nullptr)

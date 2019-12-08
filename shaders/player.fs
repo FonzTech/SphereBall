@@ -16,7 +16,7 @@ void main()
 	
 	// Dissolve effect
 	vec4 noiseColor = texture2D(noiseTexture, gl_TexCoord[0]);
-	color.a = step(noiseFactor, noiseColor.r);
+	color.a *= step(noiseFactor, noiseColor.r);
 	
 	// Write to targets
     gl_FragData[0] = color;

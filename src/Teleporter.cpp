@@ -53,6 +53,7 @@ std::shared_ptr<Teleporter> Teleporter::createInstance(const json &jsonData)
 	}
 	catch (json::exception & e)
 	{
+		(void)e; // Avoid compiler warning
 		// printf("Teleporter - Exception while parsing \"optional\": %s\n", e.what());
 	}
 	return std::make_shared<Teleporter>(warp, color);

@@ -57,7 +57,7 @@ Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakS
 	IAnimatedMesh* mesh;
 	ITexture* texture;
 	ITexture* normalMap;
-	s32 material = COMMON_EMT_SOLID;
+	s32 material = getCommonBasicMaterial(EMT_SOLID);
 
 	delayedAlphaMap = nullptr;
 	normalMap = nullptr;
@@ -193,7 +193,7 @@ Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakS
 			model = std::make_shared<Model>(mesh);
 			model->addTexture(0, texture);
 			model->scale = vector3df(1);
-			model->material = COMMON_EMT_SOLID;
+			model->material = getCommonBasicMaterial(EMT_SOLID);
 			models.push_back(model);
 		}
 	}
@@ -433,23 +433,7 @@ void Solid::SpecializedShaderCallback::OnSetConstants(IMaterialRendererServices*
 	else
 	{
 		// Apply normal map if required
-		{
-			auto& textures = solid->models.at(0)->textures;
-			auto normalMap = textures.find(1);
-			if (normalMap != textures.end())
-			{
-				services->setVertexShaderConstant("eyePos", &Camera::singleton->position.X, 3);
-				
-				s32 layer1 = 1;
-				services->setPixelShaderConstant("normalMap", &layer1, 1);
-
-				bool useNormalMap = true;
-				services->setPixelShaderConstant("useNormalMap", &useNormalMap, 1);
-
-				vector3df lightDir(0, -1, 1);
-				services->setPixelShaderConstant("lightDir", &lightDir.X, 3);
-			}
-		}
+		solid->applyNormalMapping(services, solid->models.at(0), 1);
 
 		services->setVertexShaderConstant("lookAt", &Camera::singleton->lookAt.X, 3);
 

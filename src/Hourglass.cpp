@@ -16,7 +16,7 @@ Hourglass::Hourglass() : Pickup()
 	// Create model for player
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
-	model->material = COMMON_EMT_VERTEX_ALPHA;
+	model->material = getCommonBasicMaterial(EMT_TRANSPARENT_VERTEX_ALPHA);
 	models.push_back(model);
 }
 

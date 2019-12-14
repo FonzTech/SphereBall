@@ -675,7 +675,7 @@ void Player::die()
 	ITexture* texture = driver->getTexture("textures/nailed.png");
 
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
-	model->material = COMMON_EMT_VERTEX_ALPHA;
+	model->material = getCommonBasicMaterial(EMT_TRANSPARENT_VERTEX_ALPHA);
 	model->addTexture(0, texture);
 	models.push_back(model);
 

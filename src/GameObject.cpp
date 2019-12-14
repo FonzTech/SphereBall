@@ -1,13 +1,10 @@
 #include "GameObject.h"
-
-s32 GameObject::COMMON_EMT_SOLID = EMT_SOLID;
-s32 GameObject::COMMON_EMT_VERTEX_ALPHA = EMT_TRANSPARENT_VERTEX_ALPHA;
-s32 GameObject::COMMON_EMT_TRANSPARENT_ADD_COLOR = EMT_TRANSPARENT_ADD_COLOR;
+#include "Camera.h"
 
 const s32 GameObject::getCommonBasicMaterial(E_MATERIAL_TYPE basicMaterial)
 {
 	// Create basic shader
-	ShaderCallback* bsc = new ShaderCallback();
+	BasicShaderCallback* bsc = new BasicShaderCallback(this);
 
 	IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
 	s32 material = gpu->addHighLevelShaderMaterialFromFiles("shaders/standard.vs", "shaders/standard.fs", bsc, basicMaterial);
@@ -72,4 +69,45 @@ GameObject::GameObject()
 aabbox3df GameObject::getBoundingBox()
 {
 	return models.at(0)->mesh->getBoundingBox();
+}
+
+void GameObject::applyNormalMapping(IMaterialRendererServices* services, const std::shared_ptr<Model> model, const u32 textureIndex)
+{
+	// Apply normal map if required
+	const bool useNormalMap = textureIndex > 0;
+	services->setPixelShaderConstant("useNormalMap", &useNormalMap, 1);
+
+	// Check for normal map existance
+	if (useNormalMap)
+	{
+		auto& textures = model->textures;
+		auto normalMap = textures.find(1);
+		if (normalMap != textures.end())
+		{
+			services->setVertexShaderConstant("eyePos", &Camera::singleton->position.X, 3);
+
+			const s32 layer1 = textureIndex;
+			services->setPixelShaderConstant("normalMap", &layer1, 1);
+
+			const vector3df lightDir(0, -1, 1);
+			services->setPixelShaderConstant("lightDir", &lightDir.X, 3);
+		}
+	}
+}
+
+GameObject::BasicShaderCallback::BasicShaderCallback(GameObject* go)
+{
+	this->go = go;
+}
+
+void GameObject::BasicShaderCallback::OnSetConstants(IMaterialRendererServices* services, s32 userData)
+{
+	// Execute parent method
+	ShaderCallback::OnSetConstants(services, userData);
+
+	// Apply normal mapping if required
+	if (go->models.size())
+	{
+		go->applyNormalMapping(services, go->models.at(0), go->normalMapIndex);
+	}
 }

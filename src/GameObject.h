@@ -18,6 +18,15 @@ class GameObject : public EngineObject
 {
 protected:
 
+	/**
+		This variable indicates the normal map texture index in the "textures" map of the model.
+		This also describes a limitation of this application, because a normal map is tied to the
+		mesh, not the game object which uses it. Anyway, every game objects should have their
+		primary model, which can have a normal map, in the first index of the "models" vector.
+		A value of 0 indicates no normal map enabled.
+	*/
+	u32 normalMapIndex = 0;
+
 	// Check for collision with another game object
 	template <typename T>
 	Collision checkBoundingBoxCollision(const std::vector<std::shared_ptr<GameObject>>& gameObjects, aabbox3df& rect, const std::function<bool(GameObject* go)>& specializedCheck = nullptr)
@@ -74,11 +83,6 @@ protected:
 
 public:
 
-	// Common material for game objects which does not need advanced shading
-	static s32 COMMON_EMT_SOLID;
-	static s32 COMMON_EMT_VERTEX_ALPHA;
-	static s32 COMMON_EMT_TRANSPARENT_ADD_COLOR;
-
 	/*
 		Create a basic common material to apply transformation matrix in vertex shader and
 		basic texture mapping in fragment shader. "standard.vs" and "standard.fs" are used.
@@ -87,7 +91,7 @@ public:
 
 		@return material index to be used on mesh nodes.
 	*/
-	static const s32 getCommonBasicMaterial(E_MATERIAL_TYPE basicMaterial = EMT_SOLID);
+	const s32 getCommonBasicMaterial(E_MATERIAL_TYPE basicMaterial = EMT_SOLID);
 
 	// Get instance of game object with parameters
 	static std::shared_ptr<GameObject> createInstance(const json &jsonData);
@@ -115,6 +119,27 @@ public:
 
 	// Bounding box getter
 	virtual aabbox3df getBoundingBox();
+
+	/**
+		This method applies the routine for normal mapping, used in shader service
+		inside this GameObject's subclasses.
+
+		@param services the "IMaterialRendererServices" instance passed as argument by "OnSetConstants".
+		@param model the model where to get the texture from.
+		@param textureIndex the normal map texture index in the "textures" array of the model.
+	*/
+	void applyNormalMapping(IMaterialRendererServices* services, const std::shared_ptr<Model> model, const u32 textureIndex);
+
+	// ShaderCallBack
+	class BasicShaderCallback : public ShaderCallback
+	{
+	protected:
+		GameObject* go;
+
+	public:
+		BasicShaderCallback(GameObject* go);
+		virtual void OnSetConstants(IMaterialRendererServices* services, s32 userData);
+	};
 };
 
 #endif // GAMEOBJECT_H

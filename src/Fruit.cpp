@@ -25,7 +25,7 @@ Fruit::Fruit() : Pickup()
 
 	// Load mesh and model
 	IAnimatedMesh* mesh;
-	ITexture* texture;
+	ITexture *texture, *normalMap;
 
 	{
 		std::string fruitToLoad;
@@ -52,14 +52,17 @@ Fruit::Fruit() : Pickup()
 			fruitToLoad = "apple";
 		}
 
-		mesh = smgr->getMesh(std::string("models/" + fruitToLoad + ".obj").c_str());
+		mesh = Utility::getMesh(smgr, "models/" + fruitToLoad + ".x");
 		texture = driver->getTexture(std::string("textures/" + fruitToLoad + ".png").c_str());
+		normalMap = driver->getTexture(std::string("textures/" + fruitToLoad + "_nm.png").c_str());
+		normalMapIndex = 1;
 	}
 
 	// Create model for player
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
-	model->material = COMMON_EMT_SOLID;
+	model->addTexture(1, normalMap);
+	model->material = getCommonBasicMaterial(EMT_SOLID);
 	models.push_back(model);
 
 	// Initialize variables

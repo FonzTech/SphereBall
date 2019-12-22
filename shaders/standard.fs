@@ -1,6 +1,7 @@
 uniform sampler2D tex;
 uniform sampler2D normalMap;
 uniform bool useNormalMap;
+uniform float lightPower;
 uniform vec3 lightDir;
 
 varying vec4 vertexColor;
@@ -18,7 +19,7 @@ void main()
 		vec3 tsLightDir = normalize(tbn * lightDir);
 		float NdotL = clamp(dot(normalMapValue, tsLightDir), 0, 1);
 		
-		diffuseColor += diffuseColor * vec4(4.0) * NdotL * lightDist;
+		diffuseColor += diffuseColor * vec4(lightPower) * NdotL * lightDist;
 	}
 	
 	gl_FragData[0] = diffuseColor;

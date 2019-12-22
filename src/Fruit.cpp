@@ -55,7 +55,9 @@ Fruit::Fruit() : Pickup()
 		mesh = Utility::getMesh(smgr, "models/" + fruitToLoad + ".x");
 		texture = driver->getTexture(std::string("textures/" + fruitToLoad + ".png").c_str());
 		normalMap = driver->getTexture(std::string("textures/" + fruitToLoad + "_nm.png").c_str());
-		normalMapIndex = 1;
+
+		normalMapping.textureIndex = 1;
+		normalMapping.lightPower = 2.0f;
 	}
 
 	// Create model for player

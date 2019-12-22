@@ -136,6 +136,7 @@ Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakS
 
 				// Load texture for normal mapping
 				normalMap = driver->getTexture("textures/block_nm.png");
+				normalMapping.textureIndex = 1;
 
 				// Create shader for normal mapping
 				SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
@@ -433,7 +434,7 @@ void Solid::SpecializedShaderCallback::OnSetConstants(IMaterialRendererServices*
 	else
 	{
 		// Apply normal map if required
-		solid->applyNormalMapping(services, solid->models.at(0), 1);
+		solid->applyNormalMapping(services, solid->models.at(0));
 
 		services->setVertexShaderConstant("lookAt", &Camera::singleton->lookAt.X, 3);
 

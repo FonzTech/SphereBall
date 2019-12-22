@@ -19,13 +19,17 @@ class GameObject : public EngineObject
 protected:
 
 	/**
-		This variable indicates the normal map texture index in the "textures" map of the model.
-		This also describes a limitation of this application, because a normal map is tied to the
-		mesh, not the game object which uses it. Anyway, every game objects should have their
-		primary model, which can have a normal map, in the first index of the "models" vector.
-		A value of 0 indicates no normal map enabled.
+		This structure indicates the normal map texture index in the "textures" map of the model
+		and the light power to be applied for shading. This also describes a limitation of this
+		application, because a normal map is tied to the mesh, not the game object which uses it.
+		Anyway, every game objects should have their primary model, which can have a normal map,
+		in the first index of the "models" vector. A value of 0 indicates no normal map enabled.
 	*/
-	u32 normalMapIndex = 0;
+	struct
+	{
+		s32 textureIndex = 0;
+		f32 lightPower = 4.0f;
+	} normalMapping;
 
 	// Check for collision with another game object
 	template <typename T>
@@ -126,9 +130,8 @@ public:
 
 		@param services the "IMaterialRendererServices" instance passed as argument by "OnSetConstants".
 		@param model the model where to get the texture from.
-		@param textureIndex the normal map texture index in the "textures" array of the model.
 	*/
-	void applyNormalMapping(IMaterialRendererServices* services, const std::shared_ptr<Model> model, const u32 textureIndex);
+	void applyNormalMapping(IMaterialRendererServices* services, const std::shared_ptr<Model> model);
 
 	// ShaderCallBack
 	class BasicShaderCallback : public ShaderCallback

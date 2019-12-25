@@ -89,12 +89,12 @@ Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakS
 		// Load texture
 		if (invisibleToggle >= 0)
 		{
-			texture = driver->getTexture("textures/block_glass.png");
+			texture = driver->getTexture("textures/block.png");
 
 			// Create shader for glass
 			SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
-
 			IGPUProgrammingServices* gpu = driver->getGPUProgrammingServices();
+
 			material = gpu->addHighLevelShaderMaterialFromFiles("shaders/glass.vs", "shaders/glass.fs", ssc, EMT_TRANSPARENT_VERTEX_ALPHA);
 
 			ssc->drop();

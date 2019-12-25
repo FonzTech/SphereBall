@@ -11,10 +11,8 @@ void main()
 {
 	vec4 position = mWorld * gl_Vertex;
 	
-	float d = max(0, distance(lookAt, position.xyz) - 50);
-	float x = mix(1.0 - d * 0.1, d * 0.005, fadeWhenFar);
-	float y = mix(0.675, 1.0, fadeWhenFar);
-	dalpha = clamp(x, 0.0, y);
+	float d = clamp((distance(lookAt, position.xyz) - 20) / 100, 0, 1);
+	dalpha = mix(1.0 - d, d, fadeWhenFar);
 	
 	gl_Position = mProj * mView * position;
 	gl_TexCoord[0] = gl_MultiTexCoord0;

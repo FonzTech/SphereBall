@@ -1,4 +1,6 @@
-#define WAVE_VALUE 0.02
+#define WAVE_VALUE 0.02 // Red
+#define GLASS_VALUE 0.04 // Red
+#define AVOID_PP_VALUE 0.04 // Green
 
 uniform sampler2D guiRtt;
 uniform sampler2D colorRtt;
@@ -32,11 +34,11 @@ vec3 cubicBezier(vec3 A, vec3 B, vec3 C, vec3 D, float t)
 	return P;
 }
 
-vec2 sineWave(vec2 tc, float factor, float strength, float amplify)
+vec2 sineWave(vec2 tc, float factor, float strength, float amplify, float phase)
 {
     // Wave distortion
-    float x = cos(19.2 * factor * tc.x + 42.7 * factor * tc.y + time * 0.005) * strength;
-    float y = sin(41.5 * factor * tc.x + 22.1 * factor * tc.y + time * 0.005) * strength;
+    float x = cos(19.2 * factor * tc.x + 42.7 * factor * tc.y + phase * 0.005) * strength;
+    float y = sin(41.5 * factor * tc.x + 22.1 * factor * tc.y + phase * 0.005) * strength;
 	
 	// Clamp to avoid bad effects on edges
     return vec2(clamp(tc.x + x * amplify, 0.001, 0.999), clamp(tc.y + y * amplify, 0.001, 0.999));
@@ -126,7 +128,7 @@ void main()
 	}
 	else
 	{
-		coord = sineWave(gl_TexCoord[0].xy, 1.0, waveStrength, 1.0);
+		coord = sineWave(gl_TexCoord[0].xy, 1.0, waveStrength, 1.0, time);
 	}
 	
 	// Apply ripple
@@ -138,10 +140,26 @@ void main()
 	// Get post processing mask for the fragment
 	vec4 pp = texture2D(ppRtt, coord);
 	
-	// Pre-scene processing
+	/* Pre-scene processing */
+	
+	// Avoid PP if necessary
+	float amplify;
+	{
+		vec4 color = texture2D(ppRtt, coord);
+		amplify = 1.0 - inRange(color.g, AVOID_PP_VALUE);
+	}
+	
+	// Heat wave
 	{
 		float factor = getHeatWaveFactor(ppRtt, coord, 0.005) * 0.25;
-		coord = sineWave(coord, 2.0, 0.01, factor);
+		coord = sineWave(coord, 2.0, 0.01, factor * amplify, time);
+	}
+	
+	// Glass
+	{
+		vec4 color = texture2D(ppRtt, coord);
+		float factor = inRange(color.r, GLASS_VALUE);
+		coord = sineWave(coord, 20.0, 0.01, factor * color.b * amplify, 0);
 	}
 
 	// Apply texture for the fragment

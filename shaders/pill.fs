@@ -33,5 +33,5 @@ void main()
 	
 	// Assign color to fragment
     gl_FragData[0] = color;
-    gl_FragData[1] = vec4(0);
+	gl_FragData[1] = vec4(0, 0.02, 0, 1);
 }

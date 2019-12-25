@@ -1,3 +1,5 @@
+#define WAVE_VALUE 0.02
+
 uniform sampler2D guiRtt;
 uniform sampler2D colorRtt;
 uniform sampler2D ppRtt;
@@ -9,6 +11,11 @@ uniform vec3 ripplePoint;
 uniform float blurFactor;
 
 // Here goes the basic functions
+
+float inRange(float x, float y)
+{
+	return step(y - 0.01, x) - step(y + 0.01, x);
+}
 
 // "glsl-bezier-curve" by "yiwenl"
 vec3 cubicBezier(vec3 A, vec3 B, vec3 C, vec3 D, float t)
@@ -64,6 +71,13 @@ float getHeatWaveFactor(sampler2D mask, vec2 coord, float radius)
 	float down = texture2D(mask, clamp(coord - vec2(0.0, radius), vec2(0), vec2(1))).r;
 	float left = texture2D(mask, clamp(coord - vec2(radius, 0), vec2(0), vec2(1))).r;
 	float right = texture2D(mask, clamp(coord + vec2(radius, 0), vec2(0), vec2(1))).r;
+	
+	center = inRange(center, WAVE_VALUE);
+	up = inRange(up, WAVE_VALUE);
+	down = inRange(down, WAVE_VALUE);
+	left = inRange(left, WAVE_VALUE);
+	right = inRange(right, WAVE_VALUE);
+	
 	return (center + up + down + left + right) / 5.0;
 }
 

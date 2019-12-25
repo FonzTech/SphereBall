@@ -4,8 +4,8 @@ std::shared_ptr<SoundManager> SoundManager::singleton = nullptr;
 
 SoundManager::SoundManager()
 {
-	volumeLevels[KEY_SETTING_MUSIC] = 100.0f;
-	volumeLevels[KEY_SETTING_SOUND] = 100.0f;
+	volumeLevels[KEY_SETTING_MUSIC] = 20.0f;
+	volumeLevels[KEY_SETTING_SOUND] = 20.0f;
 }
 
 std::shared_ptr<sf::SoundBuffer> SoundManager::getSoundBuffer(const std::string& fname)

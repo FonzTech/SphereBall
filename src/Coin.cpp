@@ -22,18 +22,23 @@ Coin::Coin(const u8 type) : Pickup()
 	this->type = type;
 
 	// Get correct texture
-	std::string textureFile = std::string("textures/") + (type == 1 ? "coin_blue" : "coin") + ".png";
+	std::string textureFile = std::string("textures/") + (type == 1 ? "coin_blue" : "coin");
 
 	// Load mesh and texture
 	IAnimatedMesh* mesh = smgr->getMesh("models/coin.obj");
-	ITexture* texture = driver->getTexture(textureFile.c_str());
+	ITexture* texture = driver->getTexture((textureFile + ".png").c_str());
+	ITexture* normalMap = driver->getTexture((textureFile + "_nm.png").c_str());
 
 	// Load model
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
+	model->addTexture(1, normalMap);
 	model->scale = vector3df(1, 1, 1);
 	model->material = getCommonBasicMaterial(EMT_SOLID);
 	models.push_back(model);
+
+	// Set normal
+	normalMapping.textureIndex = 1;
 }
 
 void Coin::update()

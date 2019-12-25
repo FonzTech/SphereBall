@@ -75,6 +75,7 @@ void GameObject::applyNormalMapping(IMaterialRendererServices* services, const s
 {
 	// Apply normal map if required
 	const bool useNormalMap = normalMapping.textureIndex > 0;
+	services->setVertexShaderConstant("useNormalMap", &useNormalMap, 1);
 	services->setPixelShaderConstant("useNormalMap", &useNormalMap, 1);
 
 	// Check for normal map existance
@@ -82,12 +83,14 @@ void GameObject::applyNormalMapping(IMaterialRendererServices* services, const s
 	{
 		services->setVertexShaderConstant("eyePos", &Camera::singleton->position.X, 3);
 
-		services->setPixelShaderConstant("normalMap", &normalMapping.textureIndex, 1);
-
 		const vector3df lightDir(0, -1, 1);
-		services->setPixelShaderConstant("lightDir", &lightDir.X, 3);
+		services->setVertexShaderConstant("lightDir", &lightDir.X, 3);
+
+		const vector3df eyeDir = Camera::singleton->lookAt - Camera::singleton->position;
+		services->setVertexShaderConstant("eyeDir", &eyeDir.X, 3);
 
 		services->setPixelShaderConstant("lightPower", &normalMapping.lightPower, 1);
+		services->setPixelShaderConstant("normalMap", &normalMapping.textureIndex, 1);
 	}
 }
 

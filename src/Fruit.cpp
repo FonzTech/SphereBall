@@ -57,7 +57,6 @@ Fruit::Fruit() : Pickup()
 		normalMap = driver->getTexture(std::string("textures/" + fruitToLoad + "_nm.png").c_str());
 
 		normalMapping.textureIndex = 1;
-		normalMapping.lightPower = 2.0f;
 	}
 
 	// Create model for player

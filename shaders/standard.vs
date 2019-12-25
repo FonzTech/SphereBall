@@ -2,10 +2,15 @@ uniform mat4 mWorld;
 uniform mat4 mView;
 uniform mat4 mProj;
 
+uniform bool useNormalMap;
 uniform vec3 eyePos;
+uniform vec3 lightDir;
+uniform vec3 eyeDir;
 
 varying vec4 vertexColor;
 varying mat3 tbn;
+varying vec3 tsLightDir;
+varying vec3 tsEyeDir;
 varying float lightDist;
 
 void main()
@@ -27,7 +32,13 @@ void main()
 		vertexTangent.z, vertexBitangent.z, vertexNormal.z
 	);
 	
-	lightDist = distance(eyePos, modelSpaceVertex.xyz) / 150.0;
+	lightDist = distance(eyePos, modelSpaceVertex.xyz) / 200.0;
 	lightDist = pow(lightDist, 4);
 	lightDist = 1.0 - clamp(lightDist, 0.0, 1.0);
+	
+	if (useNormalMap)
+	{
+		tsLightDir = normalize(tbn * lightDir);
+		tsEyeDir = normalize(tbn * eyeDir);
+	}
 }

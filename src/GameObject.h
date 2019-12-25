@@ -28,7 +28,7 @@ protected:
 	struct
 	{
 		s32 textureIndex = 0;
-		f32 lightPower = 4.0f;
+		f32 lightPower = 1.5f;
 	} normalMapping;
 
 	// Check for collision with another game object

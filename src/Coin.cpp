@@ -35,10 +35,8 @@ Coin::Coin(const u8 type) : Pickup()
 	model->addTexture(1, normalMap);
 	model->scale = vector3df(1, 1, 1);
 	model->material = getCommonBasicMaterial(EMT_SOLID);
+	model->normalMapping.textureIndex = 1;
 	models.push_back(model);
-
-	// Set normal
-	normalMapping.textureIndex = 1;
 }
 
 void Coin::update()

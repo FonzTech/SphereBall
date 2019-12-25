@@ -18,19 +18,6 @@ class GameObject : public EngineObject
 {
 protected:
 
-	/**
-		This structure indicates the normal map texture index in the "textures" map of the model
-		and the light power to be applied for shading. This also describes a limitation of this
-		application, because a normal map is tied to the mesh, not the game object which uses it.
-		Anyway, every game objects should have their primary model, which can have a normal map,
-		in the first index of the "models" vector. A value of 0 indicates no normal map enabled.
-	*/
-	struct
-	{
-		s32 textureIndex = 0;
-		f32 lightPower = 1.5f;
-	} normalMapping;
-
 	// Check for collision with another game object
 	template <typename T>
 	Collision checkBoundingBoxCollision(const std::vector<std::shared_ptr<GameObject>>& gameObjects, aabbox3df& rect, const std::function<bool(GameObject* go)>& specializedCheck = nullptr)

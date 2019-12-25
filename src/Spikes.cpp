@@ -56,37 +56,45 @@ Spikes::Spikes(s8 initialMode, f32 delay) : GameObject()
 	if (delay < 0)
 	{
 		// Load mesh
-		IAnimatedMesh* mesh = smgr->getMesh("models/spikes_b.obj");
+		IAnimatedMesh* mesh = smgr->getMesh("models/spikes_b.x");
 
 		// Load texture
 		ITexture* texture = driver->getTexture("textures/spikes_b.png");
+		ITexture* normalMap = driver->getTexture("textures/spikes_b_nm.png");
 
 		// Create model for base
 		std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 		model->addTexture(0, texture);
+		model->addTexture(1, normalMap);
 		model->material = getCommonBasicMaterial(EMT_SOLID);
+		model->normalMapping.textureIndex = 1;
 		models.push_back(model);
 	}
 	else
 	{
 		// Load mesh
-		IAnimatedMesh* meshA = smgr->getMesh("models/spikes_base.obj");
-		IAnimatedMesh* meshB = smgr->getMesh("models/spikes_tip.obj");
+		IAnimatedMesh* meshA = smgr->getMesh("models/spikes_base.x");
+		IAnimatedMesh* meshB = smgr->getMesh("models/spikes_tip.x");
 
 		// Load texture
 		ITexture* texture = driver->getTexture("textures/spikes.png");
+		ITexture* normalMap = driver->getTexture("textures/spikes_nm.png");
 
 		// Create model for base
 		std::shared_ptr<Model> model = std::make_shared<Model>(meshA);
 		model->addTexture(0, texture);
+		model->addTexture(1, normalMap);
 		model->material = getCommonBasicMaterial(EMT_SOLID);
+		model->normalMapping.textureIndex = 1;
 		models.push_back(model);
 
 		// Create model for tip
 		model = std::make_shared<Model>(meshB);
 		model->addTexture(0, texture);
 		model->scale = vector3df(1, 1, 1);
+		model->addTexture(1, normalMap);
 		model->material = getCommonBasicMaterial(EMT_SOLID);
+		model->normalMapping.textureIndex = 1;
 		models.push_back(model);
 
 		// Load sounds

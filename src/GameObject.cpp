@@ -74,7 +74,7 @@ aabbox3df GameObject::getBoundingBox()
 void GameObject::applyNormalMapping(IMaterialRendererServices* services, const std::shared_ptr<Model> model)
 {
 	// Apply normal map if required
-	const bool useNormalMap = normalMapping.textureIndex > 0;
+	const bool useNormalMap = model->normalMapping.textureIndex > 0;
 	services->setVertexShaderConstant("useNormalMap", &useNormalMap, 1);
 	services->setPixelShaderConstant("useNormalMap", &useNormalMap, 1);
 
@@ -89,8 +89,8 @@ void GameObject::applyNormalMapping(IMaterialRendererServices* services, const s
 		const vector3df eyeDir = Camera::singleton->lookAt - Camera::singleton->position;
 		services->setVertexShaderConstant("eyeDir", &eyeDir.X, 3);
 
-		services->setPixelShaderConstant("lightPower", &normalMapping.lightPower, 1);
-		services->setPixelShaderConstant("normalMap", &normalMapping.textureIndex, 1);
+		services->setPixelShaderConstant("lightPower", &model->normalMapping.lightPower, 1);
+		services->setPixelShaderConstant("normalMap", &model->normalMapping.textureIndex, 1);
 	}
 }
 

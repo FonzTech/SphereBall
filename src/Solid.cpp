@@ -136,7 +136,6 @@ Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakS
 
 				// Load texture for normal mapping
 				normalMap = driver->getTexture("textures/block_nm.png");
-				normalMapping.textureIndex = 1;
 
 				// Create shader for normal mapping
 				SpecializedShaderCallback* ssc = new SpecializedShaderCallback(this);
@@ -164,6 +163,7 @@ Solid::Solid(std::optional<std::array<f32, 4>> & delayedParams, const f32 breakS
 	if (normalMap != nullptr)
 	{
 		model->addTexture(1, normalMap);
+		model->normalMapping.textureIndex = 1;
 	}
 	else if (delayedAlphaMap != nullptr)
 	{

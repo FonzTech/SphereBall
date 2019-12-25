@@ -10,14 +10,18 @@ std::shared_ptr<Hourglass> Hourglass::createInstance(const json &jsonData)
 Hourglass::Hourglass() : Pickup()
 {
 	// Load mesh and texture
-	IAnimatedMesh* mesh = smgr->getMesh("models/hourglass.obj");
+	IAnimatedMesh* mesh = smgr->getMesh("models/hourglass.x");
 	ITexture* texture = driver->getTexture("textures/hourglass.png");
+	ITexture* normalMap = driver->getTexture("textures/hourglass_nm.png");
 
 	// Create model for player
 	std::shared_ptr<Model> model = std::make_shared<Model>(mesh);
 	model->addTexture(0, texture);
+	model->addTexture(1, normalMap);
 	model->material = getCommonBasicMaterial(EMT_TRANSPARENT_VERTEX_ALPHA);
 	models.push_back(model);
+	model->normalMapping.textureIndex = 1;
+	model->normalMapping.lightPower = 0.5f;
 }
 
 void Hourglass::update()

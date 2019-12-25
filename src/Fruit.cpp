@@ -55,8 +55,6 @@ Fruit::Fruit() : Pickup()
 		mesh = Utility::getMesh(smgr, "models/" + fruitToLoad + ".x");
 		texture = driver->getTexture(std::string("textures/" + fruitToLoad + ".png").c_str());
 		normalMap = driver->getTexture(std::string("textures/" + fruitToLoad + "_nm.png").c_str());
-
-		normalMapping.textureIndex = 1;
 	}
 
 	// Create model for player
@@ -64,6 +62,7 @@ Fruit::Fruit() : Pickup()
 	model->addTexture(0, texture);
 	model->addTexture(1, normalMap);
 	model->material = getCommonBasicMaterial(EMT_SOLID);
+	model->normalMapping.textureIndex = 1;
 	models.push_back(model);
 
 	// Initialize variables

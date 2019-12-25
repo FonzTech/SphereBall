@@ -13,6 +13,17 @@ using namespace video;
 class Model
 {
 public:
+	/**
+		This structure indicates the normal map texture index in the "textures" map of the model
+		and the light power to be applied for shading. A value of 0 indicates no normal map enabled.
+		So avoid binding normal map texture to slot 0.
+	*/
+	struct
+	{
+		s32 textureIndex = 0;
+		f32 lightPower = 1.5f;
+	} normalMapping;
+
 	std::unordered_map<u32, ITexture*> textures;
 	IAnimatedMesh* mesh;
 	aabbox3df boundingBox;

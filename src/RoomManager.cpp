@@ -15,12 +15,14 @@
 #include "Fruit.h"
 #include "Fire.h"
 #include "Teleporter.h"
+#include "Editor.h"
 
 std::shared_ptr<RoomManager> RoomManager::singleton = nullptr;
 
-const std::string RoomManager::ROOM_MAIN_MENU = "main_menu";
-
 const std::string RoomManager::LEVEL_PREFIX = "level_";
+
+const std::string RoomManager::ROOM_MAIN_MENU = "main_menu";
+const std::string RoomManager::ROOM_EDITOR = "editor";
 
 RoomManager::RoomManager()
 {
@@ -46,6 +48,7 @@ RoomManager::RoomManager()
 	gameObjectFactory["Fruit"] = &Fruit::createInstance;
 	gameObjectFactory["Fire"] = &Fire::createInstance;
 	gameObjectFactory["Teleporter"] = &Teleporter::createInstance;
+	gameObjectFactory["Editor"] = &Editor::createInstance;
 
 	// Initialize variables
 	isProgramRunning = true;

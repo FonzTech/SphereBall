@@ -1,24 +1,12 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
-#include "GameObject.h"
+#include "Hud.h"
 #include "EventManager.h"
 
-class MainMenu : public GameObject
+class MainMenu : public Hud
 {
 protected:
-
-	// Font for menu entriess
-	IGUIFont* font;
-
-	// Textures
-	ITexture* mouse;
-	ITexture* rectangleTexture;
-
-	// HUD and Window size
-	vector2df windowSize;
-	dimension2di hudSize;
-	vector2di mousePosition;
 
 	// Strings for text strings
 	std::vector<std::wstring> optionTitles;
@@ -38,7 +26,7 @@ protected:
 	std::string roomToLoad;
 
 	// Jump Room callback function
-	void jumpToLevel();
+	void jumpToRoom();
 
 public:
 
@@ -47,10 +35,8 @@ public:
 
 	// Mandatory methods
 	void update();
-	void draw();
 
-	// Resolution adjuster
-	vector2di adjustResolutionAndGetMouse();
+	void drawHud();
 
 	// Create specialized instance
 	static std::shared_ptr<MainMenu> createInstance(const json &jsonData);

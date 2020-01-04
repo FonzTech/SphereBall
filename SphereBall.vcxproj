@@ -182,10 +182,12 @@
     <ClCompile Include="src/GameObject.cpp" />
     <ClCompile Include="src/main.cpp" />
     <ClCompile Include="src/RoomManager.cpp" />
+    <ClCompile Include="src\Editor.cpp" />
     <ClCompile Include="src\Fire.cpp" />
     <ClCompile Include="src\Fruit.cpp" />
     <ClCompile Include="src\GUIImageSceneNode.cpp" />
     <ClCompile Include="src\Hourglass.cpp" />
+    <ClCompile Include="src\Hud.cpp" />
     <ClCompile Include="src\Pickup.cpp" />
     <ClCompile Include="src\ScreenQuadSceneNode.cpp" />
     <ClCompile Include="src\ShaderCallback.cpp" />
@@ -213,10 +215,12 @@
     <ClInclude Include="src/Model.h" />
     <ClInclude Include="src/Player.h" />
     <ClInclude Include="src/RoomManager.h" />
+    <ClInclude Include="src\Editor.h" />
     <ClInclude Include="src\Fire.h" />
     <ClInclude Include="src\Fruit.h" />
     <ClInclude Include="src\GUIImageSceneNode.h" />
     <ClInclude Include="src\Hourglass.h" />
+    <ClInclude Include="src\Hud.h" />
     <ClInclude Include="src\Pickup.h" />
     <ClInclude Include="src\ScreenQuadSceneNode.h" />
     <ClInclude Include="src\ShaderCallback.h" />

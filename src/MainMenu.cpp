@@ -9,15 +9,8 @@ std::shared_ptr<MainMenu> MainMenu::createInstance(const json &jsonData)
 	return std::make_shared<MainMenu>();
 }
 
-MainMenu::MainMenu() : GameObject()
+MainMenu::MainMenu() : Hud()
 {
-	// Initialize font to null
-	font = nullptr;
-
-	// Load textures
-	mouse = driver->getTexture("textures/gui_mouse.png");
-	rectangleTexture = driver->getTexture("textures/gui_rectangle.png");
-
 	// Create texts for main menu
 	optionTitles.push_back(L"Start Game");
 	optionTitles.push_back(L"Level Editor");
@@ -55,9 +48,7 @@ MainMenu::MainMenu() : GameObject()
 
 void MainMenu::update()
 {
-	// Get window size
-	windowSize = Utility::getWindowSize<f32>(driver);
-	mousePosition = adjustResolutionAndGetMouse();
+	Hud::update();
 
 	// Temporary current index
 	s8 tmpIndex = -1;
@@ -157,7 +148,7 @@ void MainMenu::update()
 			{
 				roomToLoad = "level_" + std::to_string(currentIndex - 1);
 
-				std::function<void()> callback = std::bind(&MainMenu::jumpToLevel, this);
+				std::function<void()> callback = std::bind(&MainMenu::jumpToRoom, this);
 				SharedData::singleton->startFade(true, callback);
 			}
 		}
@@ -181,7 +172,10 @@ void MainMenu::update()
 		{
 			if (currentSection == 1)
 			{
-				printf("Not yet implemented!\n");
+				roomToLoad = RoomManager::ROOM_EDITOR;
+
+				std::function<void()> callback = std::bind(&MainMenu::jumpToRoom, this);
+				SharedData::singleton->startFade(true, callback);
 			}
 			else
 			{
@@ -257,17 +251,8 @@ void MainMenu::update()
 	}
 }
 
-void MainMenu::draw()
+void MainMenu::drawHud()
 {
-	// Render on GUI RTT
-	driver->setRenderTarget(SharedData::singleton->guiRtt);
-
-	// Load font if required
-	if (font == nullptr)
-	{
-		font = guienv->getFont(hudSize.Width > 1024 ? "fonts/titles.xml" : "fonts/titles_small.xml");
-	}
-
 	// Reposition camera
 	Camera::singleton->position = position + vector3df(0, 40, -100);
 	Camera::singleton->lookAt = position;
@@ -373,31 +358,9 @@ void MainMenu::draw()
 			text->setTextAlignment(i == 1 ? EGUIA_LOWERRIGHT : EGUIA_CENTER, EGUIA_CENTER);
 		}
 	}
-
-	// Draw mouse pointer
-	{
-		recti r = Utility::getSourceRect(mouse) + mousePosition;
-		IGUIImage* image = guienv->addImage(r);
-		image->setImage(mouse);
-	}
-
-	// Draw GUI and Reset RTT
-	guienv->drawAll();
-	guienv->clear();
-
-	driver->setRenderTarget(SharedData::singleton->sceneRtts, false, false);
 }
 
-void MainMenu::jumpToLevel()
+void MainMenu::jumpToRoom()
 {
 	RoomManager::singleton->loadRoom(roomToLoad);
-}
-
-vector2di MainMenu::adjustResolutionAndGetMouse()
-{
-	s32 videoMode = Utility::getVideoMode(device);
-	hudSize = videoMode == -1 ? dimension2du((u32)windowSize.X, (u32)windowSize.Y) : device->getVideoModeList()->getVideoModeResolution(videoMode);
-
-	vector2df pos(vector2df((f32)EventManager::singleton->mousePosition.X, (f32)EventManager::singleton->mousePosition.Y) / windowSize * vector2df((f32)hudSize.Width, (f32)hudSize.Height));
-	return mousePosition = vector2di((s32)pos.X, (s32)pos.Y);
 }

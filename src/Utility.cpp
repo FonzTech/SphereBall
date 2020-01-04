@@ -84,9 +84,9 @@ IAnimatedMesh* Utility::getMesh(ISceneManager* smgr, const std::string& path)
 				// Check if file has been already extracted
 				if (std::filesystem::exists(std::filesystem::path(file)))
 				{
-#if NDEBUG || _DEBUG
+					#if NDEBUG || _DEBUG
 					printf("ZIP Model - No need to extract %s\n", fpath.filename().string().c_str());
-#endif
+					#endif
 				}
 				else
 				{

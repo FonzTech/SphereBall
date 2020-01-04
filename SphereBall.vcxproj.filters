@@ -114,6 +114,12 @@
     <ClCompile Include="src\Teleporter.cpp">
       <Filter>Sources\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Editor.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hud.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src/Engine.h">
@@ -201,6 +207,12 @@
       <Filter>Headers\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Teleporter.h">
+      <Filter>Headers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor.h">
+      <Filter>Headers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hud.h">
       <Filter>Headers\Game</Filter>
     </ClInclude>
   </ItemGroup>

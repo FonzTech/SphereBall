@@ -30,8 +30,9 @@ protected:
 
 public:
 
-	// Main Menu static room name value
-	const static std::string ROOM_MAIN_MENU;
+	// namespacefor static room names
+	static const std::string ROOM_MAIN_MENU;
+	static const std::string ROOM_EDITOR;
 
 	// Singleton holder
 	static std::shared_ptr<RoomManager> singleton;

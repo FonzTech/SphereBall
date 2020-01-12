@@ -6,6 +6,12 @@
 
 class Editor : public Hud
 {
+protected:
+	vector3df velocity;
+	u8 direction;
+	vector3df zoom;
+	vector2df snap;
+
 public:
 
 	// Constructor

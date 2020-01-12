@@ -15,7 +15,8 @@ EventManager::EventManager()
 	}
 
 	// Initialize data for mouse
-	mousePosition = vector2di();
+	mousePosition = vector2di(0);
+	mouseWheel = 0.0f;
 }
 
 bool EventManager::OnEvent(const SEvent& event)
@@ -40,6 +41,10 @@ bool EventManager::OnEvent(const SEvent& event)
 	{
 		switch (event.MouseInput.Event)
 		{
+		case EMIE_MOUSE_WHEEL:
+			mouseWheel = event.MouseInput.Wheel;
+			break;
+
 		case EMIE_MOUSE_MOVED:
 			mousePosition.X = event.MouseInput.X;
 			mousePosition.Y = event.MouseInput.Y;
@@ -95,6 +100,9 @@ bool EventManager::OnEvent(const SEvent& event)
 
 void EventManager::updateKeyStates()
 {
+	// Reset mouse wheel
+	mouseWheel = 0;
+
 	// Cycle through all available keys
 	for (u32 i = 0; i < KEY_KEY_CODES_COUNT; ++i)
 	{

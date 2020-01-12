@@ -30,6 +30,9 @@ public:
 	// We use this data structure to store current mouse position
 	vector2di mousePosition;
 
+	// Variable for mouse wheel state
+	f32 mouseWheel;
+
 	// OnEvent callback
 	bool OnEvent(const SEvent& event);
 

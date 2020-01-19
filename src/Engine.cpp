@@ -5,6 +5,7 @@
 #include "SoundManager.h"
 #include "SharedData.h"
 #include "Camera.h"
+#include "Editor.h"
 
 // Default values
 const wchar_t* Engine::WINDOW_TITLE = L"SphereBall - Demo";
@@ -191,33 +192,54 @@ void Engine::loop()
 		// Double buffered scene with clear color
 		driver->beginScene(true, true, SColor(0, 0, 0, 0));
 
+		// Add camera scene node
+		smgr->addCameraSceneNode(0, Camera::singleton->position, Camera::singleton->lookAt);
+
+		/*
+		// Search for level editor
+		if (RoomManager::singleton->gameObjects.size() > 0)
+		{
+			// Check if level editor is NOT in the final index of the vector
+			const auto& last = RoomManager::singleton->gameObjects.end() - 1;
+			if (Editor::singleton != nullptr && *(last) != Editor::singleton)
+			{
+				// Swap level editor instance against the last element
+				const auto& it = std::find(RoomManager::singleton->gameObjects.begin(), RoomManager::singleton->gameObjects.end(), Editor::singleton);
+				std::iter_swap(it, last);
+			}
+		}
+		*/
+
 		// Cycle through all available game objects
 		std::vector<std::shared_ptr<GameObject>>::iterator it = RoomManager::singleton->gameObjects.begin();
 		while (it != RoomManager::singleton->gameObjects.end())
 		{
+			// Get game object
+			std::shared_ptr<GameObject> go = *it;
+
 			// Set delta time for the current object
-			(*it)->deltaTime = (f32) deltaTime;
+			go->deltaTime = (f32) deltaTime;
 
 			// Update current game object
 			if (!SharedData::singleton->isAppPaused())
 			{
-				(*it)->update();
+				go->update();
 			}
 
 			// Check if game object has been destroyed
-			if ((*it)->destroy)
+			if (go->destroy)
 			{
 				it = RoomManager::singleton->gameObjects.erase(it);
 				continue;
 			}
 
 			// Affect drawing of game object
-			(*it)->draw();
+			go->draw();
 			
 			// Game Object is a SkyBox
-			if ((*it)->gameObjectIndex == KEY_GOI_SKYBOX)
+			if (go->gameObjectIndex == KEY_GOI_SKYBOX)
 			{
-				auto& model = (*it)->models.at(0);
+				auto& model = go->models.at(0);
 				auto& textures = model->textures;
 
 				ISceneNode* node = smgr->addSkyBoxSceneNode(textures[0], textures[1], textures[2], textures[3], textures[4], textures[5]);
@@ -231,19 +253,20 @@ void Engine::loop()
 			else
 			{
 				// Add all game object's models to the scene
-				for (std::shared_ptr<Model> &model : (*it)->models)
+				for (std::shared_ptr<Model> &model : go->models)
 				{
 					// Create scene node from this mesh
 					IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode(model->mesh, nullptr, -1, model->position, model->rotation, model->scale);
 
-					if (setBBoxVisible)
-					{
-						node->setDebugDataVisible(irr::scene::EDS_BBOX);
-					}
-
 					// Add all texture layer for this mesh (obtained from model)
 					if (node != nullptr)
 					{
+						// Debug informations
+						if (setBBoxVisible)
+						{
+							node->setDebugDataVisible(irr::scene::EDS_BBOX);
+						}
+
 						// Set current frame position
 						node->setCurrentFrame(model->currentFrame);
 
@@ -265,12 +288,12 @@ void Engine::loop()
 				}
 			}
 
+			// Post update
+			go->postUpdate();
+
 			// Advance iterator
 			++it;
 		}
-
-		// Add camera scene node
-		smgr->addCameraSceneNode(0, Camera::singleton->position, Camera::singleton->lookAt);
 
 		// Draw the entire scene
 		smgr->drawAll();

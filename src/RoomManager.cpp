@@ -144,6 +144,12 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 				// Get pointer to class instance
 				std::shared_ptr<GameObject> instance = classFunction(object);
 
+				// Check for editor game object
+				if (goIterator->first == "Editor")
+				{
+					Editor::singleton = instance;
+				}
+
 				// Check if item is a pickup
 				if (std::find(pickupableItemKeys.begin(), pickupableItemKeys.end(), goIterator->first) != pickupableItemKeys.end())
 				{

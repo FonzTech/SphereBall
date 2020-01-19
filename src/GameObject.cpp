@@ -66,6 +66,10 @@ GameObject::GameObject()
 	destroy = false;
 }
 
+void GameObject::postUpdate()
+{
+}
+
 aabbox3df GameObject::getBoundingBox()
 {
 	return models.at(0)->mesh->getBoundingBox();

@@ -87,9 +87,6 @@ public:
 	// Get instance of game object with parameters
 	static std::shared_ptr<GameObject> createInstance(const json &jsonData);
 
-	// Assign common room data for GameObject
-	void assignGameObjectCommonData(const json& commonData);
-
 	// Common data among GameObjects
 	std::vector<std::shared_ptr<Model>> models;
 
@@ -108,8 +105,14 @@ public:
 	// Make commits on drawable resources
 	virtual void draw() = 0;
 
+	// All the actions performed after adding all the nodes to scene manager
+	virtual void postUpdate();
+
 	// Bounding box getter
 	virtual aabbox3df getBoundingBox();
+
+	// Assign common room data for GameObject
+	void assignGameObjectCommonData(const json& commonData);
 
 	/**
 		This method applies the routine for normal mapping, used in shader service

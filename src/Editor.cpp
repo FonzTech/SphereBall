@@ -3,6 +3,8 @@
 #include "SharedData.h"
 #include "Camera.h"
 
+std::shared_ptr<GameObject> Editor::singleton = nullptr;
+
 std::shared_ptr<Editor> Editor::createInstance(const json &jsonData)
 {
 	return std::make_shared<Editor>();
@@ -156,7 +158,26 @@ void Editor::update()
 	Camera::singleton->position = position + vector3df(0, 0, -100 * zoom.X);
 
 	// Compute snapped position
-	snap = vector2df(std::floorf(position.X / 10) * 10, std::floorf(position.Y / 10) * 10);
+	snap = vector2df(std::floorf(cursorPos.X / 10) * 10, std::floorf(cursorPos.Y / 10) * 10);
+}
+
+void Editor::postUpdate()
+{
+	// Get 3D ray
+	ISceneCollisionManager* colmgr = smgr->getSceneCollisionManager();
+	line3d<f32> ray = colmgr->getRayFromScreenCoordinates(device->getCursorControl()->getPosition());
+
+	// And intersect the ray with a plane around the node facing towards the camera.
+	plane3df plane(position, vector3df(0, 0, -1));
+	vector3df mousePosition;
+	if (plane.getIntersectionWithLine(ray.start, ray.getVector(), mousePosition))
+	{
+		mousePosition.Z = 0;
+		cursorPos = mousePosition;
+	}
+
+	// Move cursor
+	models.at(0)->position = cursorPos;
 }
 
 void Editor::drawHud()

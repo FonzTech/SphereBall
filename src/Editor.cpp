@@ -162,6 +162,26 @@ void Editor::update()
 
 	// Update grid position
 	models.at(0)->position = vector3df(snap.X, snap.Y, 0);
+
+	// Check for game object to place
+	if (EventManager::singleton->keyStates[KEY_LBUTTON] == KEY_RELEASED)
+	{
+		// Get method to instantiate class
+		auto goIterator = RoomManager::singleton->gameObjectFactory.find("Solid");
+		std::function<std::shared_ptr<GameObject>(const json& jsonData)> classFunction = goIterator->second;
+
+		// Instantiate object with parameters
+		// json object = { { "required", { { "position", { {"x", snap.X }, {"y", snap.Y }, {"z", 0 } } } } } };
+		json object = {};
+		std::shared_ptr<GameObject> instance = classFunction(object);
+
+		// Set position
+		instance->position = vector3df(snap.X, snap.Y, 0);
+		instance->models.at(0)->scale = vector3df(1);
+
+		// Add to room
+		RoomManager::singleton->gameObjects.push_back(instance);
+	}
 }
 
 void Editor::postUpdate()
@@ -181,6 +201,12 @@ void Editor::postUpdate()
 
 	// Move cursor
 	models.at(0)->position = cursorPos;
+
+	// Check for removal click
+	if (EventManager::singleton->keyStates[KEY_RBUTTON] == KEY_RELEASED)
+	{
+		printf("Catch the node by iterating existing game objects.\n");
+	}
 }
 
 void Editor::drawHud()

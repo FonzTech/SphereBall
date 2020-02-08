@@ -127,8 +127,8 @@ void Engine::loop()
 	bool setBBoxVisible = false;
 
 	// Setup camera
-	Camera::singleton->position = vector3df(0, 40, -100);
-	Camera::singleton->lookAt = vector3df(0);
+	Camera::singleton->setPosition(vector3df(0, 40, -100));
+	Camera::singleton->setLookAt(vector3df(0));
 
 	// Loop while game is still running
 	while (device->run() && RoomManager::singleton->isProgramRunning)
@@ -193,7 +193,7 @@ void Engine::loop()
 		driver->beginScene(true, true, SColor(0, 0, 0, 0));
 
 		// Add camera scene node
-		smgr->addCameraSceneNode(0, Camera::singleton->position, Camera::singleton->lookAt);
+		smgr->addCameraSceneNode(0, Camera::singleton->getPosition(), Camera::singleton->getLookAt());
 
 		/*
 		// Search for level editor
@@ -211,11 +211,10 @@ void Engine::loop()
 		*/
 
 		// Cycle through all available game objects
-		std::vector<std::shared_ptr<GameObject>>::iterator it = RoomManager::singleton->gameObjects.begin();
-		while (it != RoomManager::singleton->gameObjects.end())
+		for (u32 i = 0; i != RoomManager::singleton->gameObjects.size(); ++i)
 		{
 			// Get game object
-			std::shared_ptr<GameObject> go = *it;
+			std::shared_ptr<GameObject> go = RoomManager::singleton->gameObjects[i];
 
 			// Set delta time for the current object
 			go->deltaTime = (f32) deltaTime;
@@ -229,7 +228,8 @@ void Engine::loop()
 			// Check if game object has been destroyed
 			if (go->destroy)
 			{
-				it = RoomManager::singleton->gameObjects.erase(it);
+				RoomManager::singleton->gameObjects.erase(RoomManager::singleton->gameObjects.begin() + i);
+				--i;
 				continue;
 			}
 
@@ -290,9 +290,6 @@ void Engine::loop()
 
 			// Post update
 			go->postUpdate();
-
-			// Advance iterator
-			++it;
 		}
 
 		// Draw the entire scene

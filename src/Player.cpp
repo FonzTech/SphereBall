@@ -279,9 +279,9 @@ void Player::draw()
 	// Reposition camera
 	if (state != STATE_FELLOFF)
 	{
-		Camera::singleton->position = position + cameraDistance;
+		Camera::singleton->setPosition(position + cameraDistance);
 	}
-	Camera::singleton->lookAt = position;
+	Camera::singleton->setLookAt(position);
 }
 
 s32 Player::getJumpingState()

@@ -254,8 +254,8 @@ void MainMenu::update()
 void MainMenu::drawHud()
 {
 	// Reposition camera
-	Camera::singleton->position = position + vector3df(0, 40, -100);
-	Camera::singleton->lookAt = position;
+	Camera::singleton->setPosition(position + vector3df(0, 40, -100));
+	Camera::singleton->setLookAt(position);
 
 	// Get animated value
 	f32 animatedValue = Utility::getCubicBezierAt(*(&vector2df(0, 1)), *(&vector2df(1, 0)), abs(animation)).X;

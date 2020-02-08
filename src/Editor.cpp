@@ -154,11 +154,14 @@ void Editor::update()
 	position += velocity;
 
 	// Set correct camera position
-	Camera::singleton->lookAt = position;
-	Camera::singleton->position = position + vector3df(0, 0, -100 * zoom.X);
+	Camera::singleton->setPosition(position + vector3df(0, 0, -100 * zoom.X));
+	Camera::singleton->setLookAt(position);
 
 	// Compute snapped position
 	snap = vector2df(std::floorf(cursorPos.X / 10) * 10, std::floorf(cursorPos.Y / 10) * 10);
+
+	// Update grid position
+	models.at(0)->position = vector3df(snap.X, snap.Y, 0);
 }
 
 void Editor::postUpdate()
@@ -167,7 +170,7 @@ void Editor::postUpdate()
 	ISceneCollisionManager* colmgr = smgr->getSceneCollisionManager();
 	line3d<f32> ray = colmgr->getRayFromScreenCoordinates(device->getCursorControl()->getPosition());
 
-	// And intersect the ray with a plane around the node facing towards the camera.
+	// And intersect the ray with a plane around the node facing towards the camera
 	plane3df plane(position, vector3df(0, 0, -1));
 	vector3df mousePosition;
 	if (plane.getIntersectionWithLine(ray.start, ray.getVector(), mousePosition))

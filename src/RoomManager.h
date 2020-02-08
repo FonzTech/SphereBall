@@ -19,9 +19,6 @@ protected:
 	// Array to hold pickupable item keys
 	std::vector<std::string> pickupableItemKeys;
 
-	// Map structure to hold factory pattern for game objects
-	std::unordered_map<std::string, std::function<std::shared_ptr<GameObject>(const json& jsonData)>> gameObjectFactory;
-
 	// Room name holder
 	std::string roomName;
 
@@ -42,6 +39,9 @@ public:
 
 	// Variable to check if program is actually running
 	bool isProgramRunning;
+
+	// Map structure to hold factory pattern for game objects
+	std::unordered_map<std::string, std::function<std::shared_ptr<GameObject>(const json& jsonData)>> gameObjectFactory;
 
 	// Vector to hold all active game objects
 	std::vector<std::shared_ptr<GameObject>> gameObjects;

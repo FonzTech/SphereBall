@@ -436,7 +436,8 @@ void Solid::SpecializedShaderCallback::OnSetConstants(IMaterialRendererServices*
 		// Apply normal map if required
 		solid->applyNormalMapping(services, solid->models.at(0));
 
-		services->setVertexShaderConstant("lookAt", &Camera::singleton->lookAt.X, 3);
+		const vector3df p = Camera::singleton->getLookAt();
+		services->setVertexShaderConstant("lookAt", &p.X, 3);
 
 		f32 fadeWhenFar = solid->invisibleToggle == 1 ? 1.0f : 0.0f;
 		services->setVertexShaderConstant("fadeWhenFar", &fadeWhenFar, 1);

@@ -160,6 +160,7 @@ public:
 
 		// Get window size
 		#ifdef __linux__
+		return vector2d<T>((T)(1920, 1080));
 		// Not implemented yet
 
 		#elif _WIN32

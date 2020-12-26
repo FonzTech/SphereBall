@@ -68,7 +68,7 @@ public:
 	IGUIEnvironment* guienv;
 
 	// Start device with best target system target
-	bool startDevice();
+	bool startDevice(void* privateData);
 
 	// Setup window and required managers
 	bool setupComponents();

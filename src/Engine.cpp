@@ -29,15 +29,24 @@ void Engine::createPostProcessingMaterial()
 	postProcessingMaterial = gpu->addHighLevelShaderMaterialFromFiles("shaders/scene.vs", "shaders/scene.fs", postProcessing.get());
 }
 
-bool Engine::startDevice()
+bool Engine::startDevice(void* privateData)
 {
 	// Create device and assign
 	SIrrlichtCreationParameters params;
-	params.DriverType = EDT_OPENGL;
 	params.WindowSize = dimension2d<u32>(1920, 1080);
 	params.Bits = 32;
 	params.Vsync = true;
 	params.EventReceiver = EventManager::singleton.get();
+
+#ifdef _IRR_ANDROID_PLATFORM_
+	if (privateData != nullptr)
+	{
+		params.privateData = privateData;
+	}
+	params.DriverType = EDT_OGLES2;
+#else
+	params.DriverType = EDT_OPENGL;
+#endif
 
 	device = createDeviceEx(params);
 	device->setResizable(true);

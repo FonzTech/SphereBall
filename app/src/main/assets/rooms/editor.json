@@ -1,0 +1,23 @@
+	[
+	{
+		"name": "Editor",
+		"required": {
+			"position": {
+				"x": 0.0,
+				"y": 0.0,
+				"z": 0.0
+			},
+			"scale": {
+				"x": 8.0,
+				"y": 8.0,
+				"z": 1.0
+			}
+		}
+	},
+	{
+		"name": "SkyBox",
+		"optional": {
+			"texture": "egypt"
+		}
+	}
+]

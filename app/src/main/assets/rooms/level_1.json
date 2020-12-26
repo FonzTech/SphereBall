@@ -1,0 +1,480 @@
+[
+	{
+		"name": "SharedData",
+		"enable": [
+			{
+				"key": 0,
+				"value": 0
+			},
+			{
+				"key": 2,
+				"value": 2
+			},
+			{
+				"key": 3,
+				"value": 80
+			},
+			{
+				"key": 4,
+				"value": 100
+			}
+		]
+	},
+	{
+		"name": "Player",
+		"required": {
+			"position": {
+				"x": 0.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "SkyBox",
+		"optional": {
+			"texture": "egypt"
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 0.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 20.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 40.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 60.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 80.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 140.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 200.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 260.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 280.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 300.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"springTension": 0.0
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 340.0,
+				"y": 80.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 360.0,
+				"y": 80.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 380.0,
+				"y": 80.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Key",
+		"required": {
+			"position": {
+				"x": 380.0,
+				"y": 100.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 400.0,
+				"y": 80.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 420.0,
+				"y": 80.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 440.0,
+				"y": 80.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 460.0,
+				"y": 80.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"breakState": 0.0
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 480.0,
+				"y": 80.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"breakState": 0.0
+		}
+	},
+	{
+		"name": "Coin",
+		"required": {
+			"position": {
+				"x": 440.0,
+				"y": 100.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Coin",
+		"required": {
+			"position": {
+				"x": 480.0,
+				"y": 100.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Coin",
+		"required": {
+			"position": {
+				"x": 560.0,
+				"y": 100.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Coin",
+		"required": {
+			"position": {
+				"x": 520.0,
+				"y": 100.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 520.0,
+				"y": 80.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"breakState": 0.0
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 560.0,
+				"y": 80.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"breakState": 0.0
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 580.0,
+				"y": 80.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Key",
+		"required": {
+			"position": {
+				"x": 580.0,
+				"y": 100.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 600.0,
+				"y": 80.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Fruit",
+		"required": {
+			"position": {
+				"x": 620.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 620.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Spikes",
+		"required": {
+			"position": {
+				"x": 640.0,
+				"y": 130.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"mode": -1
+		}
+	},
+	{
+		"name": "Spikes",
+		"required": {
+			"position": {
+				"x": 600.0,
+				"y": 90.0,
+				"z": 0.0
+			}
+		},
+		"optional": {
+			"mode": -1
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 640.0,
+				"y": 120.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 640.0,
+				"y": 100.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 640.0,
+				"y": 80.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Coin",
+		"required": {
+			"position": {
+				"x": 140.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Coin",
+		"required": {
+			"position": {
+				"x": 200.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 680.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 700.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 720.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Solid",
+		"required": {
+			"position": {
+				"x": 740.0,
+				"y": 0.0,
+				"z": 0.0
+			}
+		}
+	},
+	{
+		"name": "Exit",
+		"required": {
+			"position": {
+				"x": 740.0,
+				"y": 20.0,
+				"z": 0.0
+			}
+		}
+	}
+]

@@ -22,7 +22,7 @@ public:
 	void draw();
 
 	// Create specialized instance
-	static std::shared_ptr<SkyBox> createInstance(const json &jsonData);
+	static std::shared_ptr<SkyBox> createInstance(const nlohmann::json &jsonData);
 };
 
 #endif // SKYBOX_H

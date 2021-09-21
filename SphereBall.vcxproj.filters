@@ -1,9 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
     <Filter Include="Headers">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Headers\Core">
       <UniqueIdentifier>{07d027f1-c68d-499f-8213-4cfbfedfd9ee}</UniqueIdentifier>
@@ -21,69 +29,8 @@
     <Filter Include="Sources\Game">
       <UniqueIdentifier>{56d3bfde-d09d-4e67-bffa-5f6f1d73a306}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src/Alarm.cpp">
-      <Filter>Sources\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src/Camera.cpp">
-      <Filter>Sources\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src/Engine.cpp">
-      <Filter>Sources\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src/EngineObject.cpp">
-      <Filter>Sources\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src/EventManager.cpp">
-      <Filter>Sources\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src/GameObject.cpp">
-      <Filter>Sources\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src/Model.cpp">
-      <Filter>Sources\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src/RoomManager.cpp">
-      <Filter>Sources\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src/SharedData.cpp">
-      <Filter>Sources\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src/SoundManager.cpp">
-      <Filter>Sources\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src/Utility.cpp">
-      <Filter>Sources\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src/Coin.cpp">
-      <Filter>Sources\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src/Exit.cpp">
-      <Filter>Sources\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src/Player.cpp">
-      <Filter>Sources\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src/SkyBox.cpp">
-      <Filter>Sources\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src/Solid.cpp">
-      <Filter>Sources\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src/Spikes.cpp">
-      <Filter>Sources\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src/MainMenu.cpp">
-      <Filter>Sources\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src/main.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\Key.cpp">
       <Filter>Sources\Game</Filter>
     </ClCompile>
@@ -120,65 +67,65 @@
     <ClCompile Include="src\Hud.cpp">
       <Filter>Sources\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Alarm.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EngineObject.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EventManager.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RoomManager.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SharedData.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SoundManager.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utility.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SkyBox.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Solid.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Spikes.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Exit.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Coin.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainMenu.cpp">
+      <Filter>Sources\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src/Engine.h">
-      <Filter>Headers\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src/Alarm.h">
-      <Filter>Headers\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src/Camera.h">
-      <Filter>Headers\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src/EngineObject.h">
-      <Filter>Headers\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src/EventManager.h">
-      <Filter>Headers\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src/GameObject.h">
-      <Filter>Headers\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src/Model.h">
-      <Filter>Headers\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src/RoomManager.h">
-      <Filter>Headers\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src/SharedData.h">
-      <Filter>Headers\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src/SoundManager.h">
-      <Filter>Headers\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src/Utility.h">
-      <Filter>Headers\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src/Coin.h">
-      <Filter>Headers\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src/Exit.h">
-      <Filter>Headers\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src/MainMenu.h">
-      <Filter>Headers\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src/Player.h">
-      <Filter>Headers\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src/SkyBox.h">
-      <Filter>Headers\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src/Solid.h">
-      <Filter>Headers\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src/Spikes.h">
-      <Filter>Headers\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src/Collision.h">
-      <Filter>Headers\Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\Key.h">
       <Filter>Headers\Game</Filter>
     </ClInclude>
@@ -213,6 +160,63 @@
       <Filter>Headers\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Hud.h">
+      <Filter>Headers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Alarm.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Collision.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EngineObject.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EventManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObject.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RoomManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SharedData.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SoundManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utility.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Spikes.h">
+      <Filter>Headers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Solid.h">
+      <Filter>Headers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SkyBox.h">
+      <Filter>Headers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Player.h">
+      <Filter>Headers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Exit.h">
+      <Filter>Headers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainMenu.h">
+      <Filter>Headers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Coin.h">
       <Filter>Headers\Game</Filter>
     </ClInclude>
   </ItemGroup>

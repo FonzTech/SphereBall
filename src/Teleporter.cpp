@@ -1,9 +1,11 @@
 #include "Teleporter.h"
 
+using nlohmann::json;
+
 const std::string Teleporter::VECTOR_COMPONENTS[] = { "x", "y", "z" };
 const std::string Teleporter::COLOR_COMPONENTS[] = { "r", "g", "b" };
 
-std::shared_ptr<Teleporter> Teleporter::createInstance(const json &jsonData)
+std::shared_ptr<Teleporter> Teleporter::createInstance(const nlohmann::json &jsonData)
 {
 	vector3df warp;
 	SColorf color(0);
@@ -11,10 +13,10 @@ std::shared_ptr<Teleporter> Teleporter::createInstance(const json &jsonData)
 	try
 	{
 		// Get optional data
-		const json & optional = jsonData.at("optional");
+		const nlohmann::json & optional = jsonData.at("optional");
 
 		// Get the warp coordinates
-		const json & optWarp = optional.at("warp");
+		const nlohmann::json & optWarp = optional.at("warp");
 		{
 			/*
 				Get coordinate components from the "warp"
@@ -29,7 +31,7 @@ std::shared_ptr<Teleporter> Teleporter::createInstance(const json &jsonData)
 		}
 
 		// Get the color property
-		const json & optColor = optional.at("color");
+		const nlohmann::json & optColor = optional.at("color");
 		{
 			/*
 				Get components without requiring to specify
@@ -42,7 +44,7 @@ std::shared_ptr<Teleporter> Teleporter::createInstance(const json &jsonData)
 				{
 					optColor.at(COLOR_COMPONENTS[i]).get_to(c[i]);
 				}
-				catch (json::exception ex)
+				catch (nlohmann::json::exception ex)
 				{
 				}
 			}
@@ -51,7 +53,7 @@ std::shared_ptr<Teleporter> Teleporter::createInstance(const json &jsonData)
 			color = SColorf(c[0], c[1], c[2]);
 		}
 	}
-	catch (json::exception & e)
+	catch (nlohmann::json::exception & e)
 	{
 		(void)e; // Avoid compiler warning
 		// printf("Teleporter - Exception while parsing \"optional\": %s\n", e.what());

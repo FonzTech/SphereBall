@@ -1,6 +1,8 @@
 #include "GUIImageSceneNode.h"
 #include "Utility.h"
 
+#undef snprintf
+
 GUIImageSceneNode::GUIImageSceneNode(scene::ISceneNode* parent, scene::ISceneManager* smgr, s32 id) : ISceneNode(parent, smgr, id)
 {
 	/*

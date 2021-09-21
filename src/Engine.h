@@ -1,8 +1,10 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include <irrlicht.h>
+#undef snprintf
 #include <nlohmann/json.hpp>
+
+#include <irrlicht.h>
 #include <vector>
 
 #include "EventManager.h"
@@ -13,8 +15,6 @@ using namespace core;
 using namespace scene;
 using namespace video;
 using namespace gui;
-
-using nlohmann::json;
 
 class Engine
 {

@@ -14,12 +14,12 @@ const s32 GameObject::getCommonBasicMaterial(E_MATERIAL_TYPE basicMaterial)
 	return material;
 }
 
-std::shared_ptr<GameObject> GameObject::createInstance(const json &jsonData)
+std::shared_ptr<GameObject> GameObject::createInstance(const nlohmann::json &jsonData)
 {
 	return nullptr;
 }
 
-void GameObject::assignGameObjectCommonData(const json& commonData)
+void GameObject::assignGameObjectCommonData(const nlohmann::json& commonData)
 {
 	for (u8 i = 0; i < 3; ++i)
 	{

@@ -5,7 +5,7 @@
 
 std::shared_ptr<GameObject> Editor::singleton = nullptr;
 
-std::shared_ptr<Editor> Editor::createInstance(const json &jsonData)
+std::shared_ptr<Editor> Editor::createInstance(const nlohmann::json &jsonData)
 {
 	return std::make_shared<Editor>();
 }
@@ -168,11 +168,11 @@ void Editor::update()
 	{
 		// Get method to instantiate class
 		auto goIterator = RoomManager::singleton->gameObjectFactory.find("Solid");
-		std::function<std::shared_ptr<GameObject>(const json& jsonData)> classFunction = goIterator->second;
+		std::function<std::shared_ptr<GameObject>(const nlohmann::json& jsonData)> classFunction = goIterator->second;
 
 		// Instantiate object with parameters
 		// json object = { { "required", { { "position", { {"x", snap.X }, {"y", snap.Y }, {"z", 0 } } } } } };
-		json object = {};
+		nlohmann::json object = {};
 		std::shared_ptr<GameObject> instance = classFunction(object);
 
 		// Set position

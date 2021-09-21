@@ -20,7 +20,7 @@ public:
 	Spikes(s8 initialMode, f32 delay);
 
 	// Create specialized instance
-	static std::shared_ptr<Spikes> createInstance(const json &jsonData);
+	static std::shared_ptr<Spikes> createInstance(const nlohmann::json &jsonData);
 
 	// Mandatory methods
 	void update();

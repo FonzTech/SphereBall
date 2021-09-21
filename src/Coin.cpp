@@ -2,15 +2,15 @@
 #include "SharedData.h"
 #include "SoundManager.h"
 
-std::shared_ptr<Coin> Coin::createInstance(const json &jsonData)
+std::shared_ptr<Coin> Coin::createInstance(const nlohmann::json &jsonData)
 {
 	u8 type = 0;
 	try
 	{
-		json optional = jsonData.at("optional");
+		nlohmann::json optional = jsonData.at("optional");
 		optional.at("type").get_to(type);
 	}
-	catch (json::exception e)
+	catch (nlohmann::json::exception e)
 	{
 	}
 	return std::make_shared<Coin>(type);

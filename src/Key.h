@@ -17,7 +17,7 @@ public:
 	bool pick();
 
 	// Create specialized instance
-	static std::shared_ptr<Key> createInstance(const json &jsonData);
+	static std::shared_ptr<Key> createInstance(const nlohmann::json &jsonData);
 };
 
 #endif // KEY_H

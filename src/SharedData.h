@@ -33,6 +33,7 @@
 #define KEY_PP_RIPPLE	1
 #define KEY_PP_BLUR		2
 
+#undef snprintf
 #include <nlohmann/json.hpp>
 
 #include <memory>
@@ -41,8 +42,6 @@
 
 #include "EngineObject.h"
 #include "Alarm.h"
-
-using nlohmann::json;
 
 class SharedData : public EngineObject
 {
@@ -106,7 +105,7 @@ protected:
 	std::unordered_map<u8, ITexture*> frameResources;
 
 	// Map to hold post processing effect
-	std::unordered_map<u8, std::function<void(const json&)>> ppCallbacks;
+	std::unordered_map<u8, std::function<void(const nlohmann::json&)>> ppCallbacks;
 
 	// Map to hold textures
 	std::unordered_map<u8, ITexture*> guiTextures;
@@ -209,10 +208,10 @@ public:
 		Set function for post processing effect.
 		Supply nullptr for callback to erase the desired key.
 	*/
-	void setPostProcessingCallback(u8 key, std::function<void(const json&)> callback);
+	void setPostProcessingCallback(u8 key, std::function<void(const nlohmann::json&)> callback);
 
 	// Trigger post processing callback
-	bool triggerPostProcessingCallback(u8 key, const json& data);
+	bool triggerPostProcessingCallback(u8 key, const nlohmann::json& data);
 
 	// Stop time
 	void stopTime();

@@ -1,6 +1,6 @@
 #include "Fire.h"
 
-std::shared_ptr<Fire> Fire::createInstance(const json &jsonData)
+std::shared_ptr<Fire> Fire::createInstance(const nlohmann::json &jsonData)
 {
 	return std::make_shared<Fire>();
 }

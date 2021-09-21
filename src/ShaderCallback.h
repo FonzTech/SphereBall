@@ -1,7 +1,7 @@
 #ifndef SHADERCALLBACK_H
 #define SHADERCALLBACK_H
 
-#include "irrlicht.h"
+#include <irrlicht.h>
 
 using namespace irr;
 

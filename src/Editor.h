@@ -26,7 +26,7 @@ public:
 	void postUpdate();
 
 	// Create specialized instance
-	static std::shared_ptr<Editor> createInstance(const json &jsonData);
+	static std::shared_ptr<Editor> createInstance(const nlohmann::json &jsonData);
 };
 
 #endif // EDITOR_H

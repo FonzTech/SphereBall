@@ -2,15 +2,17 @@
 #include "SharedData.h"
 #include "SoundManager.h"
 
-std::shared_ptr<Pill> Pill::createInstance(const json &jsonData)
+using nlohmann::json;
+
+std::shared_ptr<Pill> Pill::createInstance(const nlohmann::json &jsonData)
 {
 	u8 type;
 	try
 	{
-		json optional = jsonData.at("optional");
+		nlohmann::json optional = jsonData.at("optional");
 		optional.at("type").get_to(type);
 	}
-	catch (json::exception e)
+	catch (nlohmann::json::exception e)
 	{
 		type = 0;
 	}

@@ -84,10 +84,10 @@ bool Engine::setupComponents()
 	// Bind post processing functions
 	{
 		// Declare function
-		std::function<void(const json&)> callback;
+		std::function<void(const nlohmann::json&)> callback;
 
 		// Wave		
-		callback = [this](const json& data)
+		callback = [this](const nlohmann::json& data)
 		{
 			f32 params[2];
 
@@ -100,7 +100,7 @@ bool Engine::setupComponents()
 		SharedData::singleton->setPostProcessingCallback(KEY_PP_WAVE, callback);
 
 		// Ripple
-		callback = [this](const json& data)
+		callback = [this](const nlohmann::json& data)
 		{
 			f32 params[3];
 
@@ -113,7 +113,7 @@ bool Engine::setupComponents()
 		SharedData::singleton->setPostProcessingCallback(KEY_PP_RIPPLE, callback);
 
 		// Blur
-		callback = [this](const json& data)
+		callback = [this](const nlohmann::json& data)
 		{
 			f32 params[2];
 

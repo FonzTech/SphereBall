@@ -2,7 +2,7 @@
 #include "SharedData.h"
 #include "SoundManager.h"
 
-std::shared_ptr<Hourglass> Hourglass::createInstance(const json &jsonData)
+std::shared_ptr<Hourglass> Hourglass::createInstance(const nlohmann::json &jsonData)
 {
 	return std::make_shared<Hourglass>();
 }

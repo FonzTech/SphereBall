@@ -39,7 +39,7 @@ public:
 	void drawHud();
 
 	// Create specialized instance
-	static std::shared_ptr<MainMenu> createInstance(const json &jsonData);
+	static std::shared_ptr<MainMenu> createInstance(const nlohmann::json &jsonData);
 };
 
 #endif // MAINMENU_H

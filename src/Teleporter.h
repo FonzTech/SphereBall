@@ -40,7 +40,7 @@ public:
 	void draw();
 
 	// Create specialized instance
-	static std::shared_ptr<Teleporter> createInstance(const json &jsonData);
+	static std::shared_ptr<Teleporter> createInstance(const nlohmann::json &jsonData);
 };
 
 #endif // TELEPORTER_H

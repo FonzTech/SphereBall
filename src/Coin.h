@@ -22,7 +22,7 @@ public:
 	bool pick();
 
 	// Create specialized instance
-	static std::shared_ptr<Coin> createInstance(const json &jsonData);
+	static std::shared_ptr<Coin> createInstance(const nlohmann::json &jsonData);
 };
 
 #endif // COIN_H

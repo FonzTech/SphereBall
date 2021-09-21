@@ -4,7 +4,7 @@
 #include "Camera.h"
 #include "SharedData.h"
 
-std::shared_ptr<MainMenu> MainMenu::createInstance(const json &jsonData)
+std::shared_ptr<MainMenu> MainMenu::createInstance(const nlohmann::json &jsonData)
 {
 	return std::make_shared<MainMenu>();
 }

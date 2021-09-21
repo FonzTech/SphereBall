@@ -1,10 +1,12 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
+#undef snprintf
+#include <nlohmann/json.hpp>
+
 #include <memory>
 #include <irrlicht.h>
 #include <SFML/Audio.hpp>
-#include <nlohmann/json.hpp>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -15,8 +17,6 @@ using namespace core;
 using namespace scene;
 using namespace video;
 using namespace gui;
-
-using nlohmann::json;
 
 class Utility
 {

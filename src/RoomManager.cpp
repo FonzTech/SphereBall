@@ -74,14 +74,14 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 	}
 
 	// Read room from file and parse JSON
-	json jsonData;
+	nlohmann::json jsonData;
 	{
 		try
 		{
 			std::ifstream input("rooms/" + roomToLoad + ".json");
 			input >> jsonData;
 		}
-		catch (json::exception e)
+		catch (nlohmann::json::exception e)
 		{
 			printf("Room %s could NOT be loaded.\n", roomToLoad.c_str());
 			return;
@@ -101,7 +101,7 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 	for (u32 i = 0; i < jsonData.size(); ++i)
 	{
 		// Get JSON Object at i-index
-		json object = jsonData.at(i);
+		nlohmann::json object = jsonData.at(i);
 
 		// Check for object name
 		std::string name;
@@ -111,12 +111,12 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 		if (name == SharedData::ROOM_OBJECT_KEY)
 		{
 			// Parse "enable" array
-			json items = object.at("enable");
+			nlohmann::json items = object.at("enable");
 
 			// Cycle through game objects
-			for (json::iterator it = items.begin(); it != items.end(); ++it)
+			for (nlohmann::json::iterator it = items.begin(); it != items.end(); ++it)
 			{
-				json item = (*it);
+				nlohmann::json item = (*it);
 				SharedData::singleton->initGameScoreValue(item.at("key"), item.at("value"));
 			}
 
@@ -128,7 +128,7 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 		// Ordinary game object
 		else
 		{
-			// std::unordered_map<std::string, std::function<shared_ptr<GameObject>(const json& jsonData)>>::const_iterator
+			// std::unordered_map<std::string, std::function<shared_ptr<GameObject>(const nlohmann::json& jsonData)>>::const_iterator
 			auto goIterator = gameObjectFactory.find(name);
 
 			// Check if class has been found
@@ -139,7 +139,7 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 			else
 			{
 				// Get method to instantiate class
-				std::function<std::shared_ptr<GameObject>(const json& jsonData)> classFunction = goIterator->second;
+				std::function<std::shared_ptr<GameObject>(const nlohmann::json& jsonData)> classFunction = goIterator->second;
 
 				// Get pointer to class instance
 				std::shared_ptr<GameObject> instance = classFunction(object);
@@ -161,7 +161,7 @@ void RoomManager::loadRoom(const std::string roomToLoad)
 				{
 					instance->assignGameObjectCommonData(object.at("required"));
 				}
-				catch (json::exception e)
+				catch (nlohmann::json::exception e)
 				{
 				}
 

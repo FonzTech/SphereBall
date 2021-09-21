@@ -2,7 +2,7 @@
 #include "SharedData.h"
 #include "SoundManager.h"
 
-std::shared_ptr<Key> Key::createInstance(const json &jsonData)
+std::shared_ptr<Key> Key::createInstance(const nlohmann::json &jsonData)
 {
 	return std::make_shared<Key>();
 }

@@ -4,15 +4,12 @@
 #define KEY_GOI_SKYBOX 1
 
 #include <vector>
-#include <nlohmann/json.hpp>
 
 #include "EngineObject.h"
 #include "ShaderCallback.h"
 #include "Collision.h"
 #include "Model.h"
 #include "Utility.h"
-
-using nlohmann::json;
 
 class GameObject : public EngineObject
 {
@@ -85,7 +82,7 @@ public:
 	const s32 getCommonBasicMaterial(E_MATERIAL_TYPE basicMaterial = EMT_SOLID);
 
 	// Get instance of game object with parameters
-	static std::shared_ptr<GameObject> createInstance(const json &jsonData);
+	static std::shared_ptr<GameObject> createInstance(const nlohmann::json &jsonData);
 
 	// Common data among GameObjects
 	std::vector<std::shared_ptr<Model>> models;
@@ -112,7 +109,7 @@ public:
 	virtual aabbox3df getBoundingBox();
 
 	// Assign common room data for GameObject
-	void assignGameObjectCommonData(const json& commonData);
+	void assignGameObjectCommonData(const nlohmann::json& commonData);
 
 	/**
 		This method applies the routine for normal mapping, used in shader service

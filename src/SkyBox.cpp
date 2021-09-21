@@ -1,11 +1,13 @@
 #include "SkyBox.h"
 #include "Camera.h"
 
+using nlohmann::json;
+
 const std::string SkyBox::FRAMES[] = {
 	"top", "bottom", "left", "right", "front", "back"
 };
 
-std::shared_ptr<SkyBox> SkyBox::createInstance(const json &jsonData)
+std::shared_ptr<SkyBox> SkyBox::createInstance(const nlohmann::json &jsonData)
 {
 	std::string fname;
 	jsonData.at("optional").at("texture").get_to(fname);

@@ -23,7 +23,7 @@ public:
 	void draw();
 
 	// Create specialized instance
-	static std::shared_ptr<Fire> createInstance(const json &jsonData);
+	static std::shared_ptr<Fire> createInstance(const nlohmann::json &jsonData);
 };
 
 #endif // HOURGLASS_H

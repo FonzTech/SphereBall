@@ -6,7 +6,6 @@
 #include <unordered_map>
 #include <string>
 #include <functional>
-#include <nlohmann/json.hpp>
 #include "GameObject.h"
 
 class RoomManager
@@ -41,7 +40,7 @@ public:
 	bool isProgramRunning;
 
 	// Map structure to hold factory pattern for game objects
-	std::unordered_map<std::string, std::function<std::shared_ptr<GameObject>(const json& jsonData)>> gameObjectFactory;
+	std::unordered_map<std::string, std::function<std::shared_ptr<GameObject>(const nlohmann::json& jsonData)>> gameObjectFactory;
 
 	// Vector to hold all active game objects
 	std::vector<std::shared_ptr<GameObject>> gameObjects;

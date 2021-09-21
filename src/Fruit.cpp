@@ -7,7 +7,7 @@
 
 std::unordered_map<u32, bool> Fruit::fruitRooms;
 
-std::shared_ptr<Fruit> Fruit::createInstance(const json &jsonData)
+std::shared_ptr<Fruit> Fruit::createInstance(const nlohmann::json &jsonData)
 {
 	return std::make_shared<Fruit>();
 }

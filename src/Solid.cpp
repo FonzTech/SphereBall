@@ -5,9 +5,11 @@
 #include "Player.h"
 #include "Camera.h"
 
+using nlohmann::json;
+
 const f32 Solid::BREAKING_THRESHOLD = 8.0f;
 
-std::shared_ptr<Solid> Solid::createInstance(const json &jsonData)
+std::shared_ptr<Solid> Solid::createInstance(const nlohmann::json &jsonData)
 {
 	f32 breakState = -1.0f;
 	f32 springTension = -1.0f;
@@ -17,7 +19,7 @@ std::shared_ptr<Solid> Solid::createInstance(const json &jsonData)
 	try
 	{
 		// Check if block is breakable
-		json optional = jsonData.at("optional");
+		nlohmann::json optional = jsonData.at("optional");
 
 		if (optional.find("breakState") != optional.end())
 		{
@@ -45,7 +47,7 @@ std::shared_ptr<Solid> Solid::createInstance(const json &jsonData)
 			delayedParams = std::array<f32, 4>{values[0], values[1], values[2], values[3]};
 		}
 	}
-	catch (json::exception e)
+	catch (nlohmann::json::exception e)
 	{
 	}
 	return std::make_shared<Solid>(delayedParams, breakState, springTension, invisibleToggle);

@@ -71,7 +71,7 @@ void SharedData::update(f32 deltaTime)
 		if (EventManager::singleton->keyStates[KEY_RETURN] == KEY_PRESSED)
 		{
 			// Trigger wave effect
-			json data;
+			nlohmann::json data;
 			data["mode"] = 0.0f;
 			data["factor"] = 1.0f;
 			SharedData::singleton->triggerPostProcessingCallback(KEY_PP_BLUR, data);
@@ -208,7 +208,7 @@ void SharedData::update(f32 deltaTime)
 	else if (EventManager::singleton->keyStates[KEY_RETURN] == KEY_PRESSED)
 	{
 		// Trigger wave effect
-		json data;
+		nlohmann::json data;
 		data["mode"] = 1.0f;
 		data["factor"] = 0.001f;
 		SharedData::singleton->triggerPostProcessingCallback(KEY_PP_BLUR, data);
@@ -645,7 +645,7 @@ void SharedData::resetState()
 	isLevelPassed = false;
 
 	// Reset post-processing effects
-	json data = {
+	nlohmann::json data = {
 		{ "speed", 0.0f },
 		{ "strength", 0.0f }
 	};
@@ -788,7 +788,7 @@ void SharedData::disposeResourcesAtFrameEnd()
 	frameResources.clear();
 }
 
-void SharedData::setPostProcessingCallback(u8 key, std::function<void(const json&)> callback)
+void SharedData::setPostProcessingCallback(u8 key, std::function<void(const nlohmann::json&)> callback)
 {
 	if (callback == nullptr)
 	{
@@ -800,7 +800,7 @@ void SharedData::setPostProcessingCallback(u8 key, std::function<void(const json
 	}
 }
 
-bool SharedData::triggerPostProcessingCallback(u8 key, const json& data)
+bool SharedData::triggerPostProcessingCallback(u8 key, const nlohmann::json& data)
 {
 	try
 	{
@@ -833,7 +833,7 @@ void SharedData::invertTime()
 	const vector2df windowSize = Utility::getWindowSize<f32>(driver);
 	const vector2df position(windowSize.X - 128, windowSize.Y - 128);
 
-	json data = {
+	nlohmann::json data = {
 		{ "x", position.X / windowSize.X },
 		{ "y", position.Y / windowSize.Y },
 		{ "z", 1.0f }

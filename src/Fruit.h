@@ -24,7 +24,7 @@ public:
 	bool pick();
 
 	// Create specialized instance
-	static std::shared_ptr<Fruit> createInstance(const json &jsonData);
+	static std::shared_ptr<Fruit> createInstance(const nlohmann::json &jsonData);
 };
 
 #endif // FRUIT_H

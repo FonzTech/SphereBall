@@ -56,7 +56,7 @@ public:
 	aabbox3df getBoundingBox();
 
 	// Create specialized instance
-	static std::shared_ptr<Solid> createInstance(const json &jsonData);
+	static std::shared_ptr<Solid> createInstance(const nlohmann::json &jsonData);
 	
 	// Behaviour
 	bool isSolid();

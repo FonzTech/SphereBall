@@ -19,7 +19,7 @@
 
 const f32 Player::breathingDelta = 0.125f;
 
-std::shared_ptr<Player> Player::createInstance(const json &jsonData)
+std::shared_ptr<Player> Player::createInstance(const nlohmann::json &jsonData)
 {
 	return std::make_shared<Player>();
 }
@@ -238,8 +238,8 @@ void Player::update()
 	}
 
 	// Update listener position
-	sf::Listener::setDirection(sf::Vector3f(0, 0, -1));
-	sf::Listener::setPosition(Utility::irrVectorToSf(position));
+	// sf::Listener::setDirection(sf::Vector3f(0, 0, -1));
+	// sf::Listener::setPosition(Utility::irrVectorToSf(position));
 }
 
 void Player::draw()

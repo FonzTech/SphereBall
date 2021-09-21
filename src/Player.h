@@ -106,7 +106,7 @@ public:
 	void addSpeed(const vector3df & motion, const vector3df & fallLine);
 
 	// Create specialized instance
-	static std::shared_ptr<Player> createInstance(const json &jsonData);
+	static std::shared_ptr<Player> createInstance(const nlohmann::json &jsonData);
 };
 
 #endif // PLAYER_H

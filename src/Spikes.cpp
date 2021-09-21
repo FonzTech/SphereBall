@@ -1,15 +1,17 @@
 #include "Spikes.h"
 #include "SoundManager.h"
 
+using nlohmann::json;
+
 const f32 Spikes::TIP_HEIGHT = 10;
 
-std::shared_ptr<Spikes> Spikes::createInstance(const json &jsonData)
+std::shared_ptr<Spikes> Spikes::createInstance(const nlohmann::json &jsonData)
 {
 	u32 initialMode = -1;
 	f32 delay;
 	try
 	{
-		json optional = jsonData.at("optional");
+		nlohmann::json optional = jsonData.at("optional");
 		optional.at("mode").get_to(initialMode);
 
 		if (initialMode == -1)
@@ -22,7 +24,7 @@ std::shared_ptr<Spikes> Spikes::createInstance(const json &jsonData)
 			{
 				optional.at("delay").get_to(delay);
 			}
-			catch (json::exception ex)
+			catch (nlohmann::json::exception ex)
 			{
 				if (initialMode)
 				{
@@ -35,7 +37,7 @@ std::shared_ptr<Spikes> Spikes::createInstance(const json &jsonData)
 			}
 		}
 	}
-	catch (json::exception e)
+	catch (nlohmann::json::exception e)
 	{
 		if (initialMode == -1)
 		{

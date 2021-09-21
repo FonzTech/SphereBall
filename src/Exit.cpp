@@ -3,7 +3,9 @@
 #include "Exit.h"
 #include "SharedData.h"
 
-std::shared_ptr<Exit> Exit::createInstance(const json &jsonData)
+using nlohmann::json;
+
+std::shared_ptr<Exit> Exit::createInstance(const nlohmann::json &jsonData)
 {
 	return std::make_shared<Exit>();
 }

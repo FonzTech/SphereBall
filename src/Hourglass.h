@@ -17,7 +17,7 @@ public:
 	bool pick();
 
 	// Create specialized instance
-	static std::shared_ptr<Hourglass> createInstance(const json &jsonData);
+	static std::shared_ptr<Hourglass> createInstance(const nlohmann::json &jsonData);
 };
 
 #endif // HOURGLASS_H

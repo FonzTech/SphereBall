@@ -29,7 +29,7 @@ public:
 	bool pick();
 
 	// Create specialized instance
-	static std::shared_ptr<Pill> createInstance(const json &jsonData);
+	static std::shared_ptr<Pill> createInstance(const nlohmann::json &jsonData);
 
 	// ShaderCallBack
 	class PillShaderCallback : public ShaderCallback
